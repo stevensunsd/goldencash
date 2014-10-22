@@ -77,22 +77,24 @@ public class SigninActivity extends Activity
         //SignIn Button Clicked, Should have gone to a pop-up cover the main screen,
         //then check the username and password with the database, if correct, jump
         //to main screen, or false should return to the sign in screen.
-        Log.d(getString(R.string.debugInfo_text) , username_field.getText().toString());
-
+        Log.d(getString(R.string.debugInfo_text) , "Username entered: "+username_field.getText().toString());
+        signIn();
     }
 
     private void signIn(){
         ParseQuery<ParseObject> query = ParseQuery.getQuery("User");
         query.whereEqualTo("username",username_field.getText().toString());
-        query.whereEqualTo("password",password_field.getText().toString());
         query.getFirstInBackground(new GetCallback<ParseObject>() {
             public void done(ParseObject object, ParseException e) {
                 if (e == null) {
                     // object will be your User
-                    Log.d(getString(R.string.debugInfo_text),object.toString());
+                    Log.d(getString(R.string.debugInfo_text),"Found and returned password: "+
+                            object.getString("password"));
+                    //TODO: use method check if password entered correctly
                 } else {
                     // something went wrong
                     Log.d(getString(R.string.debugInfo_text),"Error: " + e.getMessage());
+                    //TODO: username not found, use Toast post error to screen
                 }
             }
         });
