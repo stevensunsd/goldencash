@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="debugInfo_text">DebugInfo: </string>
+
+
 
     <string name="app_name">GoldenCash</string>
     <string name="signing_textview">Sign in</string>
