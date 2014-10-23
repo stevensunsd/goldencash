@@ -14,4 +14,12 @@
     <string name="open_account_text">OPEN ACCOUNT</string>
     <string name="firstname_text">First Name</string>
     <string name="lastname_text">Last Name</string>
+    <string name="button_confirm">Confirm</string>
+    <string name="button_cancel">Cancel</string>
+    <string name="Debit_account">DEBIT ACCOUNT</string>
+    <string name="Checking">CHECKING</string>
+    <string name="Saving">SAVING</string>
+    <string name="Credit_Account">CREDIT ACCOUNT</string>
+    <string name="account_type">ACCOUNT TYPE:</string>
 </resources>
+

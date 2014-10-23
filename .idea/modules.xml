@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/GoldenCash.iml" filepath="$PROJECT_DIR$/GoldenCash.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/goldencash.iml" filepath="$PROJECT_DIR$/goldencash.iml" />
       <module fileurl="file://$PROJECT_DIR$/goldencash.iml" filepath="$PROJECT_DIR$/goldencash.iml" />
     </modules>
   </component>
