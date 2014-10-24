@@ -5,7 +5,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 
 /**
  * Created by jeremywen on 10/21/14.
@@ -21,8 +23,6 @@ public class SignupActivity extends Activity implements View.OnClickListener {
         setContentView(R.layout.activity_signup);
         // Get the message from the intent
         Intent intent = getIntent();
-        // Enable the "Up" button for more navigation options
-        getActionBar().setDisplayHomeAsUpEnabled(true);
 
         cancelButton = (Button) findViewById(R.id.button_cancel);
         cancelButton.setOnClickListener(this);
@@ -40,6 +40,17 @@ public class SignupActivity extends Activity implements View.OnClickListener {
     private void signup() {
         //create Parse user object
     }
+
+    private void clearAlltext() {
+        ViewGroup textFields = (ViewGroup) findViewById(R.id.signup_textFields);
+        for (int i = 0, count = textFields.getChildCount(); i < count; ++i) {
+            View view = textFields.getChildAt(i);
+            if (view instanceof EditText) {
+                ((EditText) view).setText("");
+            }
+        }
+    }
+    //TODO: check all text field correctness, before "Parsing"
+
 }
 
-//TODO: check all text field correctness, before "Parsing"

@@ -6,26 +6,28 @@
     android:layout_height="wrap_content"
     android:layout_margin="25dp"
     >
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:id="@+id/signup_textFields">
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="@string/open_account_text"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
+
         android:id="@+id/textViewHeader"/>
 
     <EditText
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/textViewHeader"
         android:hint="@string/Username_text"
         android:id="@+id/signup_username"/>
 
     <EditText
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/signup_username"
         android:hint="@string/password_text"
         android:id="@+id/signup_password"
         android:inputType="textPassword" />
@@ -33,23 +35,22 @@
     <EditText
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/signup_password"
         android:hint="@string/password_text"
         android:id="@+id/signup_password2"/>
 
     <EditText
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/signup_password2"
         android:hint="@string/firstname_text"
         android:id="@+id/signup_firstname"/>
 
     <EditText
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/signup_firstname"
         android:hint="@string/lastname_text"
         android:id="@+id/signup_lastname"/>
+
+    </LinearLayout>inearLayout
 
     <TextView
         android:layout_width="wrap_content"
@@ -57,9 +58,8 @@
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:text="@string/account_type"
         android:id="@+id/account_type"
-        android:layout_below="@+id/signup_lastname"
         android:layout_marginTop="10dp"
-        android:layout_marginLeft="15dp" />
+        android:layout_below="@id/signup_textFields"/>
 
     <CheckBox
         android:layout_width="wrap_content"
@@ -93,7 +93,6 @@
         android:id="@+id/check_credit"
         android:layout_below="@+id/check_saving"
         android:layout_alignParentStart="true" />
-
 
 
     <Button
