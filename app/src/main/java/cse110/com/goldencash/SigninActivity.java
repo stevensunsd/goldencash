@@ -1,6 +1,7 @@
 package cse110.com.goldencash;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -23,6 +24,7 @@ public class SigninActivity extends Activity
         implements View.OnClickListener {
 
     Button signinButton;
+    Button signupButton;
     EditText username_field;
     EditText password_field;
 
@@ -46,6 +48,8 @@ public class SigninActivity extends Activity
 
         signinButton = (Button) findViewById(R.id.sigin_button);
         signinButton.setOnClickListener(this);
+        signupButton = (Button) findViewById(R.id.signup_button);
+        signupButton.setOnClickListener(this);
 
         username_field = (EditText) findViewById(R.id.usernameField);
         password_field = (EditText) findViewById(R.id.passwordField);
@@ -77,8 +81,17 @@ public class SigninActivity extends Activity
         //SignIn Button Clicked, Should have gone to a pop-up cover the main screen,
         //then check the username and password with the database, if correct, jump
         //to main screen, or false should return to the sign in screen.
-        Log.d(getString(R.string.debugInfo_text) , "Username entered: "+username_field.getText().toString());
-        signIn();
+        if(findViewById(R.id.sigin_button).equals(view)) {
+            Log.d(getString(R.string.debugInfo_text), "Username entered: " + username_field.getText().toString());
+            signIn();
+        }else{
+            signUp();
+        }
+    }
+
+    private void signUp() {
+        Intent intent = new Intent(this, SignupActivity.class);
+        startActivity(intent);
     }
 
     private void signIn(){

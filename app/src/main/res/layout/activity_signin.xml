@@ -12,6 +12,7 @@
         android:text="@string/signing_textview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
         android:id="@+id/textView" />
 
     <EditText
@@ -42,7 +43,7 @@
         android:layout_width="96dp"
         android:layout_height="wrap_content"
         android:layout_below="@id/sigin_button"
-
+        android:id="@+id/signup_button"
         android:layout_centerInParent="true"
         android:text="@string/signup_text"/>
 </RelativeLayout>

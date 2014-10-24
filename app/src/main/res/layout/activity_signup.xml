@@ -1,52 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:layout_margin="25dp"
     >
-
-
     <TextView
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="@string/open_account_text"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:id="@+id/textViewHeader"/>
 
     <EditText
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
+        android:layout_below="@id/textViewHeader"
         android:hint="@string/Username_text"
         android:id="@+id/signup_username"/>
 
     <EditText
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="100dp"
+        android:layout_below="@id/signup_username"
         android:hint="@string/password_text"
-        android:id="@+id/signup_password"/>
+        android:id="@+id/signup_password"
+        android:inputType="textPassword" />
 
     <EditText
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="150dp"
+        android:layout_below="@id/signup_password"
         android:hint="@string/password_text"
         android:id="@+id/signup_password2"/>
 
     <EditText
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="200dp"
+        android:layout_below="@id/signup_password2"
         android:hint="@string/firstname_text"
         android:id="@+id/signup_firstname"/>
 
     <EditText
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="250dp"
+        android:layout_below="@id/signup_firstname"
         android:hint="@string/lastname_text"
         android:id="@+id/signup_lastname"/>
 
@@ -112,4 +113,5 @@
         android:layout_alignTop="@+id/button_confirm"
         android:layout_toEndOf="@+id/button_confirm"
         android:layout_marginLeft="65dp" />
+
 </RelativeLayout>

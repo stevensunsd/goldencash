@@ -1,6 +1,7 @@
 package cse110.com.goldencash;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -15,7 +16,8 @@ public class SignupActivity extends Activity {
 
         // Tell the activity which XML layout is right
         setContentView(R.layout.activity_signup);
-
+        // Get the message from the intent
+        Intent intent = getIntent();
         // Enable the "Up" button for more navigation options
         getActionBar().setDisplayHomeAsUpEnabled(true);
 
