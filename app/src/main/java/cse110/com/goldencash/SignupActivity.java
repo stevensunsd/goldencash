@@ -31,6 +31,7 @@ public class SignupActivity extends Activity implements View.OnClickListener {
     String lastname;
     boolean openDebit;
     boolean openCredit;
+    boolean openSaving;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,6 +67,8 @@ public class SignupActivity extends Activity implements View.OnClickListener {
 
         openDebit = ((CheckBox)findViewById(R.id.check_debit)).isChecked();
         openCredit = ((CheckBox)findViewById(R.id.check_credit)).isChecked();
+        openSaving  = ((CheckBox)findViewById(R.id.check_saving)).isChecked();
+
         if(findViewById(R.id.button_cancel).equals(view)) {
             finish();
         }else{
@@ -85,6 +88,7 @@ public class SignupActivity extends Activity implements View.OnClickListener {
             user.put("lastname",lastname);
             user.put("debit",openDebit);
             user.put("credit",openCredit);
+            user.put("saving",openSaving);
             user.saveInBackground();
 
     }
@@ -116,12 +120,21 @@ public class SignupActivity extends Activity implements View.OnClickListener {
                     usernameOk = true;
                     //after function call back returned, check password.
                     if(checkPassword()){
-                        processSignup();
+                        // can change if-statement later to reflect project specifications
+                        if((openDebit) || (openCredit) || (openSaving)) {
+                            if((firstname.matches("[a-zA-Z]+")) && (lastname.matches("[a-zA-Z]+"))){
+                                processSignup();
+                            }else {
+                                // entered garbage for name fields
+                                Log.d(getString(R.string.debugInfo_text),
+                                        "Please only enter letters for names.");
+                            }
+                        }
                     }else{
                         //password not match
+                        Log.d(getString(R.string.debugInfo_text),"The passwords do not match.");
                     }
                 }
-
             }
         });
     }
@@ -136,7 +149,5 @@ public class SignupActivity extends Activity implements View.OnClickListener {
             }
         }
     }
-    //TODO: check all text field correctness, before "Parsing"
-
 }
 

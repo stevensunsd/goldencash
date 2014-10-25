@@ -46,7 +46,7 @@ public class SigninActivity extends Activity
         */
         setContentView(R.layout.activity_signin);
 
-        signinButton = (Button) findViewById(R.id.sigin_button);
+        signinButton = (Button) findViewById(R.id.signin_button);
         signinButton.setOnClickListener(this);
         signupButton = (Button) findViewById(R.id.signup_button);
         signupButton.setOnClickListener(this);
@@ -81,8 +81,9 @@ public class SigninActivity extends Activity
         //SignIn Button Clicked, Should have gone to a pop-up cover the main screen,
         //then check the username and password with the database, if correct, jump
         //to main screen, or false should return to the sign in screen.
-        if(findViewById(R.id.sigin_button).equals(view)) {
-            Log.d(getString(R.string.debugInfo_text), "Username entered: " + username_field.getText().toString());
+        if(findViewById(R.id.signin_button).equals(view)) {
+            Log.d(getString(R.string.debugInfo_text), "Username entered: " +
+                    username_field.getText().toString());
             signIn();
         }else{
             signUp();

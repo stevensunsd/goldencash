@@ -9,7 +9,7 @@
    >
 
     <TextView
-        android:text="@string/signing_textview"
+        android:text="@string/signin_textview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
@@ -32,7 +32,7 @@
         android:layout_below="@id/usernameField"/>
 
     <Button
-        android:id="@+id/sigin_button"
+        android:id="@+id/signin_button"
         android:layout_width="96dp"
         android:layout_height="wrap_content"
         android:layout_below="@id/passwordField"
@@ -42,7 +42,7 @@
     <Button
         android:layout_width="96dp"
         android:layout_height="wrap_content"
-        android:layout_below="@id/sigin_button"
+        android:layout_below="@id/signin_button"
         android:id="@+id/signup_button"
         android:layout_centerInParent="true"
         android:text="@string/signup_text"/>
