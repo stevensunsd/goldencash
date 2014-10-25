@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 
 import com.parse.GetCallback;
@@ -21,61 +22,85 @@ import com.parse.ParseQuery;
 public class SignupActivity extends Activity implements View.OnClickListener {
 
     Button cancelButton;
-
+    Button confirmButton;
     boolean usernameOk;
     String username;
-    EditText password1;
-    EditText password2;
+    String password1;
+    String password2;
+    String firstname;
+    String lastname;
+    boolean openDebit;
+    boolean openCredit;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Parse.initialize(this, "1XwyXTQlIQDuwcjETTTmvEaysvJVZLsSasuxibY3",
-                "hQIEN0MfhYKiBPCHsPZ6djei7myOjcRpX56Cd4Xc");
+        Parse.initialize(this, getString(R.string.ApplicationID),
+                getString(R.string.ClientKey));
+
         // Tell the activity which XML layout is right
         setContentView(R.layout.activity_signup);
         // Get the message from the intent
         Intent intent = getIntent();
 
+        confirmButton = (Button) findViewById(R.id.button_confirm);
+        confirmButton.setOnClickListener(this);
         cancelButton = (Button) findViewById(R.id.button_cancel);
         cancelButton.setOnClickListener(this);
 
-        username = ((EditText)
-                findViewById(R.id.signup_username)).getText().toString().toLowerCase();
 
-        password1 = (EditText) findViewById(R.id.signup_password);
-
-        password2 = (EditText) findViewById(R.id.signup_password2);
 
     }
 
     @Override
     public void onClick(View view) {
+        username = ((EditText)
+                findViewById(R.id.signup_username)).getText().toString().toLowerCase();
+
+        password1 = ((EditText) findViewById(R.id.signup_password)).getText().toString();
+
+        password2 = ((EditText) findViewById(R.id.signup_password2)).getText().toString();
+
+        firstname = ((EditText)findViewById(R.id.signup_firstname)).getText().toString();
+        lastname = ((EditText)findViewById(R.id.signup_lastname)).getText().toString();
+
+        openDebit = ((CheckBox)findViewById(R.id.check_debit)).isChecked();
+        openCredit = ((CheckBox)findViewById(R.id.check_credit)).isChecked();
         if(findViewById(R.id.button_cancel).equals(view)) {
             finish();
         }else{
-            signup();
+            //start checking all field by checking username
+            checkUsername();
         }
     }
 
-    private void signup() {
-        //create Parse user object
+
+    private void processSignup() {
+
+            Log.d(getString(R.string.debugInfo_text),"signing up for: "+username);
+            ParseObject user = new ParseObject("User");
+            user.put("username",username);
+            user.put("password",password1);
+            user.put("firstname",firstname);
+            user.put("lastname",lastname);
+            user.put("debit",openDebit);
+            user.put("credit",openCredit);
+            user.saveInBackground();
 
     }
 
-    private boolean CheckPassword(){
+    private boolean checkPassword(){
 
         //check two passwords if equals
-        return (password1.getText().equals(password2.getText()));
+        return (password1.equals(password2));
     }
 
-    private void CheckUsername(){
+    private void checkUsername(){
 
         ParseQuery<ParseObject> query = ParseQuery.getQuery("User");
         query.whereEqualTo("username",username);
         query.getFirstInBackground(new GetCallback<ParseObject>() {
             public void done(ParseObject object, ParseException e) {
-
 
                 if (e == null) {
                     // object will be your User
@@ -85,15 +110,23 @@ public class SignupActivity extends Activity implements View.OnClickListener {
                     usernameOk = false;
                 } else {
                     //username is ok to create
-                    Log.d(getString(R.string.debugInfo_text),"no username used OK to create");
+                    Log.d(getString(R.string.debugInfo_text),"no username used, OK to create");
 
                     //set username to true
                     usernameOk = true;
+                    //after function call back returned, check password.
+                    if(checkPassword()){
+                        processSignup();
+                    }else{
+                        //password not match
+                    }
                 }
+
             }
         });
     }
 
+    //this function will be using when need to clear the text user entered in the textfields
     private void clearAlltext() {
         ViewGroup textFields = (ViewGroup) findViewById(R.id.signup_textFields);
         for (int i = 0, count = textFields.getChildCount(); i < count; ++i) {

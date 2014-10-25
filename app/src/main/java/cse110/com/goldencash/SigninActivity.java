@@ -33,8 +33,8 @@ public class SigninActivity extends Activity
         super.onCreate(savedInstanceState);
 
         //init Parse with these specific key
-        Parse.initialize(this, "1XwyXTQlIQDuwcjETTTmvEaysvJVZLsSasuxibY3",
-                "hQIEN0MfhYKiBPCHsPZ6djei7myOjcRpX56Cd4Xc");
+        Parse.initialize(this, getString(R.string.ApplicationID),
+                getString(R.string.ClientKey));
 
         //test Parse
         /*
