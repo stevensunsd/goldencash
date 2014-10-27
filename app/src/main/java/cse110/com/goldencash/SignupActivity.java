@@ -17,7 +17,7 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
 /**
- * Created by jeremywen on 10/21/14.
+ * Created by Xin Wen on 10/21/14.
  */
 public class SignupActivity extends Activity implements View.OnClickListener {
 
@@ -48,8 +48,6 @@ public class SignupActivity extends Activity implements View.OnClickListener {
         confirmButton.setOnClickListener(this);
         cancelButton = (Button) findViewById(R.id.button_cancel);
         cancelButton.setOnClickListener(this);
-
-
 
     }
 
@@ -122,7 +120,8 @@ public class SignupActivity extends Activity implements View.OnClickListener {
                     if(checkPassword()){
                         // can change if-statement later to reflect project specifications
                         if((openDebit) || (openCredit) || (openSaving)) {
-                            if((firstname.matches("[a-zA-Z]+")) && (lastname.matches("[a-zA-Z]+"))){
+                            if((firstname.matches("[a-zA-Z]+")) &&
+                                    (lastname.matches("[a-zA-Z]+"))){
                                 processSignup();
                             }else {
                                 // entered garbage for name fields
