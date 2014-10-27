@@ -39,7 +39,7 @@ public class SigninActivity extends Activity
                 getString(R.string.ClientKey));
 
         //test Parse
-        /*
+        /*FOR TEST ONLY
         ParseObject user = new ParseObject("User");
         user.put("username","wenxin3262");
         user.put("password","123");
@@ -106,29 +106,29 @@ public class SigninActivity extends Activity
                     // object will be your User
                     //Log.d(getString(R.string.debugInfo_text),"Found and returned password: "+
                     //       object.getString("password"));
-                    //TODO: use method check if password entered correctly
+                    //TODO: Save user ID and go main activity
                     if(object.getString("password").equals(
                             username_field.getText().toString())){
                         //Save User ID and go to Main Activity
                     }else{
-                        alertMsg();
+                        //Password Not match
+                 alertMsg("Unable to Sign In",getString(R.string.ERROR_password));
                     }
                 } else {
-                    // something went wrong
+                    // something went wrong with networking
                     Log.d(getString(R.string.debugInfo_text),"Error: " + e.getMessage());
-                    //TODO: username not found, use Toast post error to screen
-                    alertMsg();
+
+                    alertMsg("Network Error","Please try again.");
                 }
             }
         });
     }
 
-    private void alertMsg(){
+    private void alertMsg(String title, String msg){
         //build dialog
         AlertDialog.Builder builder= new AlertDialog.Builder(this);
-        builder.setTitle("Unable to Sign In");
-        builder.setMessage("The Username or Password you entered is incorrect."+
-        "Please click 'OK' to reenter your Username and Password.");
+        builder.setTitle(title);
+        builder.setMessage(msg);
         builder.setPositiveButton("OK",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {

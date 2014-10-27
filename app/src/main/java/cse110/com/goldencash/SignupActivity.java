@@ -71,11 +71,11 @@ public class SignupActivity extends Activity implements View.OnClickListener {
             finish();
         }else{
             //start checking all field by checking username
-            checkUsername();
+            checkAllFields();
         }
     }
 
-
+    //Networking with Parse for signup
     private void processSignup() {
 
             Log.d(getString(R.string.debugInfo_text),"signing up for: "+username);
@@ -91,13 +91,15 @@ public class SignupActivity extends Activity implements View.OnClickListener {
 
     }
 
+    //check if password exactly same
     private boolean checkPassword(){
 
         //check two passwords if equals
         return (password1.equals(password2));
     }
 
-    private void checkUsername(){
+    //A chain of methods to validate all fields that user entered
+    private void checkAllFields(){
 
         ParseQuery<ParseObject> query = ParseQuery.getQuery("User");
         query.whereEqualTo("username",username);
@@ -107,7 +109,7 @@ public class SignupActivity extends Activity implements View.OnClickListener {
                 if (e == null) {
                     // object will be your User
                     Log.d(getString(R.string.debugInfo_text),"Found a exist username");
-                    // print out error massage username exist
+                    //TODO:ALERTDIALOG print out error massage username exist
 
                     usernameOk = false;
                 } else {
@@ -125,12 +127,14 @@ public class SignupActivity extends Activity implements View.OnClickListener {
                                 processSignup();
                             }else {
                                 // entered garbage for name fields
+                                //TODO:ALERT dialog: name invalid
                                 Log.d(getString(R.string.debugInfo_text),
                                         "Please only enter letters for names.");
                             }
                         }
                     }else{
-                        //password not match
+
+                        //TODO:Alert dialog:password not match
                         Log.d(getString(R.string.debugInfo_text),"The passwords do not match.");
                     }
                 }
@@ -147,6 +151,16 @@ public class SignupActivity extends Activity implements View.OnClickListener {
                 ((EditText) view).setText("");
             }
         }
+    }
+
+
+    //TODO:generate an user ID for a new user
+    private String createUserID(){
+        return new String("");
+    }
+    //TODO:Encrypt password before uploading
+    private String passwordEncryption(String password){
+        return new String("");
     }
 }
 

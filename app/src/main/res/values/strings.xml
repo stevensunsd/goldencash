@@ -24,5 +24,9 @@
     <string name="Saving">SAVING</string>
     <string name="Credit_Account">CREDIT ACCOUNT</string>
     <string name="account_type">ACCOUNT TYPE:</string>
+
+
+    <string name="ERROR_password"
+        >The Username or Password you entered is incorrect.</string>
 </resources>
 
