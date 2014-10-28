@@ -84,14 +84,21 @@ public class SignupActivity extends Activity implements View.OnClickListener {
 
             Log.d(getString(R.string.debugInfo_text),"signing up for: "+username);
             ParseObject user = new ParseObject("User");
+            ParseObject account = new ParseObject("Account");
+            user.put("id",user.getObjectId());
             user.put("username",username);
             user.put("password",password1);
             user.put("firstname",firstname);
             user.put("lastname",lastname);
-            user.put("debit",openDebit);
-            user.put("credit",openCredit);
-            user.put("saving",openSaving);
             user.saveInBackground();
+            account.put("debit",openDebit);
+            account.put("credit",openCredit);
+            account.put("saving",openSaving);
+            account.put("id", user.getObjectId());
+            account.put("Debit", 100);
+            account.put("Credit", 100);
+            account.put("Saving", 100);
+            account.saveInBackground();
 
     }
 
