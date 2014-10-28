@@ -16,6 +16,10 @@ import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
+
 /**
  * Created by Xin Wen on 10/21/14.
  */
@@ -98,6 +102,28 @@ public class SignupActivity extends Activity implements View.OnClickListener {
         return (password1.equals(password2));
     }
 
+    private String passwordEncryption(String password) {
+        try {
+            SecureRandom rand = SecureRandom.getInstance("SHA1PRNG");
+            byte[] salt = new byte[16];
+            rand.nextBytes(salt);
+            String junk = salt.toString();
+            MessageDigest msg = MessageDigest.getInstance("MD5");
+            msg.update(junk.getBytes());
+            byte[] bytes = msg.digest(password.getBytes());
+            StringBuilder build = new StringBuilder();
+            for (int i = 0; i < bytes.length; i++)
+                build.append(Integer.toString((bytes[i] & 0xff) + 0x100, 16).substring(1));
+            System.out.println(build.toString());
+            return build.toString();
+        }
+        catch(NoSuchAlgorithmException ex) {
+            ex.printStackTrace();
+            return "";
+        }
+    }
+
+
     //A chain of methods to validate all fields that user entered
     private void checkAllFields(){
 
@@ -115,11 +141,13 @@ public class SignupActivity extends Activity implements View.OnClickListener {
                 } else {
                     //username is ok to create
                     Log.d(getString(R.string.debugInfo_text),"no username used, OK to create");
+                    System.out.println(username.toString());
 
                     //set username to true
                     usernameOk = true;
                     //after function call back returned, check password.
                     if(checkPassword()){
+                        password1 = passwordEncryption(password1);
                         // can change if-statement later to reflect project specifications
                         if((openDebit) || (openCredit) || (openSaving)) {
                             if((firstname.matches("[a-zA-Z]+")) &&
@@ -156,10 +184,6 @@ public class SignupActivity extends Activity implements View.OnClickListener {
 
     //TODO:generate an user ID for a new user
     private String createUserID(){
-        return new String("");
-    }
-    //TODO:Encrypt password before uploading
-    private String passwordEncryption(String password){
         return new String("");
     }
 }
