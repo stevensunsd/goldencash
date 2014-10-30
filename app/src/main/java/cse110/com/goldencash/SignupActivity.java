@@ -91,10 +91,11 @@ public class SignupActivity extends Activity implements View.OnClickListener {
             user.put("firstname",firstname);
             user.put("lastname",lastname);
             user.put("salt", saltvalue);
+
             account.put("opendebit",openDebit);
             account.put("opencredit",openCredit);
             account.put("opensaving",openSaving);
-            //account.put("id", user.getObjectId());
+
             account.put("debit", 100);
             account.put("credit", 100);
             account.put("saving", 100);
@@ -192,9 +193,6 @@ public class SignupActivity extends Activity implements View.OnClickListener {
     }
 
 
-    //TODO:generate an user ID for a new user
-    private String createUserID(){
-        return new String("");
-    }
+
 }
 

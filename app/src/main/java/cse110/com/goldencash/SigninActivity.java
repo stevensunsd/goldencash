@@ -9,21 +9,18 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 
 //Parse Imports
 import com.parse.GetCallback;
 import com.parse.Parse;
-import com.parse.ParseAnalytics;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
 
 
 public class SigninActivity extends Activity
@@ -92,15 +89,18 @@ public class SigninActivity extends Activity
                     username_field.getText().toString());
             signIn();
         }else{
-            signUp();
+            gotoSignup();
         }
     }
 
-    private void signUp() {
+    private void gotoSignup() {
         Intent intent = new Intent(this, SignupActivity.class);
         startActivity(intent);
     }
-
+    private void gotoMainPage(){
+        Intent intent = new Intent(this, AccountsActivity.class);
+        startActivity(intent);
+    }
     private void signIn(){
         ParseQuery<ParseObject> query = ParseQuery.getQuery("User");
         query.whereEqualTo("username",username_field.getText().toString());
@@ -115,9 +115,10 @@ public class SigninActivity extends Activity
                             object.getString("salt")).equals(
                             object.getString("password"))) {
                             // System.err.println("True\n");
-                        //Save User ID and go to Main Activity
-                    //if(object.getString("password").equals(
-                    //        password_field.getText().toString())){
+                            //Save User ID and go to Main Activity
+                        //Log.d(getString(R.string.debugInfo_text),object.getString("salt"));
+                            //storeUserKey(object.getString("account"));
+                            gotoMainPage();
                     }else{
                         //Password Not match
                         alertMsg("Unable to Sign In",getString(R.string.ERROR_password));
@@ -170,5 +171,10 @@ public class SigninActivity extends Activity
         }
     }
 
-
+    private void storeUserKey(String key){
+        //saving to sharedpreference
+        getPreferences(MODE_PRIVATE).edit().putString("key",key).commit();
+        //to retrieve
+        //"your_variable" = getPreferences(MODE_PRIVATE).getString("Name of variable",default value);
+    }
 }
