@@ -33,6 +33,7 @@ public class SignupActivity extends Activity implements View.OnClickListener {
     String password2;
     String firstname;
     String lastname;
+    String saltvalue;
     boolean openDebit;
     boolean openCredit;
     boolean openSaving;
@@ -89,7 +90,7 @@ public class SignupActivity extends Activity implements View.OnClickListener {
             user.put("password",password1);
             user.put("firstname",firstname);
             user.put("lastname",lastname);
-
+            user.put("salt", saltvalue);
             account.put("opendebit",openDebit);
             account.put("opencredit",openCredit);
             account.put("opensaving",openSaving);
@@ -114,14 +115,16 @@ public class SignupActivity extends Activity implements View.OnClickListener {
             SecureRandom rand = SecureRandom.getInstance("SHA1PRNG");
             byte[] salt = new byte[16];
             rand.nextBytes(salt);
-            String junk = salt.toString();
+            saltvalue = salt.toString();
+            // System.err.println(saltvalue);
             MessageDigest msg = MessageDigest.getInstance("MD5");
-            msg.update(junk.getBytes());
+            msg.update(saltvalue.getBytes());
             byte[] bytes = msg.digest(password.getBytes());
             StringBuilder build = new StringBuilder();
-            for (int i = 0; i < bytes.length; i++)
-                build.append(Integer.toString((bytes[i] & 0xff) + 0x100, 16).substring(1));
-            System.out.println(build.toString());
+            for (byte aByte : bytes) {
+                build.append(Integer.toString((aByte & 0xff) + 0x100, 16).substring(1));
+            }
+            // System.err.println(build.toString());
             return build.toString();
         }
         catch(NoSuchAlgorithmException ex) {

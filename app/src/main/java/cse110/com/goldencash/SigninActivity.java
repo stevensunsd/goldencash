@@ -21,6 +21,10 @@ import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
+
 
 public class SigninActivity extends Activity
         implements View.OnClickListener {
@@ -107,16 +111,20 @@ public class SigninActivity extends Activity
                     //Log.d(getString(R.string.debugInfo_text),"Found and returned password: "+
                     //       object.getString("password"));
                     //TODO: Save user ID and go main activity
-                    if(object.getString("password").equals(
-                            username_field.getText().toString())){
+                    if(passwordEncryption(password_field.getText().toString(),
+                            object.getString("salt")).equals(
+                            object.getString("password"))) {
+                            // System.err.println("True\n");
                         //Save User ID and go to Main Activity
+                    //if(object.getString("password").equals(
+                    //        password_field.getText().toString())){
                     }else{
                         //Password Not match
-                 alertMsg("Unable to Sign In",getString(R.string.ERROR_password));
+                        alertMsg("Unable to Sign In",getString(R.string.ERROR_password));
                     }
                 } else {
                     // something went wrong with networking
-                    Log.d(getString(R.string.debugInfo_text),"Error: " + e.getMessage());
+                    Log.d(getString(R.string.debugInfo_text), "Error: " + e.getMessage());
 
                     alertMsg("Network Error","Please try again.");
                 }
@@ -141,6 +149,25 @@ public class SigninActivity extends Activity
         AlertDialog alert = builder.create();
         //show dialog on screen
         alert.show();
+    }
+
+    private String passwordEncryption(String password, String salted) {
+        try {
+            //System.err.println(salted);
+            MessageDigest msg = MessageDigest.getInstance("MD5");
+            msg.update(salted.getBytes());
+            byte[] bytes = msg.digest(password.getBytes());
+            StringBuilder build = new StringBuilder();
+            for (byte aByte : bytes) {
+                build.append(Integer.toString((aByte & 0xff) + 0x100, 16).substring(1));
+            }
+            //System.err.println(build.toString());
+            return build.toString();
+        }
+        catch(NoSuchAlgorithmException ex) {
+            ex.printStackTrace();
+            return ""; // TODO: changed to a generic error msg
+        }
     }
 
 
