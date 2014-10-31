@@ -108,9 +108,6 @@ public class SigninActivity extends Activity
             public void done(ParseObject object, ParseException e) {
                 if (e == null) {
                     // object will be your User
-                    //Log.d(getString(R.string.debugInfo_text),"Found and returned password: "+
-                    //       object.getString("password"));
-                    //TODO: Save user ID and go main activity
                     if (passwordEncryption(password_field.getText().toString(),
                             object.getString("salt")).equals(
                             object.getString("password"))) {
@@ -124,10 +121,15 @@ public class SigninActivity extends Activity
                         alertMsg("Unable to Sign In", getString(R.string.ERROR_password));
                     }
                 } else {
-                    // something went wrong with networking
-                    Log.d(getString(R.string.debugInfo_text), "Error: " + e.getMessage());
+                    // something went wrong with networking or username not found
+                    if(e.getCode() == 101){
+                        Log.d(getString(R.string.debugInfo_text), "Error: "+e.getMessage());
+                        alertMsg("Unable to Sign In", getString(R.string.ERROR_password));
+                    }else {
+                        Log.d(getString(R.string.debugInfo_text), "Error: " + e.getMessage());
 
-                    alertMsg("Network Error", "Please try again.");
+                        alertMsg("Network Error", "Please try again.");
+                    }
                 }
             }
         });

@@ -119,7 +119,6 @@ public class SignupActivity extends Activity implements View.OnClickListener {
             byte[] salt = new byte[16];
             rand.nextBytes(salt);
             saltvalue = salt.toString();
-            // System.err.println(saltvalue);
             MessageDigest msg = MessageDigest.getInstance("MD5");
             msg.update(saltvalue.getBytes());
             byte[] bytes = msg.digest(password.getBytes());
@@ -132,7 +131,7 @@ public class SignupActivity extends Activity implements View.OnClickListener {
         }
         catch(NoSuchAlgorithmException ex) {
             ex.printStackTrace();
-            alertMsg("Fatal Error", "Program failed to generate password. Please try again later.");
+            //alertMsg("Fatal Error", "Program failed to generate password. Please try again later.");
             return "";
         }
     }

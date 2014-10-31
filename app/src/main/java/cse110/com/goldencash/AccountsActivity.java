@@ -14,6 +14,7 @@ import android.widget.ListView;
 public class AccountsActivity extends Activity{
 
     ListView listview;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
