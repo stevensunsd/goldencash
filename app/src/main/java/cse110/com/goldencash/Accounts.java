@@ -9,6 +9,9 @@ import com.parse.ParseQuery;
  * Created by Yang on 10/31/2014.
  */
 public class Accounts {
+    private boolean openDebit;
+    private boolean openCredit;
+    private boolean openSaving;
     private double debitAmount;
     private double creditAmount;
     private double savingAmount;
@@ -23,9 +26,17 @@ public class Accounts {
             @Override
             public void done(ParseObject parseObject, ParseException e) {
                 if (e == null) {
-                    debitAmount = (double) parseObject.getInt("debit");
-                    creditAmount = (double) parseObject.getInt("credit");
-                    savingAmount = (double) parseObject.getInt("saving");
+                    openDebit = parseObject.getBoolean("opendebit");
+                    if (openDebit) {
+                        debitAmount = (double) parseObject.getInt("debit");
+                    }
+                    openCredit = parseObject.getBoolean("opencredit");
+                    if (openCredit) {
+                        creditAmount = (double) parseObject.getInt("credit");
+                    }
+                    if (openSaving) {
+                        savingAmount = (double) parseObject.getInt("saving");
+                    }
                 } else {
                     //TODO: error alert
                 }
@@ -35,14 +46,38 @@ public class Accounts {
 
     // Getter methods
     public double getDebitAmount() {
-        return debitAmount;
+        if (openDebit) {
+            return debitAmount;
+        } else {
+            return 0;
+        }
     }
 
     public double getCreditAmount() {
-        return creditAmount;
+        if (openCredit) {
+            return creditAmount;
+        } else {
+            return 0;
+        }
     }
 
     public double getSavingAmount() {
-        return savingAmount;
+        if (openSaving) {
+            return savingAmount;
+        } else {
+            return 0;
+        }
+    }
+
+    public boolean getOpenDebit() {
+        return openDebit;
+    }
+
+    public boolean getOpenCredit() {
+        return openCredit;
+    }
+
+    public boolean getOpenSaving() {
+        return openSaving;
     }
 }
