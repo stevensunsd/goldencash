@@ -2,6 +2,8 @@ package cse110.com.goldencash;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -147,6 +149,8 @@ public class SignupActivity extends Activity implements View.OnClickListener {
                     // object will be your User
                     Log.d(getString(R.string.debugInfo_text),"Found a exist username");
                     //TODO:ALERTDIALOG print out error massage username exist
+                    alertMsg("Sign up fail", "username already exit, choose a new user name");
+
 
                     usernameOk = false;
                 } else {
@@ -169,12 +173,14 @@ public class SignupActivity extends Activity implements View.OnClickListener {
                                 //TODO:ALERT dialog: name invalid
                                 Log.d(getString(R.string.debugInfo_text),
                                         "Please only enter letters for names.");
+                                alertMsg("Signup Fail", "Please only enter letter for names");
                             }
                         }
                     }else{
 
                         //TODO:Alert dialog:password not match
                         Log.d(getString(R.string.debugInfo_text),"The passwords do not match.");
+                        alertMsg("Sign up Fail", "Passwords do not match");
                     }
                 }
             }
@@ -192,7 +198,24 @@ public class SignupActivity extends Activity implements View.OnClickListener {
         }
     }
 
+    private void alertMsg(String title, String msg){
+        //build dialog
+        AlertDialog.Builder builder= new AlertDialog.Builder(this);
+        builder.setTitle(title);
+        builder.setMessage(msg);
+        builder.setPositiveButton("OK",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        //clear msg
+                        clearAlltext();
 
+                    }
+                });
+        //create alert dialog
+        AlertDialog alert = builder.create();
+        //show dialog on screen
+        alert.show();
+    }
 
 }
 
