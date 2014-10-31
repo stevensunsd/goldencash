@@ -117,7 +117,7 @@ public class SigninActivity extends Activity
                             // System.err.println("True\n");
                             //Save User ID and go to Main Activity
                         //Log.d(getString(R.string.debugInfo_text),object.getString("salt"));
-                            //storeUserKey(object);
+                            storeUserKey(object);
                             gotoMainPage();
                     }else{
                         //Password Not match
@@ -178,6 +178,7 @@ public class SigninActivity extends Activity
                 if(e == null){
                     String key = object.getObjectId();
                     //saving to sharedpreference
+                    Log.d(getString(R.string.debugInfo_text),"Key: "+key);
                     getPreferences(MODE_PRIVATE).edit().putString("key",key).commit();
                 }else{
                     //TODO:Signin error msg
