@@ -132,6 +132,7 @@ public class SignupActivity extends Activity implements View.OnClickListener {
         }
         catch(NoSuchAlgorithmException ex) {
             ex.printStackTrace();
+            alertMsg("Fatal Error", "Program failed to generate password. Please try again later.");
             return "";
         }
     }
@@ -147,11 +148,8 @@ public class SignupActivity extends Activity implements View.OnClickListener {
 
                 if (e == null) {
                     // object will be your User
-                    Log.d(getString(R.string.debugInfo_text),"Found a exist username");
-                    //TODO:ALERTDIALOG print out error massage username exist
-                    alertMsg("Sign up fail", "username already exit, choose a new user name");
-
-
+                    Log.d(getString(R.string.debugInfo_text),"Found a existing username");
+                    alertMsg("Sign Up Failed", "Username already exists, choose a new username.");
                     usernameOk = false;
                 } else {
                     //username is ok to create
@@ -170,17 +168,15 @@ public class SignupActivity extends Activity implements View.OnClickListener {
                                 processSignup();
                             }else {
                                 // entered garbage for name fields
-                                //TODO:ALERT dialog: name invalid
                                 Log.d(getString(R.string.debugInfo_text),
                                         "Please only enter letters for names.");
-                                alertMsg("Signup Fail", "Please only enter letter for names");
+                                alertMsg("Sign Up Failed", "Please only enter letters for names.");
                             }
                         }
                     }else{
 
-                        //TODO:Alert dialog:password not match
                         Log.d(getString(R.string.debugInfo_text),"The passwords do not match.");
-                        alertMsg("Sign up Fail", "Passwords do not match");
+                        alertMsg("Sign Up Failed", "Passwords do not match.");
                     }
                 }
             }

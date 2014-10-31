@@ -111,23 +111,23 @@ public class SigninActivity extends Activity
                     //Log.d(getString(R.string.debugInfo_text),"Found and returned password: "+
                     //       object.getString("password"));
                     //TODO: Save user ID and go main activity
-                    if(passwordEncryption(password_field.getText().toString(),
+                    if (passwordEncryption(password_field.getText().toString(),
                             object.getString("salt")).equals(
                             object.getString("password"))) {
-                            // System.err.println("True\n");
-                            //Save User ID and go to Main Activity
+                        // System.err.println("True\n");
+                        //Save User ID and go to Main Activity
                         //Log.d(getString(R.string.debugInfo_text),object.getString("salt"));
-                            storeUserKey(object);
-                            gotoMainPage();
-                    }else{
+                        storeUserKey(object);
+                        gotoMainPage();
+                    } else {
                         //Password Not match
-                        alertMsg("Unable to Sign In",getString(R.string.ERROR_password));
+                        alertMsg("Unable to Sign In", getString(R.string.ERROR_password));
                     }
                 } else {
                     // something went wrong with networking
                     Log.d(getString(R.string.debugInfo_text), "Error: " + e.getMessage());
 
-                    alertMsg("Network Error","Please try again.");
+                    alertMsg("Network Error", "Please try again.");
                 }
             }
         });
@@ -167,7 +167,8 @@ public class SigninActivity extends Activity
         }
         catch(NoSuchAlgorithmException ex) {
             ex.printStackTrace();
-            return ""; // TODO: changed to a generic error msg
+            alertMsg("Fatal Error", "Program failed to generate password. Please try again later.");
+            return "";
         }
     }
 
