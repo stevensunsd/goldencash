@@ -1,6 +1,7 @@
 package cse110.com.goldencash;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -17,6 +18,7 @@ import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.parse.SaveCallback;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -39,6 +41,10 @@ public class SignupActivity extends Activity implements View.OnClickListener {
     boolean openDebit;
     boolean openCredit;
     boolean openSaving;
+
+    boolean finishTag = false;
+
+    protected ProgressDialog proDialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,6 +83,7 @@ public class SignupActivity extends Activity implements View.OnClickListener {
         if(findViewById(R.id.button_cancel).equals(view)) {
             finish();
         }else{
+            startLoading();
             //start checking all field by checking username
             checkAllFields();
         }
@@ -103,7 +110,20 @@ public class SignupActivity extends Activity implements View.OnClickListener {
             account.put("saving", 100);
 
             user.put("account",account);
-            user.saveInBackground();
+            user.saveInBackground(new SaveCallback() {
+                @Override
+                public void done(ParseException e) {
+                    stopLoading();
+                    if( e == null){
+                        //user created successfully
+                        finishTag = true;
+                        alertMsg("Successful", "Click OK to go to Sign In page.");
+                    }else{
+                        //Unable to create user with some network error.
+                        alertMsg("Unable to Sign Up","Please check your network connection and try again.");
+                    }
+                }
+            });
     }
 
     //check if password exactly same
@@ -183,7 +203,7 @@ public class SignupActivity extends Activity implements View.OnClickListener {
     }
 
     //this function will be using when need to clear the text user entered in the textfields
-    private void clearAlltext() {
+    protected void clearAlltext() {
         ViewGroup textFields = (ViewGroup) findViewById(R.id.signup_textFields);
         for (int i = 0, count = textFields.getChildCount(); i < count; ++i) {
             View view = textFields.getChildAt(i);
@@ -193,7 +213,7 @@ public class SignupActivity extends Activity implements View.OnClickListener {
         }
     }
 
-    private void alertMsg(String title, String msg){
+    protected void alertMsg(String title, String msg){
         //build dialog
         AlertDialog.Builder builder= new AlertDialog.Builder(this);
         builder.setTitle(title);
@@ -203,7 +223,9 @@ public class SignupActivity extends Activity implements View.OnClickListener {
                     public void onClick(DialogInterface dialog, int id) {
                         //clear msg
                         clearAlltext();
-
+                        if(finishTag){
+                            finish();
+                        }
                     }
                 });
         //create alert dialog
@@ -212,5 +234,17 @@ public class SignupActivity extends Activity implements View.OnClickListener {
         alert.show();
     }
 
+    protected void startLoading() {
+        proDialog = new ProgressDialog(this);
+        proDialog.setMessage("Signing Up...");
+        proDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        proDialog.setCancelable(false);
+        proDialog.show();
+    }
+
+    protected void stopLoading() {
+        proDialog.dismiss();
+        proDialog = null;
+    }
 }
 
