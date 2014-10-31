@@ -30,13 +30,13 @@ public class AccountsActivity extends Activity{
         // Forth - the Array of data
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_list_item_1, android.R.id.text1, values);
+                android.R.layout.simple_list_item_1, android.R.id.text1, somevalue);
 
         // Assign adapter to ListView
         listview.setAdapter(adapter);
 
         // ListView Item Click Listener
-        listview.setOnItemClickListener(new OnItemClickListener() {
+        listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
             public void onItemClick(AdapterView<?> parent, View view,
