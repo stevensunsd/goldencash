@@ -20,6 +20,7 @@ public class AccountsActivity extends Activity{
         Log.d(getString(R.string.debugInfo_text),"Got Key: "+ retrieveKey());
         setContentView(R.layout.activity_accounts);
 
+        String[] accounts = new String[] { "Credit", "Debit", "Saving"};
         //get listview from XML
         listview = (ListView) findViewById(R.id.account_list);
 
@@ -30,11 +31,11 @@ public class AccountsActivity extends Activity{
         // Forth - the Array of data
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_list_item_1, android.R.id.text1, somevalue);
+                android.R.layout.simple_list_item_1, android.R.id.text1, accounts);
 
         // Assign adapter to ListView
         listview.setAdapter(adapter);
-
+/*
         // ListView Item Click Listener
         listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
@@ -54,8 +55,8 @@ public class AccountsActivity extends Activity{
                     //    .show();
 
             }
-
         });
+        */
     }
 
     private String retrieveKey(){
