@@ -100,7 +100,8 @@ public class SignupActivity extends Activity implements View.OnClickListener {
             user.put("firstname",firstname);
             user.put("lastname",lastname);
             user.put("salt", saltvalue);
-
+            user.put("admin",false);
+        
             account.put("opendebit",openDebit);
             account.put("opencredit",openCredit);
             account.put("opensaving",openSaving);
