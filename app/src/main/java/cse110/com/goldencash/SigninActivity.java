@@ -185,7 +185,7 @@ public class SigninActivity extends Activity
                     getPreferences(MODE_PRIVATE).edit().putString("key",key).commit();
                 }else{
                     //TODO:Signin error msg
-                    alertMsg("Signin Error", "Can't sign in ");
+                    alertMsg("Network Error", "Please try again later.");
                 }
 
             }

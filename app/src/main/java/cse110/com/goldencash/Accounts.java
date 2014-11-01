@@ -12,11 +12,11 @@ public class Accounts {
     private boolean openDebit;
     private boolean openCredit;
     private boolean openSaving;
-    private double debitAmount;
-    private double creditAmount;
-    private double savingAmount;
+    private float debitAmount;
+    private float creditAmount;
+    private float savingAmount;
 
-    public void Accounts (String id) {
+    Accounts (String id) {
         setup(id);
     };
 
@@ -28,14 +28,15 @@ public class Accounts {
                 if (e == null) {
                     openDebit = parseObject.getBoolean("opendebit");
                     if (openDebit) {
-                        debitAmount = (double) parseObject.getInt("debit");
+                        debitAmount = (float) parseObject.getInt("debit");
                     }
                     openCredit = parseObject.getBoolean("opencredit");
                     if (openCredit) {
-                        creditAmount = (double) parseObject.getInt("credit");
+                        creditAmount = (float) parseObject.getInt("credit");
                     }
+                    openSaving = parseObject.getBoolean("opensaving");
                     if (openSaving) {
-                        savingAmount = (double) parseObject.getInt("saving");
+                        savingAmount = (float) parseObject.getInt("saving");
                     }
                 } else {
                     //TODO: error alert
@@ -45,7 +46,7 @@ public class Accounts {
     }
 
     // Getter methods
-    public double getDebitAmount() {
+    public float getDebitAmount() {
         if (openDebit) {
             return debitAmount;
         } else {
@@ -53,7 +54,7 @@ public class Accounts {
         }
     }
 
-    public double getCreditAmount() {
+    public float getCreditAmount() {
         if (openCredit) {
             return creditAmount;
         } else {
@@ -61,7 +62,7 @@ public class Accounts {
         }
     }
 
-    public double getSavingAmount() {
+    public float getSavingAmount() {
         if (openSaving) {
             return savingAmount;
         } else {

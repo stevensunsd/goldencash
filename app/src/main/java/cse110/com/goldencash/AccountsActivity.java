@@ -8,17 +8,31 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+//Our class
+import cse110.com.goldencash.Accounts;
+
 /**
  * Created by Xin Wen on 10/27/14.
  */
 public class AccountsActivity extends Activity{
 
     ListView listview;
+    protected boolean openDebit;
+    protected boolean openCredit;
+    protected boolean openSaving;
+    protected float debit;
+    protected float credit;
+    protected float saving;
+
+    protected Accounts accounts;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.d(getString(R.string.debugInfo_text),"Got Key: "+ retrieveKey());
+        Log.d(getString(R.string.debugInfo_text), "Got Key: " + retrieveKey());
+        accounts = new Accounts(retrieveKey());
+        credit = accounts.getCreditAmount();
+        
         setContentView(R.layout.activity_accounts);
 
         String[] accounts = new String[] { "Credit", "Debit", "Saving"};
