@@ -1,5 +1,6 @@
 package cse110.com.goldencash;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.app.Activity;
 import android.util.Log;
@@ -26,13 +27,14 @@ public class AccountsActivity extends Activity{
 
     protected Accounts accounts;
 
+    protected ProgressDialog proDialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.d(getString(R.string.debugInfo_text), "Got Key: " + retrieveKey());
         accounts = new Accounts(retrieveKey());
         credit = accounts.getCreditAmount();
-        
+
         setContentView(R.layout.activity_accounts);
 
         String[] accounts = new String[] { "Credit", "Debit", "Saving"};
@@ -76,5 +78,18 @@ public class AccountsActivity extends Activity{
 
     private String retrieveKey(){
         return getPreferences(MODE_PRIVATE).getString("key","");
+    }
+
+    protected void startLoading() {
+        proDialog = new ProgressDialog(this);
+        proDialog.setMessage("Signing Up...");
+        proDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        proDialog.setCancelable(false);
+        proDialog.show();
+    }
+
+    protected void stopLoading() {
+        proDialog.dismiss();
+        proDialog = null;
     }
 }
