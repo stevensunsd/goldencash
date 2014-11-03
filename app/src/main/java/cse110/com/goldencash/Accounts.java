@@ -85,8 +85,59 @@ public class Accounts {
         return openSaving;
     }
 
-    public void updateCreditAmount(float amount){
+    // methods updating balance
+    public void updateCreditAmount(final float amount){
         //Parse update the value
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("Account");
+        query.getInBackground(objId, new GetCallback<ParseObject>() {
+            @Override
+            public void done(ParseObject parseObject, ParseException e) {
+                if(e == null) {
+                    if(openCredit) {
+                        parseObject.put("credit", amount);
+                        parseObject.saveInBackground();
+                    }
+                    else {
+                        //err msg
+                    }
+                }
+            }
+        });
+    }
+
+    public void updateDebitAmount(final float amount) {
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("Account");
+        query.getInBackground(objId, new GetCallback<ParseObject>() {
+            @Override
+            public void done(ParseObject parseObject, ParseException e) {
+                if (e == null) {
+                    if (openDebit) {
+                        parseObject.put("debit", amount);
+                        parseObject.saveInBackground();
+                    } else {
+                        //err msg
+                    }
+                }
+            }
+        });
+    }
+
+    public void updateSavingAmount(final float amount) {
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("Account");
+        query.getInBackground(objId, new GetCallback<ParseObject>() {
+            @Override
+            public void done(ParseObject parseObject, ParseException e) {
+                if(e == null) {
+                    if(openSaving) {
+                        parseObject.put("saving", amount);
+                        parseObject.saveInBackground();
+                    }
+                    else {
+                        //err msg
+                    }
+                }
+            }
+        });
     }
 
 
