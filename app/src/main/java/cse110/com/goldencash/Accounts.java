@@ -18,6 +18,8 @@ public class Accounts {
     private float creditAmount;
     private float savingAmount;
 
+    private boolean flag;
+
     Accounts (String id) {
         setup(id);
     };
@@ -85,8 +87,8 @@ public class Accounts {
         return openSaving;
     }
 
-    // methods updating balance
-    public void updateCreditAmount(final float amount){
+    // methods updating balance, return true for success and false for fail
+    public boolean updateCreditAmount(final float amount){
         //Parse update the value
         ParseQuery<ParseObject> query = ParseQuery.getQuery("Account");
         query.getInBackground(objId, new GetCallback<ParseObject>() {
@@ -96,16 +98,19 @@ public class Accounts {
                     if(openCredit) {
                         parseObject.put("credit", amount);
                         parseObject.saveInBackground();
+                        flag = true;
                     }
                     else {
                         //err msg
+                        flag = false;
                     }
                 }
             }
         });
+        return flag;
     }
 
-    public void updateDebitAmount(final float amount) {
+    public boolean updateDebitAmount(final float amount) {
         ParseQuery<ParseObject> query = ParseQuery.getQuery("Account");
         query.getInBackground(objId, new GetCallback<ParseObject>() {
             @Override
@@ -114,15 +119,18 @@ public class Accounts {
                     if (openDebit) {
                         parseObject.put("debit", amount);
                         parseObject.saveInBackground();
+                        flag = true;
                     } else {
                         //err msg
+                        flag = false;
                     }
                 }
             }
         });
+        return flag;
     }
 
-    public void updateSavingAmount(final float amount) {
+    public boolean updateSavingAmount(final float amount) {
         ParseQuery<ParseObject> query = ParseQuery.getQuery("Account");
         query.getInBackground(objId, new GetCallback<ParseObject>() {
             @Override
@@ -131,13 +139,16 @@ public class Accounts {
                     if(openSaving) {
                         parseObject.put("saving", amount);
                         parseObject.saveInBackground();
+                        flag = true;
                     }
                     else {
                         //err msg
+                        flag = false;
                     }
                 }
             }
         });
+        return flag;
     }
 
 
