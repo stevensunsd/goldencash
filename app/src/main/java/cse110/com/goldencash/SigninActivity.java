@@ -22,7 +22,6 @@ import com.parse.ParseQuery;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-
 public class SigninActivity extends Activity
         implements View.OnClickListener {
 
@@ -30,6 +29,10 @@ public class SigninActivity extends Activity
     Button signupButton;
     EditText username_field;
     EditText password_field;
+
+    private int credit;
+    private int debit;
+    private int saving;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,7 +81,6 @@ public class SigninActivity extends Activity
         }
         return super.onOptionsItemSelected(item);
     }
-
     @Override
     public void onClick(View view) {
         //SignIn Button Clicked, Should have gone to a pop-up cover the main screen,
