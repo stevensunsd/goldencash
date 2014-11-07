@@ -1,6 +1,8 @@
 package cse110.com.goldencash;
 
 
+import android.util.Log;
+
 import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
@@ -20,11 +22,7 @@ public class Accounts {
 
     private boolean flag;
 
-    Accounts (String id) {
-        setup(id);
-    };
-
-    private void setup(String id) {
+    public void setup(String id) {
         ParseQuery<ParseObject> query = ParseQuery.getQuery("Account");
         query.getInBackground(id, new GetCallback<ParseObject>() {
             @Override
@@ -73,6 +71,10 @@ public class Accounts {
         } else {
             return 0;
         }
+    }
+
+    public String getObjectId() {
+        return objId;
     }
 
     public boolean getOpenDebit() {

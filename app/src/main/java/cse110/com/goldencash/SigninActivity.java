@@ -2,8 +2,10 @@ package cse110.com.goldencash;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -22,6 +24,7 @@ import com.parse.ParseQuery;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
+
 public class SigninActivity extends Activity
         implements View.OnClickListener {
 
@@ -30,9 +33,6 @@ public class SigninActivity extends Activity
     EditText username_field;
     EditText password_field;
 
-    private int credit;
-    private int debit;
-    private int saving;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,6 +81,7 @@ public class SigninActivity extends Activity
         }
         return super.onOptionsItemSelected(item);
     }
+
     @Override
     public void onClick(View view) {
         //SignIn Button Clicked, Should have gone to a pop-up cover the main screen,
@@ -116,7 +117,15 @@ public class SigninActivity extends Activity
                         // System.err.println("True\n");
                         //Save User ID and go to Main Activity
                         //Log.d(getString(R.string.debugInfo_text),object.getString("salt"));
-                        storeUserKey(object);
+
+                        ParseObject op = object.getParseObject("account");
+                        String key = op.getObjectId();
+                        SharedPreferences prefs = getSharedPreferences("myFile", Context.MODE_PRIVATE);
+                        SharedPreferences.Editor editor =  prefs.edit();
+                        editor.putString("key", key);
+                        editor.commit();
+
+                        Log.d(getString(R.string.debugInfo_text), "Saved Key"+key);
                         gotoMainPage();
                     } else {
                         //Password Not match
@@ -145,7 +154,7 @@ public class SigninActivity extends Activity
         builder.setPositiveButton("OK",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                       //clear msg
+                        //clear msg
                         username_field.setText("");
                         password_field.setText("");
                     }
@@ -176,24 +185,5 @@ public class SigninActivity extends Activity
         }
     }
 
-    private void storeUserKey(ParseObject user){
-        user.getParseObject("account").fetchInBackground(new GetCallback<ParseObject>() {
-            @Override
-            public void done(ParseObject object, ParseException e) {
-                if(e == null){
-                    String key = object.getObjectId();
-                    //saving to sharedpreference
-                    Log.d(getString(R.string.debugInfo_text),"Key: "+key);
-                    getPreferences(MODE_PRIVATE).edit().putString("key",key).commit();
-                }else{
-                    //TODO:Signin error msg
-                    alertMsg("Network Error", "Please try again later.");
-                }
 
-            }
-        });
-
-        //to retrieve
-        //"your_variable" = getPreferences(MODE_PRIVATE).getString("Name of variable",default value);
-    }
 }
