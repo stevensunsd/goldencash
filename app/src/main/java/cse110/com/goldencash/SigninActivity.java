@@ -118,8 +118,8 @@ public class SigninActivity extends Activity
                         //Save User ID and go to Main Activity
                         //Log.d(getString(R.string.debugInfo_text),object.getString("salt"));
 
-                        ParseObject op = object.getParseObject("account");
-                        String key = op.getObjectId();
+                        ParseObject po = object.getParseObject("account");
+                        String key = po.getObjectId();
                         SharedPreferences prefs = getSharedPreferences("myFile", Context.MODE_PRIVATE);
                         SharedPreferences.Editor editor =  prefs.edit();
                         editor.putString("key", key);
