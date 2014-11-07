@@ -1,14 +1,18 @@
 package cse110.com.goldencash;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.app.Activity;
+import android.preference.DialogPreference;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ListView;
 
 //Our class
@@ -39,7 +43,7 @@ public class AccountsActivity extends Activity{
     protected String[] accountArray;
 
     protected ProgressDialog proDialog;
-
+    protected ArrayAdapter<String> adapter;
 
     private void set() {
         accounts = new Accounts();
@@ -57,17 +61,21 @@ public class AccountsActivity extends Activity{
 
 
     private void set2() {
+        accounts = new Accounts();
+        accounts.setup(retrieveKey());
         ParseQuery<ParseObject> query = ParseQuery.getQuery("Account");
         query.getInBackground(retrieveKey(), new GetCallback<ParseObject>() {
             @Override
             public void done(ParseObject parseObject, ParseException e) {
                 if (e == null) {
                     openDebit = parseObject.getBoolean("opendebit");
-                    System.out.println("1"+openDebit);
-                    openCredit= parseObject.getBoolean("opencredit");
-                    openSaving= parseObject.getBoolean("opensaving");
-                }
-                else {
+                    openCredit = parseObject.getBoolean("opencredit");
+                    openSaving = parseObject.getBoolean("opensaving");
+                    debit = (float) parseObject.getInt("debit");
+                    credit = (float) parseObject.getInt("credit");
+                    saving = (float) parseObject.getInt("saving");
+                    setAdapter();
+                } else {
                     //TODO: error alert
                 }
             }
@@ -75,8 +83,32 @@ public class AccountsActivity extends Activity{
 
 
     }
+    private ArrayList<String> setAdapterarray(){
+        ArrayList<String> account_list=new ArrayList<String>();
+        String stringCredit = "Credit Account\nAvailable Balance:" + credit;
+        String stringSaving = "Saving Account\nAvailable Balance:" + saving;
+        String stringDebit = "Debit Account\nAvailable Balance:" + debit;
+        if(openDebit){
+            account_list.add(stringDebit);
+        }
+        if(openCredit){
+            account_list.add(stringCredit);
+        }
+        if(openSaving){
+            account_list.add(stringSaving);
+        }
+        return account_list;
+    }
 
+    private void setAdapter(){
+        ArrayList<String> templist=setAdapterarray();
+        adapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_list_item_1, android.R.id.text1, templist);
 
+        // Assign adapter to ListView
+        listview.setAdapter(adapter);
+
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -100,14 +132,11 @@ public class AccountsActivity extends Activity{
         // Forth - the Array of data
 
         set2();
-        System.out.println("Fuck"+openDebit);
-        accountArray = new String[] { "Credit Account\nAvailable Balance:" + openDebit, "Debit", "Saving"};
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_list_item_1, android.R.id.text1, accountArray);
+
 
         // Assign adapter to ListView
         listview.setAdapter(adapter);
-/*
+
         // ListView Item Click Listener
         listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
@@ -115,20 +144,33 @@ public class AccountsActivity extends Activity{
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
 
-                // ListView Clicked item index
-                int itemPosition     = position;
-
-                // ListView Clicked item value
-                String  itemValue    = (String) listview.getItemAtPosition(position);
-
-                // Show Alert
-                //Toast.makeText(getApplicationContext(),
-                  //      "Position :"+itemPosition+"  ListItem : " +itemValue , Toast.LENGTH_LONG)
-                    //    .show();
+                editbox();
 
             }
         });
-        */
+
+    }
+
+    protected void editbox() {
+        final EditText input = new EditText(this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Update Money").setIcon(android.R.drawable.ic_dialog_info).setView(input).setNegativeButton("Cancel",null);
+        builder.setPositiveButton("Confirm",new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog,int which) {
+                String update=input.getText().toString();
+                float number = (float)Integer.parseInt(update);
+                Log.d(getString(R.string.debugInfo_text),"new value"+number);
+                accounts.updateDebitAmount(number);
+                adapter.clear();
+                set2();
+                adapter.addAll(setAdapterarray());
+                adapter.notifyDataSetChanged();
+            }
+
+        });
+        builder.show();
+
+
     }
 
     private String retrieveKey(){
