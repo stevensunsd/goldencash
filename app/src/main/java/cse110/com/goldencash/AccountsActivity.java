@@ -80,9 +80,40 @@ public class AccountsActivity extends Activity{
                 }
             }
         });
+    }
+
+    private void refreshData() {
+        //accounts = new Accounts();
+
+        //accounts.setup(retrieveKey());
+       /*
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("Account");
+        query.getInBackground(retrieveKey(), new GetCallback<ParseObject>() {
+            @Override
+            public void done(ParseObject parseObject, ParseException e) {
+                if (e == null) {
+                    openDebit = parseObject.getBoolean("opendebit");
+                    openCredit = parseObject.getBoolean("opencredit");
+                    openSaving = parseObject.getBoolean("opensaving");
+                    debit = (float) parseObject.getInt("debit");
+                    credit = (float) parseObject.getInt("credit");
+                    saving = (float) parseObject.getInt("saving");
+
+                    adapter.clear();
+                    adapter.addAll(setAdapterarray());
+                    adapter.notifyDataSetChanged();
+                    listview.invalidate();
+                    Log.d(getString(R.string.debugInfo_text),"Done refresh.");
+                } else {
+                    //TODO: error alert
+                }
+            }
+        });
+        */
 
 
     }
+
     private ArrayList<String> setAdapterarray(){
         ArrayList<String> account_list=new ArrayList<String>();
         String stringCredit = "Credit Account\nAvailable Balance:" + credit;
@@ -135,7 +166,7 @@ public class AccountsActivity extends Activity{
 
 
         // Assign adapter to ListView
-        listview.setAdapter(adapter);
+       // listview.setAdapter(adapter);
 
         // ListView Item Click Listener
         listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -151,6 +182,12 @@ public class AccountsActivity extends Activity{
 
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        refreshData();
+    }
+
     protected void editbox() {
         final EditText input = new EditText(this);
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -161,10 +198,7 @@ public class AccountsActivity extends Activity{
                 float number = (float)Integer.parseInt(update);
                 Log.d(getString(R.string.debugInfo_text),"new value"+number);
                 accounts.updateDebitAmount(number);
-                adapter.clear();
-                set2();
-                adapter.addAll(setAdapterarray());
-                adapter.notifyDataSetChanged();
+                refreshData();
             }
 
         });
