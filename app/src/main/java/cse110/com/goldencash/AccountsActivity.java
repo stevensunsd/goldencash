@@ -4,12 +4,13 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.app.Activity;
-import android.preference.DialogPreference;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -22,8 +23,6 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
 import java.util.ArrayList;
-
-import cse110.com.goldencash.Accounts;
 
 /**
  * Created by Xin Wen on 10/27/14.
@@ -143,7 +142,16 @@ public class AccountsActivity extends Activity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // 11. Add a spinning progress bar (and make sure it's off)
+        requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
+        setProgressBarIndeterminateVisibility(false);
+
         setContentView(R.layout.activity_accounts);
+
+        //TODO:Get ID from Intent
+        //Intent intent = getIntent();
+        //String id = intent.getExtras().getString("userID");
+
         /* ArrayList<String> account_list=new ArrayList<String>();
         if(openDebit){
             account_list.add("Debit");
@@ -154,7 +162,7 @@ public class AccountsActivity extends Activity{
         }
         */
         //get listview from XML
-        listview = (ListView) findViewById(R.id.listView);
+        listview = (ListView) findViewById(R.id.listView_accounts);
 
         // Define a new Adapter
         // First parameter - Context
@@ -162,7 +170,6 @@ public class AccountsActivity extends Activity{
         // Third parameter - ID of the TextView to which the data is written
         // Forth - the Array of data
 
-        set2();
 
 
         // Assign adapter to ListView
@@ -174,11 +181,11 @@ public class AccountsActivity extends Activity{
             @Override
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
-
                 editbox();
 
             }
         });
+        set2();
 
     }
 

@@ -101,7 +101,8 @@ public class SigninActivity extends Activity
         startActivity(intent);
     }
     private void gotoMainPage(){
-        Intent intent = new Intent(this, AccountsActivity.class);
+        //Intent intent = new Intent(this, AccountsActivity.class);
+        Intent intent = new Intent(this, UserListActivity.class);
         startActivity(intent);
     }
     private void signIn(){
@@ -114,7 +115,7 @@ public class SigninActivity extends Activity
                     if (passwordEncryption(password_field.getText().toString(),
                             object.getString("salt")).equals(
                             object.getString("password"))) {
-                        // System.err.println("True\n");
+
                         //Save User ID and go to Main Activity
                         //Log.d(getString(R.string.debugInfo_text),object.getString("salt"));
 
@@ -126,7 +127,12 @@ public class SigninActivity extends Activity
                         editor.commit();
 
                         Log.d(getString(R.string.debugInfo_text), "Saved Key"+key);
-                        gotoMainPage();
+                        if(object.getBoolean("admin")){
+                            gotoMainPage();
+                        }else{
+                            //TODO:go to customer page
+
+                        }
                     } else {
                         //Password Not match
                         alertMsg("Unable to Sign In", getString(R.string.ERROR_password));

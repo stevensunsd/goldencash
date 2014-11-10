@@ -55,7 +55,7 @@ public class SignupActivity extends Activity implements View.OnClickListener {
         // Tell the activity which XML layout is right
         setContentView(R.layout.activity_signup);
         // Get the message from the intent
-        Intent intent = getIntent();
+        //Intent intent = getIntent();
 
         confirmButton = (Button) findViewById(R.id.button_confirm);
         confirmButton.setOnClickListener(this);
