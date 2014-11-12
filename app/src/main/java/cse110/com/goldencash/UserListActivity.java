@@ -88,4 +88,9 @@ public class UserListActivity extends Activity
         intent.putExtra("userID", id);
         startActivity(intent);
     }
+
+    @Override
+    public void onBackPressed(){
+        //TODO:Show up log out dialog
+    }
 }
