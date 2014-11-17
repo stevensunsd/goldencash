@@ -4,7 +4,7 @@ import android.app.Activity;
 import android.os.Bundle;
 
 /**
- * Created by jeremywen on 11/17/14.
+ * Created by Xin Wen on 11/17/14.
  */
 public class CustomerMainActivity extends Activity {
 
