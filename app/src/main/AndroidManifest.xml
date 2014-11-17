@@ -23,5 +23,6 @@
         <activity android:name=".SignupActivity"/>
         <activity android:name=".AccountsActivity"/>
         <activity android:name="UserListActivity"/>
+        <activity android:name=".CustomerMainActivity"/>
     </application>
 </manifest>

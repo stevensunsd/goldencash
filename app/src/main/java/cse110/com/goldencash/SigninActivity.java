@@ -105,6 +105,10 @@ public class SigninActivity extends Activity
         Intent intent = new Intent(this, UserListActivity.class);
         startActivity(intent);
     }
+    private void gotoCustomerMainPage(){
+        Intent intent = new Intent(this, CustomerMainActivity.class);
+        startActivity(intent);
+    }
     private void signIn(){
         ParseQuery<ParseObject> query = ParseQuery.getQuery("User");
         query.whereEqualTo("username",username_field.getText().toString());
@@ -131,7 +135,7 @@ public class SigninActivity extends Activity
                             gotoMainPage();
                         }else{
                             //TODO:go to customer page
-
+                            gotoCustomerMainPage();
                         }
                     } else {
                         //Password Not match
