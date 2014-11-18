@@ -148,7 +148,6 @@ public class AccountsActivity extends Activity{
 
         setContentView(R.layout.activity_accounts);
 
-        //TODO:Get ID from Intent
         //Intent intent = getIntent();
         //String id = intent.getExtras().getString("userID");
 
