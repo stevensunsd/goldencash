@@ -214,8 +214,11 @@ public class AccountsActivity extends Activity{
     }
 
     private String retrieveKey(){
-        SharedPreferences prefs = getSharedPreferences("myFile", Context.MODE_PRIVATE);
-        return prefs.getString("key","");
+//        SharedPreferences prefs = getSharedPreferences("myFile", Context.MODE_PRIVATE);
+//        return prefs.getString("key","");
+        Intent intent = getIntent();
+        return intent.getExtras().getString("userID");
+
     }
 
 

@@ -85,6 +85,8 @@ public class UserListActivity extends Activity
         Intent intent = new Intent(this, AccountsActivity.class);
         ParseObject po = parseObjects.get(i).getParseObject("account");
         String id = po.getObjectId();
+        String username = po.getString("username");
+        intent.putExtra("username",username);
         intent.putExtra("userID", id);
         startActivity(intent);
     }
