@@ -1,8 +1,10 @@
 package cse110.com.goldencash;
 
 
+import android.app.Activity;
+import android.app.AlertDialog;
 import android.util.Log;
-
+import android.content.DialogInterface;
 import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
@@ -11,7 +13,7 @@ import com.parse.ParseQuery;
 /**
  * Created by Yang on 10/31/2014.
  */
-public class Accounts {
+public class Accounts extends Activity {
     protected String objId;
     private boolean openDebit;
     private boolean openCredit;
@@ -19,6 +21,7 @@ public class Accounts {
     private float debitAmount;
     private float creditAmount;
     private float savingAmount;
+
 
     private boolean flag;
 
@@ -89,6 +92,8 @@ public class Accounts {
         return openSaving;
     }
 
+
+
     // methods updating balance, return true for success and false for fail
     public boolean updateCreditAmount(final float amount){
         //Parse update the value
@@ -153,5 +158,31 @@ public class Accounts {
         return flag;
     }
 
+    public boolean  checkwithdraw(final float withdrawAmount, final float currentAmount, String AccountType)
+    {
+        if( withdrawAmount > currentAmount)
+        {
+            String msg = "The Withdraw Amount: " + withdrawAmount + "is less than the amount; "+ currentAmount + "in your" + AccountType + "account";
+            alertMsg("Withdraw Error", msg);
+            return false;
+        }
+        else  return true;
 
+    }
+    protected void alertMsg(String title, String msg){
+        //build dialog
+        AlertDialog.Builder builder= new AlertDialog.Builder(this);
+        builder.setTitle(title);
+        builder.setMessage(msg);
+        builder.setPositiveButton("OK",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+
+                    }
+                });
+        //create alert dialog
+        AlertDialog alert = builder.create();
+        //show dialog on screen
+        alert.show();
+    }
 }
