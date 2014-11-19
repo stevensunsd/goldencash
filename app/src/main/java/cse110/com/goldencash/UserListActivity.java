@@ -37,6 +37,9 @@ public class UserListActivity extends Activity
         requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         setProgressBarIndeterminateVisibility(false);
 
+        //set title
+        setTitle("Users");
+
         setContentView(R.layout.activity_userlist);
         listView = (ListView)findViewById(R.id.listView_userlist);
         listView.setOnItemClickListener(this);
@@ -85,7 +88,7 @@ public class UserListActivity extends Activity
         Intent intent = new Intent(this, AccountsActivity.class);
         ParseObject po = parseObjects.get(i).getParseObject("account");
         String id = po.getObjectId();
-        String username = po.getString("username");
+        String username = parseObjects.get(i).getString("username");
         intent.putExtra("username",username);
         intent.putExtra("userID", id);
         startActivity(intent);

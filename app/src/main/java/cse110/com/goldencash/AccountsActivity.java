@@ -145,7 +145,9 @@ public class AccountsActivity extends Activity{
         // 11. Add a spinning progress bar (and make sure it's off)
         requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         setProgressBarIndeterminateVisibility(false);
-
+        //set title
+        setTitle(getIntent().getExtras().getString("username"));
+        //set view
         setContentView(R.layout.activity_accounts);
 
         //Intent intent = getIntent();

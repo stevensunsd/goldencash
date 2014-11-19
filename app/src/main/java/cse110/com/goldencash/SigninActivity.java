@@ -107,6 +107,7 @@ public class SigninActivity extends Activity
     }
     private void gotoCustomerMainPage(){
         Intent intent = new Intent(this, CustomerMainActivity.class);
+        intent.putExtra("username",username_field.getText().toString());
         startActivity(intent);
     }
     private void signIn(){

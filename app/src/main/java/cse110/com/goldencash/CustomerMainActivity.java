@@ -47,6 +47,7 @@ public class CustomerMainActivity extends Activity {
         requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         setProgressBarIndeterminateVisibility(false);
 
+        setTitle("Welcome, "+getIntent().getExtras().getString("username"));
         setContentView(R.layout.activity_customermain);
 
         //get listview from XML
