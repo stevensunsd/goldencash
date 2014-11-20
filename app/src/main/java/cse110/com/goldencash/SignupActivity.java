@@ -18,7 +18,10 @@ import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.parse.ParseRelation;
+import com.parse.ParseUser;
 import com.parse.SaveCallback;
+import com.parse.SignUpCallback;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -91,72 +94,46 @@ public class SignupActivity extends Activity implements View.OnClickListener {
 
     //Networking with Parse for signup
     private void processSignup() {
+        // Set up a new Parse user
+        final Account account = ParseObject.create(Account.class);
+        account.set(openDebit,openCredit,openSaving);
+        account.saveInBackground(new SaveCallback() {
+            public void done(ParseException e) {
+                if (e != null) {
+                    alertMsg("Account Sign Up Failed", "Error");
+                } else {
+                    ParseUser user = new ParseUser();
+                    user.setUsername(username);
+                    user.setPassword(password1);
+                    user.put("firstname", firstname);
+                    user.put("lastname", lastname);
+                    user.put("admin", false);
+                    user.put("account",account);
 
-            Log.d(getString(R.string.debugInfo_text),"signing up for: "+username);
-            ParseObject user = new ParseObject("User");
-            ParseObject account = new ParseObject("Account");
-            user.put("username",username);
-            user.put("password",password1);
-            user.put("firstname",firstname);
-            user.put("lastname",lastname);
-            user.put("salt", saltvalue);
-            user.put("admin",false);
-
-            account.put("opendebit",openDebit);
-            account.put("opencredit",openCredit);
-            account.put("opensaving",openSaving);
-
-            account.put("debit", 100);
-            account.put("credit", 100);
-            account.put("saving", 100);
-
-            user.put("account",account);
-            user.saveInBackground(new SaveCallback() {
-                @Override
-                public void done(ParseException e) {
-                    stopLoading();
-                    if( e == null){
-                        //user created successfully
-                        finishTag = true;
-                        alertMsg("Successful", "Click OK to go to Sign In page.");
-                    }else{
-                        //Unable to create user with some network error.
-                        alertMsg("Unable to Sign Up","Please check your network connection and try again.");
-                    }
+                    // Call the Parse signup method
+                    user.signUpInBackground(new SignUpCallback() {
+                        public void done(ParseException e) {
+                            stopLoading();
+                            if (e != null) {
+                                alertMsg("Sign Up Failed", "Please Check Your Information");
+                            } else {
+                                // Start an intent for the dispatch activity
+                                Intent intent = new Intent(SignupActivity.this, SigninActivity.class);
+                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                startActivity(intent);
+                            }
+                        }
+                    });
                 }
-            });
+            }
+        });
     }
 
     //check if password exactly same
     private boolean checkPassword(){
-
         //check two passwords if equals
         return (password1.equals(password2));
     }
-
-    private String passwordEncryption(String password) {
-        try {
-            SecureRandom rand = SecureRandom.getInstance("SHA1PRNG");
-            byte[] salt = new byte[16];
-            rand.nextBytes(salt);
-            saltvalue = salt.toString();
-            MessageDigest msg = MessageDigest.getInstance("MD5");
-            msg.update(saltvalue.getBytes());
-            byte[] bytes = msg.digest(password.getBytes());
-            StringBuilder build = new StringBuilder();
-            for (byte aByte : bytes) {
-                build.append(Integer.toString((aByte & 0xff) + 0x100, 16).substring(1));
-            }
-            // System.err.println(build.toString());
-            return build.toString();
-        }
-        catch(NoSuchAlgorithmException ex) {
-            ex.printStackTrace();
-            //alertMsg("Fatal Error", "Program failed to generate password. Please try again later.");
-            return "";
-        }
-    }
-
 
     //A chain of methods to validate all fields that user entered
     private void checkAllFields(){
@@ -180,7 +157,7 @@ public class SignupActivity extends Activity implements View.OnClickListener {
                     usernameOk = true;
                     //after function call back returned, check password.
                     if(checkPassword()){
-                        password1 = passwordEncryption(password1);
+                        //password1 = passwordEncryption(password1);
                         // can change if-statement later to reflect project specifications
                         if((openDebit) || (openCredit) || (openSaving)) {
                             if((firstname.matches("[a-zA-Z]+")) &&

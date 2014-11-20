@@ -20,27 +20,25 @@ import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.parse.ParseUser;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
+import android.app.ProgressDialog;import com.parse.LogInCallback;
 
 public class SigninActivity extends Activity
         implements View.OnClickListener {
 
-    Button signinButton;
-    Button signupButton;
-    EditText username_field;
-    EditText password_field;
+    private Button signinButton;
+    private Button signupButton;
+    private EditText username_field;
+    private EditText password_field;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        //init Parse with these specific key
-        Parse.initialize(this, getString(R.string.ApplicationID),
-                getString(R.string.ClientKey));
 
         //test Parse
         /*FOR TEST ONLY
@@ -61,7 +59,6 @@ public class SigninActivity extends Activity
         password_field = (EditText) findViewById(R.id.passwordField);
 
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -97,7 +94,8 @@ public class SigninActivity extends Activity
     }
 
     private void gotoSignup() {
-        Intent intent = new Intent(this, SignupActivity.class);
+        Intent intent = new Intent(SigninActivity.this, SignupActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
     }
     private void gotoMainPage(){
@@ -110,48 +108,25 @@ public class SigninActivity extends Activity
         intent.putExtra("username",username_field.getText().toString());
         startActivity(intent);
     }
-    private void signIn(){
-        ParseQuery<ParseObject> query = ParseQuery.getQuery("User");
-        query.whereEqualTo("username",username_field.getText().toString());
-        query.getFirstInBackground(new GetCallback<ParseObject>() {
-            public void done(ParseObject object, ParseException e) {
-                if (e == null) {
-                    // object will be your User
-                    if (passwordEncryption(password_field.getText().toString(),
-                            object.getString("salt")).equals(
-                            object.getString("password"))) {
-
-                        //Save User ID and go to Main Activity
-                        //Log.d(getString(R.string.debugInfo_text),object.getString("salt"));
-
-                        ParseObject po = object.getParseObject("account");
-                        String key = po.getObjectId();
-                        SharedPreferences prefs = getSharedPreferences("myFile", Context.MODE_PRIVATE);
-                        SharedPreferences.Editor editor =  prefs.edit();
-                        editor.putString("key", key);
-                        editor.commit();
-
-                        Log.d(getString(R.string.debugInfo_text), "Saved Key"+key);
-                        if(object.getBoolean("admin")){
-                            gotoMainPage();
-                        }else{
-                            //TODO:go to customer page
-                            gotoCustomerMainPage();
-                        }
-                    } else {
-                        //Password Not match
-                        alertMsg("Unable to Sign In", getString(R.string.ERROR_password));
-                    }
+    private void signIn() {
+        final ProgressDialog dlg = new ProgressDialog(SigninActivity.this);
+        dlg.setTitle("Please wait.");
+        dlg.setMessage("Logging in.  Please wait.");
+        dlg.show();
+        // Call the Parse login method
+        ParseUser.logInInBackground(username_field.getText().toString(), password_field.getText()
+                .toString(), new LogInCallback() {
+            @Override
+            public void done(ParseUser user, ParseException e) {
+                dlg.dismiss();
+                if (e != null) {
+                    // Show the error message
+                    alertMsg("Logging in Fail","User name and Password doesn't match");
                 } else {
-                    // something went wrong with networking or username not found
-                    if(e.getCode() == 101){
-                        Log.d(getString(R.string.debugInfo_text), "Error: "+e.getMessage());
-                        alertMsg("Unable to Sign In", getString(R.string.ERROR_password));
-                    }else {
-                        Log.d(getString(R.string.debugInfo_text), "Error: " + e.getMessage());
-
-                        alertMsg("Network Error", "Please try again.");
-                    }
+                    // Start an intent for the dispatch activity
+                    Intent intent = new Intent(SigninActivity.this, UserListActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
                 }
             }
         });
@@ -175,26 +150,4 @@ public class SigninActivity extends Activity
         //show dialog on screen
         alert.show();
     }
-
-    private String passwordEncryption(String password, String salted) {
-        try {
-            //System.err.println(salted);
-            MessageDigest msg = MessageDigest.getInstance("MD5");
-            msg.update(salted.getBytes());
-            byte[] bytes = msg.digest(password.getBytes());
-            StringBuilder build = new StringBuilder();
-            for (byte aByte : bytes) {
-                build.append(Integer.toString((aByte & 0xff) + 0x100, 16).substring(1));
-            }
-            //System.err.println(build.toString());
-            return build.toString();
-        }
-        catch(NoSuchAlgorithmException ex) {
-            ex.printStackTrace();
-            alertMsg("Fatal Error", "Program failed to generate password. Please try again later.");
-            return "";
-        }
-    }
-
-
 }

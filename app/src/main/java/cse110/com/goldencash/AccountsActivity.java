@@ -30,12 +30,14 @@ import java.util.ArrayList;
 public class AccountsActivity extends Activity{
 
     ListView listview;
+    protected String objectID;
     protected boolean openDebit;
     protected boolean openCredit;
     protected boolean openSaving;
     protected float debit;
     protected float credit;
     protected float saving;
+    protected float number;
 
 
     protected Accounts accounts;
@@ -67,6 +69,7 @@ public class AccountsActivity extends Activity{
             @Override
             public void done(ParseObject parseObject, ParseException e) {
                 if (e == null) {
+                    objectID = parseObject.getObjectId();
                     openDebit = parseObject.getBoolean("opendebit");
                     openCredit = parseObject.getBoolean("opencredit");
                     openSaving = parseObject.getBoolean("opensaving");
@@ -82,6 +85,12 @@ public class AccountsActivity extends Activity{
     }
 
     private void refreshData() {
+
+
+
+        Intent intent = new Intent(this, AccountsActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
         //accounts = new Accounts();
 
         //accounts.setup(retrieveKey());
@@ -190,11 +199,13 @@ public class AccountsActivity extends Activity{
 
     }
 
+    /*
     @Override
     public void onResume() {
         super.onResume();
         refreshData();
     }
+    */
 
     protected void editbox() {
         final EditText input = new EditText(this);
@@ -203,9 +214,20 @@ public class AccountsActivity extends Activity{
         builder.setPositiveButton("Confirm",new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog,int which) {
                 String update=input.getText().toString();
-                float number = (float)Integer.parseInt(update);
+                number = (float)Integer.parseInt(update);
                 Log.d(getString(R.string.debugInfo_text),"new value"+number);
-                accounts.updateDebitAmount(number);
+
+                ParseQuery<ParseObject> query = ParseQuery.getQuery("Debit");
+                query.getInBackground(objectID, new GetCallback<ParseObject>() {
+                            public void done(ParseObject object, ParseException e) {
+                                if (e == null) {
+                                    object.put("debit", number);
+                                    object.saveEventually();
+                                } else {
+
+                                }
+                            }
+                        });
                 refreshData();
             }
 
