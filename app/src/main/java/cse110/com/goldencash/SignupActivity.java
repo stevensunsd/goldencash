@@ -52,8 +52,8 @@ public class SignupActivity extends Activity implements View.OnClickListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Parse.initialize(this, getString(R.string.ApplicationID),
-                getString(R.string.ClientKey));
+        //Parse.initialize(this, getString(R.string.ApplicationID),
+          //      getString(R.string.ClientKey));
 
         // Tell the activity which XML layout is right
         setContentView(R.layout.activity_signup);

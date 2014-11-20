@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.app.Activity;
+import android.text.InputType;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
@@ -209,6 +210,7 @@ public class AccountsActivity extends Activity{
 
     protected void editbox() {
         final EditText input = new EditText(this);
+        input.setInputType(InputType.TYPE_CLASS_NUMBER);
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Update Money").setIcon(android.R.drawable.ic_dialog_info).setView(input).setNegativeButton("Cancel",null);
         builder.setPositiveButton("Confirm",new DialogInterface.OnClickListener() {
@@ -219,15 +221,15 @@ public class AccountsActivity extends Activity{
 
                 ParseQuery<ParseObject> query = ParseQuery.getQuery("Debit");
                 query.getInBackground(objectID, new GetCallback<ParseObject>() {
-                            public void done(ParseObject object, ParseException e) {
-                                if (e == null) {
-                                    object.put("debit", number);
-                                    object.saveEventually();
-                                } else {
+                    public void done(ParseObject object, ParseException e) {
+                        if (e == null) {
+                            object.put("debit", number);
+                            object.saveEventually();
+                        } else {
 
-                                }
-                            }
-                        });
+                        }
+                    }
+                });
                 refreshData();
             }
 

@@ -15,6 +15,7 @@ import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.parse.ParseUser;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,7 +51,7 @@ public class UserListActivity extends Activity
     //query limit to 100 at most one time.
     private void queryUsers(){
         setProgressBarIndeterminateVisibility(true);
-        ParseQuery<ParseObject> query = ParseQuery.getQuery("User");
+        ParseQuery query = ParseUser.getQuery();
         query.findInBackground(new FindCallback<ParseObject>() {
             @Override
             public void done(List<ParseObject> parseObjects, ParseException e) {

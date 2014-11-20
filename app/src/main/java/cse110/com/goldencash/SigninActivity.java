@@ -110,7 +110,7 @@ public class SigninActivity extends Activity
     }
     private void signIn() {
         final ProgressDialog dlg = new ProgressDialog(SigninActivity.this);
-        dlg.setTitle("Please wait.");
+        //dlg.setTitle("Please wait.");
         dlg.setMessage("Logging in.  Please wait.");
         dlg.show();
         // Call the Parse login method
@@ -123,6 +123,7 @@ public class SigninActivity extends Activity
                     // Show the error message
                     alertMsg("Logging in Fail","User name and Password doesn't match");
                 } else {
+                    //Log.d(getString(R.string.debugInfo_text),user.getString("admin"));
                     // Start an intent for the dispatch activity
                     Intent intent = new Intent(SigninActivity.this, UserListActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
