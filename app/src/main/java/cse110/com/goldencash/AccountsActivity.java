@@ -12,6 +12,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
+import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -35,29 +36,13 @@ public class AccountsActivity extends Activity{
     private User user = new User();
     private Account account = user.getAccount();
 
-    protected ProgressDialog proDialog;
     protected ArrayAdapter<String> adapter;
 
-    // need fix this
     private void refreshData() {
         Intent intent = new Intent(AccountsActivity.this, AccountsActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(intent); //accounts = new Accounts();
-
-        //accounts.setup(retrieveKey());
-       /*
-        ParseQuery<ParseObject> query = ParseQuery.getQuery("Account");
-        query.getInBackground(retrieveKey(), new GetCallback<ParseObject>() {
-            @Override
-            public void done(ParseObject parseObject, ParseException e) {
-                if (e == null) {
-                    openDebit = parseObject.getBoolean("opendebit");
-                    openCredit = parseObject.getBoolean("opencredit");
-                    openSaving = parseObject.getBoolean("opensaving");
-                    debit = (float) parseObject.getInt("debit");
-                    credit = (float) parseObject.getInt("credit");
-                    saving = (float) parseObject.getInt("saving");
-
+        startActivity(intent);
+                   /*
                     adapter.clear();
                     adapter.addAll(setAdapterarray());
                     adapter.notifyDataSetChanged();
@@ -126,20 +111,27 @@ public class AccountsActivity extends Activity{
             @Override
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
-                editbox();
+                // add id to give choose about which account you want to change
+                editbox(id);
             }
         });
         setAdapter();
     }
 
-    protected void editbox() {
+    protected void editbox(long id) {
         final EditText input = new EditText(this);
-        input.setInputType(InputType.TYPE_CLASS_NUMBER);
+        final int choose = (int)id;
+        input.setInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL);
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Update Money").setIcon(android.R.drawable.ic_dialog_info).setView(input).setNegativeButton("Cancel",null);
+        builder.setTitle("Please Enter The Amount You Want to Change").setIcon(android.R.drawable.ic_dialog_info).setView(input).setNegativeButton("Cancel",null);
         builder.setPositiveButton("Confirm",new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog,int which) {
-                account.setDebit(Double.parseDouble(input.getText().toString()));
+                switch (choose) {
+                    case 0:account.setDebit(Double.parseDouble(input.getText().toString())); break;
+                    case 1:account.setCredit(Double.parseDouble(input.getText().toString())); break;
+                    case 2:account.setSaving(Double.parseDouble(input.getText().toString())); break;
+                    default: // error
+                }
                 refreshData();
             }
 
