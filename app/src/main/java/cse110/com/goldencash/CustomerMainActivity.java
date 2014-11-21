@@ -45,6 +45,7 @@ public class CustomerMainActivity extends Activity {
 
     protected User user = new User();
 
+    protected boolean flag = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -157,6 +158,8 @@ public class CustomerMainActivity extends Activity {
             return true;
         }else if (id == R.id.action_logout){
             customerLogOut();
+        }else if (id == R.id.action_close_account){
+            closeAccount();
         }
         return super.onOptionsItemSelected(item);
     }
@@ -177,6 +180,57 @@ public class CustomerMainActivity extends Activity {
         //show dialog on screen
         alert.show();
     }
+
+    private void closeAccount(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        ArrayList list = new ArrayList();
+        if(openDebit){
+            list.add("Debit");
+        }
+        if(openCredit){list.add("Credit");}
+        if(openSaving){
+            list.add("Saving");
+        }
+
+        ArrayAdapter adapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_list_item_1, android.R.id.text1, list);
+        builder.setAdapter(adapter, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                //check close account
+                Account account = user.getAccount();
+                switch (i) {
+                    case 0:
+                        if(account.isOpenDebit()) {
+                            account.setOpenDebit(false);
+                            break;
+                        }
+                        else if(account.isOpenCredit()) {
+                            flag = true;
+                            account.setOpenCredit(false); break;
+                        }
+                        else {
+                            account.setOpenSaving(false); break;
+                        }
+                    case 1:
+                        if(account.isOpenCredit()&&!flag) {
+                            account.setOpenCredit(false); break;
+                        }
+                        else {
+                            account.setOpenSaving(false); break;
+                        }
+                    case 2:account.setOpenSaving(false);break;
+                    default: // error
+                }
+                refreshData();
+            }
+        });
+        builder.setTitle("Choose an account").setIcon(android.R.drawable.ic_dialog_info);
+        //create alert dialog
+        AlertDialog alert = builder.create();
+        //show dialog on screen
+        alert.show();
+    }
     private void gotoSigninActtivity(){
         Intent intent = new Intent(this,SigninActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -185,6 +239,11 @@ public class CustomerMainActivity extends Activity {
 
     private void gotoTransactionPage(){
         Intent intent = new Intent(this,TransactionActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+    }
+    private void refreshData() {
+        Intent intent = new Intent(CustomerMainActivity.this, CustomerMainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
     }
