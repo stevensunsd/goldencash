@@ -4,7 +4,7 @@ import android.util.Log;
 
 import com.parse.GetCallback;
 import com.parse.ParseClassName;
-import com.parse.ParseException;;
+import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
@@ -24,11 +24,11 @@ public class User extends ParseUser {
         return user.getBoolean("admin");
     }
 
-    public String getFirtName() {
+    public String getFirstName() {
         return user.getString("firstname");
     }
 
-    public void setFirtName(String value) {
+    public void setFirstName(String value) {
         user.put("firstname", value);
         user.saveInBackground();
     }

@@ -44,14 +44,14 @@ public class AccountsActivityTest extends ActivityInstrumentationTestCase2<Accou
     }
 
     public void testPreconditions() {
-        //assertNotNull("accounts is not null", t_accounts);
-        //assertNotNull("listview button is not null", t_listview);
-        //assertNotNull("opendebit username is not null", t_openDebit);
-        //assertNotNull("opencredit password is not null", t_openCredit);
-        //assertNotNull("opensaving button is not null", t_openSaving);
-        //assertNotNull("debit username is not null", t_debit);
-        //assertNotNull("credit password is not null", t_credit);
-        //assertNotNull("saving button is not null", t_saving);
-        //assertNotNull("saving button is not null", t_account);
+        assertNotNull("accounts is not null", t_accounts);
+        assertNotNull("listview button is not null", t_listview);
+        assertNotNull("opendebit username is not null", t_openDebit);
+        assertNotNull("opencredit password is not null", t_openCredit);
+        assertNotNull("opensaving button is not null", t_openSaving);
+        assertNotNull("debit username is not null", t_debit);
+        assertNotNull("credit password is not null", t_credit);
+        assertNotNull("saving button is not null", t_saving);
+        assertNotNull("saving button is not null", t_account);
     }
 }
