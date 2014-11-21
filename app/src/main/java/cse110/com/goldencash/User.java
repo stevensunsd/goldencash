@@ -1,11 +1,19 @@
 package cse110.com.goldencash;
 
+import android.util.Log;
+
+import com.parse.GetCallback;
+import com.parse.ParseClassName;
+import com.parse.ParseException;;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
 /**
  * Created by Sun on 2014/11/20.
  */
-public class User extends ParseUser{
+@ParseClassName("User")
+public class User extends ParseUser {
     private ParseUser user;
 
     public User() {
@@ -16,14 +24,36 @@ public class User extends ParseUser{
         return user.getBoolean("admin");
     }
 
-    public String getFirtName() { return user.getString("firstname"); }
+    public String getFirtName() {
+        return user.getString("firstname");
+    }
 
-    public void setFirtName(String value) { user.put("firstname", value); saveInBackground(); }
+    public void setFirtName(String value) {
+        user.put("firstname", value);
+        user.saveInBackground();
+    }
 
-    public String getLastName() { return user.getString("lasttname"); }
+    public String getLastName() {
+        return user.getString("lasttname");
+    }
 
-    public void setLastName(String value) { user.put("lastname",value); saveInBackground(); }
+    public void setLastName(String value) {
+        user.put("lastname", value);
+        user.saveInBackground();
+    }
 
-    public Account getAccount() {  return Account.createWithoutData(Account.class, user.getString("account")); }
+    public void LogOut() {
+        user.logOut();
+    }
+
+    public Account getAccount() {
+        Account account = (Account) user.getParseObject("account");
+        try {
+            account.fetchIfNeeded();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return account;
+    }
 
 }

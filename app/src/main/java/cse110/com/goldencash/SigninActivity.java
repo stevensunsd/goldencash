@@ -2,10 +2,8 @@ package cse110.com.goldencash;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -15,39 +13,22 @@ import android.widget.Button;
 import android.widget.EditText;
 
 //Parse Imports
-import com.parse.GetCallback;
-import com.parse.Parse;
 import com.parse.ParseException;
-import com.parse.ParseObject;
-import com.parse.ParseQuery;
 import com.parse.ParseUser;
-
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 
 import android.app.ProgressDialog;import com.parse.LogInCallback;
 
-public class SigninActivity extends Activity
-        implements View.OnClickListener {
+public class SigninActivity extends Activity implements View.OnClickListener {
 
     private Button signinButton;
     private Button signupButton;
     private EditText username_field;
     private EditText password_field;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        //test Parse
-        /*FOR TEST ONLY
-        ParseObject user = new ParseObject("User");
-        user.put("username","wenxin3262");
-        user.put("password","123");
-        user.put("user_id",12345);
-        user.saveInBackground();
-        */
         setContentView(R.layout.activity_signin);
 
         signinButton = (Button) findViewById(R.id.signin_button);
@@ -57,7 +38,6 @@ public class SigninActivity extends Activity
 
         username_field = (EditText) findViewById(R.id.usernameField);
         password_field = (EditText) findViewById(R.id.passwordField);
-
     }
 
     @Override
@@ -85,9 +65,8 @@ public class SigninActivity extends Activity
         //then check the username and password with the database, if correct, jump
         //to main screen, or false should return to the sign in screen.
         if(findViewById(R.id.signin_button).equals(view)) {
-            Log.d(getString(R.string.debugInfo_text), "Username entered: " +
-                    username_field.getText().toString());
-            signIn();
+        //Log.d(getString(R.string.debugInfo_text), "Username entered: " +  username_field.getText().toString());
+            checkInput();
         }else{
             gotoSignup();
         }
@@ -98,7 +77,7 @@ public class SigninActivity extends Activity
         startActivity(intent);
     }
     private void gotoMainPage(){
-        Intent intent = new Intent(SigninActivity.this, UserListActivity.class);
+        Intent intent = new Intent(SigninActivity.this, AccountsActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
     }
@@ -110,11 +89,10 @@ public class SigninActivity extends Activity
     }
     private void signIn() {
         final ProgressDialog dlg = new ProgressDialog(SigninActivity.this);
-        //dlg.setTitle("Please wait.");
         dlg.setMessage("Logging in.  Please wait.");
         dlg.show();
         // Call the Parse login method
-        ParseUser.logInInBackground(username_field.getText().toString(), password_field.getText()
+        User.logInInBackground(username_field.getText().toString(), password_field.getText()
                 .toString(), new LogInCallback() {
             @Override
             public void done(ParseUser user, ParseException e) {
@@ -156,5 +134,21 @@ public class SigninActivity extends Activity
         AlertDialog alert = builder.create();
         //show dialog on screen
         alert.show();
+    }
+
+    private void checkInput(){
+        if(isEmpty(username_field.getText().toString())){
+            alertMsg("Logging in Fail", "Please Enter Username");
+        }
+        else if (isEmpty(password_field.getText().toString())){
+            alertMsg("Logging in Fail", "Please Enter Password");
+        }
+        else {
+            signIn();
+        }
+    }
+
+    private boolean isEmpty(String s) {
+        return s.trim().length() > 0 ? false : true;
     }
 }

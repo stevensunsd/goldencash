@@ -6,26 +6,17 @@ import android.content.Intent;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 
-import com.parse.GetCallback;
-import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseObject;
-import com.parse.ParseQuery;
-import com.parse.ParseRelation;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 import com.parse.SignUpCallback;
-
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
 
 /**
  * Created by Xin Wen on 10/21/14.
@@ -34,13 +25,13 @@ public class SignupActivity extends Activity implements View.OnClickListener {
 
     Button cancelButton;
     Button confirmButton;
-    boolean usernameOk;
+
     String username;
     String password1;
     String password2;
     String firstname;
     String lastname;
-    String saltvalue;
+
     boolean openDebit;
     boolean openCredit;
     boolean openSaving;
@@ -51,34 +42,23 @@ public class SignupActivity extends Activity implements View.OnClickListener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        //Parse.initialize(this, getString(R.string.ApplicationID),
-          //      getString(R.string.ClientKey));
-
         // Tell the activity which XML layout is right
         setContentView(R.layout.activity_signup);
-        // Get the message from the intent
-        //Intent intent = getIntent();
 
         confirmButton = (Button) findViewById(R.id.button_confirm);
         confirmButton.setOnClickListener(this);
         cancelButton = (Button) findViewById(R.id.button_cancel);
         cancelButton.setOnClickListener(this);
-
     }
 
     @Override
     public void onClick(View view) {
         username = ((EditText)
                 findViewById(R.id.signup_username)).getText().toString().toLowerCase();
-
         password1 = ((EditText) findViewById(R.id.signup_password)).getText().toString();
-
         password2 = ((EditText) findViewById(R.id.signup_password2)).getText().toString();
-
         firstname = ((EditText)findViewById(R.id.signup_firstname)).getText().toString();
         lastname = ((EditText)findViewById(R.id.signup_lastname)).getText().toString();
-
         openDebit = ((CheckBox)findViewById(R.id.check_debit)).isChecked();
         openCredit = ((CheckBox)findViewById(R.id.check_credit)).isChecked();
         openSaving  = ((CheckBox)findViewById(R.id.check_saving)).isChecked();
@@ -86,23 +66,49 @@ public class SignupActivity extends Activity implements View.OnClickListener {
         if(findViewById(R.id.button_cancel).equals(view)) {
             finish();
         }else{
-            startLoading();
-            //start checking all field by checking username
-            checkAllFields();
+            checkInputFields();
+        }
+    }
+
+    //A chain of methods to validate all fields that user entered
+    private void checkInputFields(){
+        if(isEmpty(username)) {
+            alertMsg("Sign Up Failed", "Please Enter Username");
+        }
+        else if(isEmpty(password1)||isEmpty(password2)){
+            alertMsg("Sign Up Failed", "Please Enter Password");
+        }
+        else if(!password1.equals(password2)) {
+            alertMsg("Sign Up Failed", "The passwords do not match");
+        }
+        else if (isEmpty(firstname)||isEmpty(lastname)){
+            alertMsg("Sign Up Failed", "Please Enter Firstname or Lastname");
+        }
+        else if (!(firstname.matches("[a-zA-Z]+")) || !(lastname.matches("[a-zA-Z]+"))) {
+            alertMsg("Sign Up Failed", "Please only enter letters for names.");
+        }
+        else if(!openCredit && !openDebit &&!openSaving) {
+            alertMsg("Sign Up Failed", "Please Check one Account type");
+        }
+        else {
+            processSignup();
         }
     }
 
     //Networking with Parse for signup
     private void processSignup() {
-        // Set up a new Parse user
+        startLoading();
+        // Set up a new Account
         final Account account = ParseObject.create(Account.class);
-        account.set(openDebit,openCredit,openSaving);
+        account.setup(openDebit,openCredit,openSaving);
         account.saveInBackground(new SaveCallback() {
             public void done(ParseException e) {
                 if (e != null) {
-                    alertMsg("Account Sign Up Failed", "Error");
+                    stopLoading();
+                    alertMsg("User Account Sign Up Failed", e.getMessage());
                 } else {
-                    ParseUser user = new ParseUser();
+                    // Set up a new User
+                    User user = new User();
                     user.setUsername(username);
                     user.setPassword(password1);
                     user.put("firstname", firstname);
@@ -110,13 +116,12 @@ public class SignupActivity extends Activity implements View.OnClickListener {
                     user.put("admin", false);
                     user.put("account",account);
 
-
                     // Call the Parse signup method
                     user.signUpInBackground(new SignUpCallback() {
                         public void done(ParseException e) {
                             stopLoading();
                             if (e != null) {
-                                alertMsg("Sign Up Failed", "Please Check Your Internet Connection");
+                                alertMsg("User Sign Up Failed", e.getMessage());
                             } else {
                                 // Start an intent for the dispatch activity
                                 Intent intent = new Intent(SignupActivity.this, SigninActivity.class);
@@ -125,57 +130,6 @@ public class SignupActivity extends Activity implements View.OnClickListener {
                             }
                         }
                     });
-                }
-            }
-        });
-    }
-
-    //check if password exactly same
-    private boolean checkPassword(){
-        //check two passwords if equals
-        return (password1.equals(password2));
-    }
-
-    //A chain of methods to validate all fields that user entered
-    private void checkAllFields(){
-
-        ParseQuery<ParseObject> query = ParseQuery.getQuery("User");
-        query.whereEqualTo("username",username);
-        query.getFirstInBackground(new GetCallback<ParseObject>() {
-            public void done(ParseObject object, ParseException e) {
-
-                if (e == null) {
-                    // object will be your User
-                    Log.d(getString(R.string.debugInfo_text),"Found a existing username");
-                    alertMsg("Sign Up Failed", "Username already exists, choose a new username.");
-                    usernameOk = false;
-                } else {
-                    //username is ok to create
-                    Log.d(getString(R.string.debugInfo_text),"no username used, OK to create");
-                    //System.out.println(username);
-
-                    //set username to true
-                    usernameOk = true;
-                    //after function call back returned, check password.
-                    if(checkPassword()){
-                        //password1 = passwordEncryption(password1);
-                        // can change if-statement later to reflect project specifications
-                        if((openDebit) || (openCredit) || (openSaving)) {
-                            if((firstname.matches("[a-zA-Z]+")) &&
-                                    (lastname.matches("[a-zA-Z]+"))){
-                                processSignup();
-                            }else {
-                                // entered garbage for name fields
-                                Log.d(getString(R.string.debugInfo_text),
-                                        "Please only enter letters for names.");
-                                alertMsg("Sign Up Failed", "Please only enter letters for names.");
-                            }
-                        }
-                    }else{
-
-                        Log.d(getString(R.string.debugInfo_text),"The passwords do not match.");
-                        alertMsg("Sign Up Failed", "Passwords do not match.");
-                    }
                 }
             }
         });
@@ -213,9 +167,13 @@ public class SignupActivity extends Activity implements View.OnClickListener {
         alert.show();
     }
 
+    private boolean isEmpty(String s) {
+        return s.trim().length() > 0 ? false : true;
+    }
+
     protected void startLoading() {
         proDialog = new ProgressDialog(this);
-        proDialog.setMessage("Signing Up...");
+        proDialog.setMessage("Signing Up...Please Wait");
         proDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         proDialog.setCancelable(false);
         proDialog.show();

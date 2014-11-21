@@ -5,14 +5,12 @@ import com.parse.ParseObject;
 import com.parse.ParseClassName;
 
 @ParseClassName("Account")
-
 public class Account extends ParseObject {
     public Account() {
 
-
     }
 
-    public void set(boolean openDebit,boolean openCredit,boolean openSaving) {
+    public void setup(boolean openDebit,boolean openCredit,boolean openSaving) {
         put("opendebit",openDebit);
         put("opencredit",openCredit);
         put("opensaving",openSaving);
@@ -30,7 +28,7 @@ public class Account extends ParseObject {
     }
 
     public boolean isOpenSaving() {
-        return getBoolean("openSaving");
+        return getBoolean("opensaving");
     }
 
     public double getDebit() {
