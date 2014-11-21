@@ -41,6 +41,8 @@ public class CustomerMainActivity extends Activity {
     protected float credit;
     protected float saving;
 
+    protected User user = new User();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -52,7 +54,7 @@ public class CustomerMainActivity extends Activity {
         requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         setProgressBarIndeterminateVisibility(false);
 
-        setTitle("Welcome, "+getIntent().getExtras().getString("username"));
+        setTitle("Welcome, "+user.getFirstName());
         setContentView(R.layout.activity_customermain);
 
         //get listview from XML
@@ -131,10 +133,7 @@ public class CustomerMainActivity extends Activity {
     private String retrieveKey(){
 //        SharedPreferences prefs = getSharedPreferences("myFile", Context.MODE_PRIVATE);
 //        return prefs.getString("key","");
-        ParseUser user = ParseUser.getCurrentUser();
-        Log.d(getString(R.string.debugInfo_text),"customerID: "+user.getObjectId());
-        ParseObject account = user.getParseObject("account");
-        return account.getObjectId();
+        return user.getAccount().getObjectId();
     }
 
     @Override
@@ -160,6 +159,7 @@ public class CustomerMainActivity extends Activity {
 
     private void gotoTransactionPage(){
         Intent intent = new Intent(this,TransactionActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
     }
 }

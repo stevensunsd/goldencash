@@ -62,6 +62,15 @@ public class Account extends ParseObject {
         }
     }
 
+    public void transferFromSaving(String To, double value){
+        if (To.equals("Debit")){
+            withdrawSaving(value);
+            depositDebit(value);
+        }else{
+            withdrawSaving(value);
+            depositCredit(value);
+        }
+    }
     public double getCredit() {
         return getDouble("credit");
     }
@@ -75,9 +84,6 @@ public class Account extends ParseObject {
         setCredit(getCredit() + value);
     }
 
-    public void transferCredit(double value){
-        setCredit(getCredit() + value);
-    }
 
     public double getSaving() {
         return getDouble("saving");
@@ -96,8 +102,8 @@ public class Account extends ParseObject {
         setSaving(getSaving() + value);
     }
 
-    public void transferSaving(double value){
-        setCredit(getCredit() + value);
+    public void saveAccount(){
+        saveInBackground();
     }
 
 }

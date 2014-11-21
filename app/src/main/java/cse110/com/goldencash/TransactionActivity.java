@@ -2,7 +2,9 @@ package cse110.com.goldencash;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputType;
 import android.util.Log;
@@ -14,6 +16,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 
+import com.parse.ParseUser;
+
 import java.util.ArrayList;
 
 /**
@@ -23,6 +27,7 @@ public class TransactionActivity extends Activity{
 
     protected Spinner spinnerFrom, spinnerTo;
     protected Button button;
+    protected ProgressDialog proDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,6 +113,7 @@ public class TransactionActivity extends Activity{
         builder.setTitle("Enter Amount").setIcon(android.R.drawable.ic_dialog_info).setView(input).setNegativeButton("Cancel",null);
         builder.setPositiveButton("Confirm",new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog,int which) {
+                startLoading();
                 String amount = input.getText().toString();
                 makeTransaction(Integer.parseInt(amount),spinnerFrom.getSelectedItem().toString(),
                         spinnerTo.getSelectedItem().toString());
@@ -118,6 +124,52 @@ public class TransactionActivity extends Activity{
     }
 
     private void makeTransaction(int amount,String from, String to){
+        User user = new User();
+        Account account = user.getAccount();
+        if(from.equals("Debit")) {
+            account.transferFromDebit(to,amount);
+        }else{
+            account.transferFromSaving(to,amount);
+        }
+        account.saveAccount();
+        stopLoading();
+        alertMsg("Successful","You have transferred $"+amount+" from "+from+" to "+to);
+    }
 
+    protected void startLoading() {
+        proDialog = new ProgressDialog(this);
+        proDialog.setMessage("Transferring...Please Wait");
+        proDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        proDialog.setCancelable(false);
+        proDialog.show();
+    }
+
+    protected void stopLoading() {
+        proDialog.dismiss();
+        proDialog = null;
+    }
+
+    private void alertMsg(String title, String msg){
+        //build dialog
+        AlertDialog.Builder builder= new AlertDialog.Builder(this);
+        builder.setTitle(title);
+        builder.setMessage(msg);
+        builder.setPositiveButton("OK",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        gotoCustomerMainPage();
+
+                    }
+                });
+        //create alert dialog
+        AlertDialog alert = builder.create();
+        //show dialog on screen
+        alert.show();
+    }
+
+    private void gotoCustomerMainPage(){
+        Intent intent = new Intent(this,CustomerMainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
     }
 }
