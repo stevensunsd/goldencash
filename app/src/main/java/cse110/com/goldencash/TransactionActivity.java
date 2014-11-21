@@ -44,9 +44,9 @@ public class TransactionActivity extends Activity {
         spinnerTo = (Spinner) findViewById(R.id.spinner_transaction_to);
 
         ArrayList list = new ArrayList();
-        list.add("1");
-        list.add("2");
-        list.add("3");
+        list.add("Debit");
+        list.add("Saving");
+        list.add("Credit");
         ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item,list);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerFrom.setAdapter(adapter);

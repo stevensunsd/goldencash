@@ -73,7 +73,7 @@ public class SigninActivity extends Activity
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_transaction) {
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -94,8 +94,7 @@ public class SigninActivity extends Activity
     }
 
     private void gotoSignup() {
-        Intent intent = new Intent(SigninActivity.this, SignupActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+        Intent intent = new Intent(this, SignupActivity.class);
         startActivity(intent);
     }
     private void gotoMainPage(){

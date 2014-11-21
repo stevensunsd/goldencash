@@ -110,6 +110,7 @@ public class SignupActivity extends Activity implements View.OnClickListener {
                     user.put("admin", false);
                     user.put("account",account);
 
+
                     // Call the Parse signup method
                     user.signUpInBackground(new SignUpCallback() {
                         public void done(ParseException e) {
