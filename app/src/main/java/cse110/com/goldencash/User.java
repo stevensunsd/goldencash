@@ -34,7 +34,7 @@ public class User extends ParseUser {
     }
 
     public String getLastName() {
-        return user.getString("lasttname");
+        return user.getString("lastname");
     }
 
     public void setLastName(String value) {
