@@ -1,7 +1,9 @@
 package cse110.com.goldencash;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -153,8 +155,32 @@ public class CustomerMainActivity extends Activity {
             Log.d(getString(R.string.debugInfo_text), "clicked, now going to Transaction");
             gotoTransactionPage();
             return true;
+        }else if (id == R.id.action_logout){
+            customerLogOut();
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void customerLogOut(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        builder.setPositiveButton("Log Out",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        user.logOut();
+                        gotoSigninActtivity();
+                    }
+                });
+        builder.setNegativeButton("Cancel",null);
+        //create alert dialog
+        AlertDialog alert = builder.create();
+        //show dialog on screen
+        alert.show();
+    }
+    private void gotoSigninActtivity(){
+        Intent intent = new Intent(this,SigninActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
     }
 
     private void gotoTransactionPage(){

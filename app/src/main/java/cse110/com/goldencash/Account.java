@@ -22,14 +22,17 @@ public class Account extends ParseObject {
     public boolean isOpenDebit() {
         return getBoolean("opendebit");
     }
+    public void setOpenDebit(boolean value){ put("opendebit",value); saveInBackground();}
 
     public boolean isOpenCredit() {
         return getBoolean("opencredit");
     }
+    public void setOpenCredit(boolean value){put("opencredit",value); saveInBackground();}
 
     public boolean isOpenSaving() {
         return getBoolean("opensaving");
     }
+    public void setOpenSaving(boolean value){put("opensaving",value); saveInBackground();}
 
     public double getDebit() {
         return getDouble("debit");
