@@ -18,6 +18,7 @@ import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.parse.ParseUser;
 
 import java.util.ArrayList;
 
@@ -82,9 +83,9 @@ public class CustomerMainActivity extends Activity {
                     openDebit = parseObject.getBoolean("opendebit");
                     openCredit = parseObject.getBoolean("opencredit");
                     openSaving = parseObject.getBoolean("opensaving");
-                    debit = (float) parseObject.getInt("debit");
-                    credit = (float) parseObject.getInt("credit");
-                    saving = (float) parseObject.getInt("saving");
+                    debit = (float) parseObject.getDouble("debit");
+                    credit = (float) parseObject.getDouble("credit");
+                    saving = (float) parseObject.getDouble("saving");
                     setAdapter();
                 } else {
                     //TODO: error alert
@@ -128,8 +129,12 @@ public class CustomerMainActivity extends Activity {
     }
 
     private String retrieveKey(){
-        SharedPreferences prefs = getSharedPreferences("myFile", Context.MODE_PRIVATE);
-        return prefs.getString("key","");
+//        SharedPreferences prefs = getSharedPreferences("myFile", Context.MODE_PRIVATE);
+//        return prefs.getString("key","");
+        ParseUser user = ParseUser.getCurrentUser();
+        Log.d(getString(R.string.debugInfo_text),"customerID: "+user.getObjectId());
+        ParseObject account = user.getParseObject("account");
+        return account.getObjectId();
     }
 
     @Override
