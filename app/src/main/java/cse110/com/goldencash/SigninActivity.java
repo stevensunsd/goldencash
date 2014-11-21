@@ -77,7 +77,7 @@ public class SigninActivity extends Activity implements View.OnClickListener {
         startActivity(intent);
     }
     private void gotoMainPage(){
-        Intent intent = new Intent(SigninActivity.this, AccountsActivity.class);
+        Intent intent = new Intent(this, UserListActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
     }

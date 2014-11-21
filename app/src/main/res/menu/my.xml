@@ -4,6 +4,10 @@
         android:title="Transaction"
         android:orderInCategory="100"
         android:showAsAction="never" />
+    <item android:id="@+id/action_close_account"
+        android:title="Close Account"
+        android:orderInCategory="100"
+        android:showAsAction="never"/>
     <item android:id = "@+id/action_logout"
         android:title="Log Out"
         android:orderInCategory="100"

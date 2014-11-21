@@ -118,6 +118,27 @@ public class AccountsActivity extends Activity{
         setAdapter();
     }
 
+    protected void selectionBox(long id){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        builder.setPositiveButton("Withdraw",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+
+                    }
+                });
+        builder.setNegativeButton("Deposit",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+
+                    }
+                });
+        //create alert dialog
+        AlertDialog alert = builder.create();
+        //show dialog on screen
+        alert.show();
+    }
+
     protected void editbox(long id) {
         final EditText input = new EditText(this);
         final int choose = (int)id;
@@ -139,23 +160,4 @@ public class AccountsActivity extends Activity{
         builder.show();
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.my, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-        if (id == R.id.action_transaction) {
-            Log.d(getString(R.string.debugInfo_text),"clicked");
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
 }
