@@ -99,12 +99,13 @@ public class SigninActivity extends Activity
         startActivity(intent);
     }
     private void gotoMainPage(){
-        //Intent intent = new Intent(this, AccountsActivity.class);
-        Intent intent = new Intent(this, UserListActivity.class);
+        Intent intent = new Intent(SigninActivity.this, UserListActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
     }
     private void gotoCustomerMainPage(){
         Intent intent = new Intent(this, CustomerMainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.putExtra("username",username_field.getText().toString());
         startActivity(intent);
     }
@@ -120,14 +121,20 @@ public class SigninActivity extends Activity
             public void done(ParseUser user, ParseException e) {
                 dlg.dismiss();
                 if (e != null) {
-                    // Show the error message
-                    alertMsg("Logging in Fail","User name and Password doesn't match");
+                    if(e.getCode() == 100){
+                        alertMsg("Connection Failed","Please check your Internet connection");
+                    }else {
+                        // Show the error message for general fail
+                        alertMsg("Logging in Fail", "User name and Password doesn't match");
+                    }
                 } else {
-                    //Log.d(getString(R.string.debugInfo_text),user.getString("admin"));
+                    Log.d(getString(R.string.debugInfo_text),""+user.getBoolean("admin"));
                     // Start an intent for the dispatch activity
-                    Intent intent = new Intent(SigninActivity.this, UserListActivity.class);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                    startActivity(intent);
+                    if(user.getBoolean("admin")){
+                        gotoMainPage();
+                    }else{
+                        gotoCustomerMainPage();
+                    }
                 }
             }
         });

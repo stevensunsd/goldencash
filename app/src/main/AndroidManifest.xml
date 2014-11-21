@@ -23,5 +23,6 @@
         <activity android:name=".AccountsActivity"/>
         <activity android:name=".UserListActivity"/>
         <activity android:name=".CustomerMainActivity"/>
+        <activity android:name=".TransactionActivity"/>
     </application>
 </manifest>

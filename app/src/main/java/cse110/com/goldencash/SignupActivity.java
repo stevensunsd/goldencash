@@ -115,7 +115,7 @@ public class SignupActivity extends Activity implements View.OnClickListener {
                         public void done(ParseException e) {
                             stopLoading();
                             if (e != null) {
-                                alertMsg("Sign Up Failed", "Please Check Your Information");
+                                alertMsg("Sign Up Failed", "Please Check Your Internet Connection");
                             } else {
                                 // Start an intent for the dispatch activity
                                 Intent intent = new Intent(SignupActivity.this, SigninActivity.class);

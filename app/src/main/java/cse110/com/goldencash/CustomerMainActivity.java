@@ -2,8 +2,12 @@ package cse110.com.goldencash;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.widget.AdapterView;
@@ -126,5 +130,31 @@ public class CustomerMainActivity extends Activity {
     private String retrieveKey(){
         SharedPreferences prefs = getSharedPreferences("myFile", Context.MODE_PRIVATE);
         return prefs.getString("key","");
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.my, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+        if (id == R.id.action_settings) {
+            Log.d(getString(R.string.debugInfo_text), "clicked, now going to Transaction");
+            gotoTransactionPage();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void gotoTransactionPage(){
+        Intent intent = new Intent(this,TransactionActivity.class);
+        startActivity(intent);
     }
 }
