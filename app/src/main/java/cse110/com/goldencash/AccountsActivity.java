@@ -38,6 +38,8 @@ public class AccountsActivity extends Activity{
 
     protected ArrayAdapter<String> adapter;
 
+    protected boolean flag = false;
+
     private void refreshData() {
         Intent intent = new Intent(AccountsActivity.this, AccountsActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -148,8 +150,25 @@ public class AccountsActivity extends Activity{
         builder.setPositiveButton("Confirm",new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog,int which) {
                 switch (choose) {
-                    case 0:account.setDebit(Double.parseDouble(input.getText().toString())); break;
-                    case 1:account.setCredit(Double.parseDouble(input.getText().toString())); break;
+                    case 0:
+                        if(account.isOpenDebit()) {
+                            account.setDebit(Double.parseDouble(input.getText().toString()));
+                            break;
+                        }
+                        else if(account.isOpenCredit()) {
+                            flag = true;
+                            account.setCredit(Double.parseDouble(input.getText().toString())); break;
+                        }
+                        else {
+                            account.setSaving(Double.parseDouble(input.getText().toString())); break;
+                        }
+                    case 1:
+                        if(account.isOpenCredit()&&!flag) {
+                            account.setCredit(Double.parseDouble(input.getText().toString())); break;
+                        }
+                        else {
+                            account.setSaving(Double.parseDouble(input.getText().toString())); break;
+                        }
                     case 2:account.setSaving(Double.parseDouble(input.getText().toString())); break;
                     default: // error
                 }
