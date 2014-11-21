@@ -133,7 +133,8 @@ public class CustomerMainActivity extends Activity {
 //        return prefs.getString("key","");
         ParseUser user = ParseUser.getCurrentUser();
         Log.d(getString(R.string.debugInfo_text),"customerID: "+user.getObjectId());
-        return user.getObjectId();
+        ParseObject account = user.getParseObject("account");
+        return account.getObjectId();
     }
 
     @Override
