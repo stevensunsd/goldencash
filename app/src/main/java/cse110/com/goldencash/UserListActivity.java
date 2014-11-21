@@ -1,6 +1,8 @@
 package cse110.com.goldencash;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Message;
@@ -98,5 +100,28 @@ public class UserListActivity extends Activity
     @Override
     public void onBackPressed(){
         //TODO:Show up log out dialog
+        AdminLogOut();
+    }
+
+    private void AdminLogOut(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        builder.setPositiveButton("Log Out",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        User.getCurrentUser().logOut();
+                        gotoSigninActtivity();
+                    }
+                });
+        builder.setNegativeButton("Cancel",null);
+        //create alert dialog
+        AlertDialog alert = builder.create();
+        //show dialog on screen
+        alert.show();
+    }
+    private void gotoSigninActtivity(){
+        Intent intent = new Intent(this,SigninActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
     }
 }

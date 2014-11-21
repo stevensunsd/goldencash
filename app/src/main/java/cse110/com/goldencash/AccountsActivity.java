@@ -44,18 +44,6 @@ public class AccountsActivity extends Activity{
         Intent intent = new Intent(AccountsActivity.this, AccountsActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
-                   /*
-                    adapter.clear();
-                    adapter.addAll(setAdapterarray());
-                    adapter.notifyDataSetChanged();
-                    listview.invalidate();
-                    Log.d(getString(R.string.debugInfo_text),"Done refresh.");
-                } else {
-                    //TODO: error alert
-                }
-            }
-        });
-        */
     }
 
     private ArrayList<String> setAdapterarray(){
@@ -89,7 +77,7 @@ public class AccountsActivity extends Activity{
         requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         setProgressBarIndeterminateVisibility(false);
         //set title
-        //setTitle(getIntent().getExtras().getString("username"));
+        setTitle(getIntent().getExtras().getString("username"));
         //set view
         setContentView(R.layout.activity_accounts);
 
