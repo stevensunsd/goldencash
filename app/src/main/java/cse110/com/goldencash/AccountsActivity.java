@@ -237,8 +237,6 @@ public class AccountsActivity extends Activity{
 
         });
         builder.show();
-
-
     }
 
     private String retrieveKey(){
