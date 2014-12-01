@@ -130,7 +130,7 @@ public class CustomerMainActivity extends Activity {
     @Override
     public void onBackPressed(){
         //prevent go back to login page with override the back button behavior
-        //TODO:Show up log out dialog
+        customerLogOut();
     }
 
     private String retrieveKey(){
@@ -168,7 +168,7 @@ public class CustomerMainActivity extends Activity {
 
     private void customerLogOut(){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-
+        builder.setTitle("Log Out?");
         builder.setPositiveButton("Log Out",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
@@ -241,13 +241,13 @@ public class CustomerMainActivity extends Activity {
 
     private void gotoTransactionPage(){
         Intent intent = new Intent(this,TransactionActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+        //intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
     }
 
     private void gotoInterestPage(){
         Intent intent = new Intent(this, InterestActivity.class);
-        intent.addFlags(intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+        //intent.addFlags(intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
     }
 
