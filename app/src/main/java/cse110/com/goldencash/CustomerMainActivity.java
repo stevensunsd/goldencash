@@ -160,6 +160,8 @@ public class CustomerMainActivity extends Activity {
             customerLogOut();
         }else if (id == R.id.action_close_account){
             closeAccount();
+        }else if (id == R.id.action_interests){
+            gotoInterestPage();
         }
         return super.onOptionsItemSelected(item);
     }
@@ -242,6 +244,13 @@ public class CustomerMainActivity extends Activity {
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
     }
+
+    private void gotoInterestPage(){
+        Intent intent = new Intent(this, InterestActivity.class);
+        intent.addFlags(intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+    }
+
     private void refreshData() {
         Intent intent = new Intent(CustomerMainActivity.this, CustomerMainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);

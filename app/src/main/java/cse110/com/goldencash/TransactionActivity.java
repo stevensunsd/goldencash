@@ -27,6 +27,7 @@ public class TransactionActivity extends Activity{
 
     protected Spinner spinnerFrom, spinnerTo;
     protected Button button;
+    protected Button transferButton;
     protected ProgressDialog proDialog;
 
     @Override
@@ -64,11 +65,19 @@ public class TransactionActivity extends Activity{
     }
     private void addListenerOnButton(){
         button = (Button)findViewById(R.id.button_confirm_transaction);
+        transferButton = (Button)findViewById(R.id.button_transfer_to_account);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Log.d(getString(R.string.debugInfo_text),""+spinnerFrom.getSelectedItem()+spinnerTo.getSelectedItem());
                 editbox();
+            }
+        });
+        transferButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                Log.d(getString(R.string.debugInfo_text),"transfer button clicked");
+                showTransferAccountDialog();
             }
         });
 
@@ -171,5 +180,19 @@ public class TransactionActivity extends Activity{
         Intent intent = new Intent(this,CustomerMainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
+    }
+
+    private void showTransferAccountDialog(){
+        final EditText input = new EditText(this);
+        input.setInputType(InputType.TYPE_CLASS_NUMBER);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Enter a account number").setIcon(android.R.drawable.ic_dialog_info).setView(input).setNegativeButton("Cancel",null);
+        builder.setPositiveButton("Confirm",new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog,int which) {
+
+            }
+
+        });
+        builder.show();
     }
 }
