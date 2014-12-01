@@ -116,4 +116,6 @@ public class Account extends ParseObject {
         Random r = new Random();
         return r.nextInt(999999-100000)+100000+"";
     }
+
+    public String getAccountNumber(){   return getString("number"); }
 }

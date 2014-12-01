@@ -38,7 +38,7 @@ public class TransactionActivity extends Activity{
 
     //false for within same account transfer
     private boolean transactionMode = false;
-    private String accountNumber;
+    private Account toAccount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -135,17 +135,24 @@ public class TransactionActivity extends Activity{
                 startLoading();
                 String amount = input.getText().toString();
                 if(transactionMode){
-                    makeTransactionToOther(Integer.parseInt(amount),accountNumber);
+                    makeTransactionToOther(Integer.parseInt(amount),toAccount);
                 }else {
                     makeTransaction(Integer.parseInt(amount), spinnerFrom.getSelectedItem().toString(),
                             spinnerTo.getSelectedItem().toString());
                 }
+                stopLoading();
                 }
 
         });
         builder.show();
     }
-    private void makeTransactionToOther(int amount, String accountNumber){
+    private void makeTransactionToOther(int amount, Account targetAccount){
+        User user = new User();
+        Account currentAccount = user.getAccount();
+        currentAccount.withdrawDebit(amount);
+        targetAccount.depositDebit(amount);
+        currentAccount.saveAccount();
+        targetAccount.saveAccount();
 
     }
     private void makeTransaction(int amount,String from, String to){
@@ -157,8 +164,7 @@ public class TransactionActivity extends Activity{
             account.transferFromSaving(to,amount);
         }
         account.saveAccount();
-        stopLoading();
-        alertMsg("Successful","You have transferred $"+amount+" from "+from+" to "+to);
+        alertMsg("Successful", "You have transferred $" + amount + " from " + from + " to " + to);
     }
 
     protected void startLoading() {
@@ -200,9 +206,10 @@ public class TransactionActivity extends Activity{
         input.setInputType(InputType.TYPE_CLASS_NUMBER);
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Enter a account number").setIcon(android.R.drawable.ic_dialog_info).setView(input).setNegativeButton("Cancel",null);
-        builder.setPositiveButton("Confirm",new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog,int which) {
+        builder.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
                 setProgressBarIndeterminateVisibility(true);
+                transactionMode = true;
                 checkAccountNumber(input.getText().toString());
             }
 
@@ -212,7 +219,7 @@ public class TransactionActivity extends Activity{
 
     private void checkAccountNumber(String an){
         ParseQuery<ParseObject> query = ParseQuery.getQuery("Account");
-        query.whereEqualTo("number",an);
+        query.whereEqualTo("number", an);
         query.findInBackground(new FindCallback<ParseObject>() {
             @Override
             public void done(List<ParseObject> parseObjects, ParseException e) {
@@ -220,7 +227,7 @@ public class TransactionActivity extends Activity{
                 if (e == null) {
                     Log.d("accountNumber", parseObjects.size() + " accounts found");
                     if (!parseObjects.isEmpty()) {
-                        accountNumber = parseObjects.get(0).getString("number");
+                        toAccount = (Account) parseObjects.get(0);
                         editbox();
                     } else {
                         alertMsg("Account Not Found",
