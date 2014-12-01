@@ -16,9 +16,15 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 
+import com.parse.FindCallback;
+import com.parse.GetCallback;
+import com.parse.ParseException;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Xin Wen on 11/20/14.
@@ -29,6 +35,10 @@ public class TransactionActivity extends Activity{
     protected Button button;
     protected Button transferButton;
     protected ProgressDialog proDialog;
+
+    //false for within same account transfer
+    private boolean transactionMode = false;
+    private String accountNumber;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -124,14 +134,20 @@ public class TransactionActivity extends Activity{
             public void onClick(DialogInterface dialog,int which) {
                 startLoading();
                 String amount = input.getText().toString();
-                makeTransaction(Integer.parseInt(amount),spinnerFrom.getSelectedItem().toString(),
-                        spinnerTo.getSelectedItem().toString());
-            }
+                if(transactionMode){
+                    makeTransactionToOther(Integer.parseInt(amount),accountNumber);
+                }else {
+                    makeTransaction(Integer.parseInt(amount), spinnerFrom.getSelectedItem().toString(),
+                            spinnerTo.getSelectedItem().toString());
+                }
+                }
 
         });
         builder.show();
     }
+    private void makeTransactionToOther(int amount, String accountNumber){
 
+    }
     private void makeTransaction(int amount,String from, String to){
         User user = new User();
         Account account = user.getAccount();
@@ -170,10 +186,7 @@ public class TransactionActivity extends Activity{
 
                     }
                 });
-        //create alert dialog
-        AlertDialog alert = builder.create();
-        //show dialog on screen
-        alert.show();
+        builder.show();
     }
 
     private void gotoCustomerMainPage(){
@@ -189,10 +202,34 @@ public class TransactionActivity extends Activity{
         builder.setTitle("Enter a account number").setIcon(android.R.drawable.ic_dialog_info).setView(input).setNegativeButton("Cancel",null);
         builder.setPositiveButton("Confirm",new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog,int which) {
-
+                setProgressBarIndeterminateVisibility(true);
+                checkAccountNumber(input.getText().toString());
             }
 
         });
         builder.show();
+    }
+
+    private void checkAccountNumber(String an){
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("Account");
+        query.whereEqualTo("number",an);
+        query.findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> parseObjects, ParseException e) {
+                setProgressBarIndeterminateVisibility(false);
+                if (e == null) {
+                    Log.d("accountNumber", parseObjects.size() + " accounts found");
+                    if (!parseObjects.isEmpty()) {
+                        accountNumber = parseObjects.get(0).getString("number");
+                        editbox();
+                    } else {
+                        alertMsg("Account Not Found",
+                                "There is no account associate to the number you entered.");
+                    }
+                } else {
+                    //TODO:Newwork Error Msg
+                }
+            }
+        });
     }
 }

@@ -123,10 +123,10 @@ public class SignupActivity extends Activity implements View.OnClickListener {
                             if (e != null) {
                                 alertMsg("User Sign Up Failed", e.getMessage());
                             } else {
-                                // Start an intent for the dispatch activity
-                                Intent intent = new Intent(SignupActivity.this, SigninActivity.class);
-                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                                startActivity(intent);
+                                //sign up successful
+                                clearAlltext();
+                                finishTag = true;
+                                alertMsg("Success!","You have successfully signed up.");
                             }
                         }
                     });

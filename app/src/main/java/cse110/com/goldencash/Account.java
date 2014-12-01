@@ -4,6 +4,8 @@ package cse110.com.goldencash;
 import com.parse.ParseObject;
 import com.parse.ParseClassName;
 
+import java.util.Random;
+
 @ParseClassName("Account")
 public class Account extends ParseObject {
     public Account() {
@@ -17,6 +19,7 @@ public class Account extends ParseObject {
         put("debit",100.1);
         put("credit",100.1);
         put("saving",100.1);
+        put("number",accountNumberGenerator());
     }
 
     public boolean isOpenDebit() {
@@ -109,4 +112,8 @@ public class Account extends ParseObject {
         saveInBackground();
     }
 
+    private String accountNumberGenerator(){
+        Random r = new Random();
+        return r.nextInt(999999-100000)+100000+"";
+    }
 }
