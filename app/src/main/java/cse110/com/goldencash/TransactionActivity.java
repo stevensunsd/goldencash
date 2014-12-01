@@ -153,6 +153,9 @@ public class TransactionActivity extends Activity{
         targetAccount.depositDebit(amount);
         currentAccount.saveAccount();
         targetAccount.saveAccount();
+        alertMsg("Successful",
+                "You have transferred $" + amount +
+                        " from your checking account to " + toAccount.getAccountNumber());
 
     }
     private void makeTransaction(int amount,String from, String to){
