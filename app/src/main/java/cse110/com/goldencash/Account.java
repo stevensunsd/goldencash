@@ -4,6 +4,8 @@ package cse110.com.goldencash;
 import com.parse.ParseObject;
 import com.parse.ParseClassName;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 @ParseClassName("Account")
@@ -52,6 +54,7 @@ public class Account extends ParseObject {
 
     public void depositDebit(double value){
         setDebit(getDebit() + value);
+        updateDepositLog(value);
     }
 
     public void transferFromDebit(String To,double value){
@@ -115,5 +118,11 @@ public class Account extends ParseObject {
     private String accountNumberGenerator(){
         Random r = new Random();
         return r.nextInt(999999-100000)+100000+"";
+    }
+
+    private void updateDepositLog(double amount){
+        List<String> list = getList("statement");
+        list.add("Cash deposit $"+amount);
+        put("statement",list);
     }
 }

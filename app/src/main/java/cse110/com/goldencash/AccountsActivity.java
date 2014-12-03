@@ -23,6 +23,7 @@ import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.parse.ParseUser;
 
 import java.util.ArrayList;
 
@@ -40,9 +41,33 @@ public class AccountsActivity extends Activity{
 
     protected boolean flag = false;
 
+    private void getUser(){
+        Log.d("getting user","id: "+getIntent().getStringExtra("userID"));
+        String userId = getIntent().getStringExtra("userID");
+        ParseQuery query = ParseUser.getQuery();
+        query.getInBackground(userId,new GetCallback() {
+            @Override
+            public void done(ParseObject parseObject, ParseException e) {
+                if(e == null){
+                    Log.d("got user","id: "+parseObject.getObjectId());
+                    account =  (Account) parseObject.getParseObject("account");
+                    try {
+                        account.fetchIfNeeded();
+                    } catch (ParseException exc) {
+                        exc.printStackTrace();
+                    }
+                    setAdapter();
+                }else{
+                    //network error
+                }
+            }
+        });
+        //user = new User(getIntent().getStringExtra("userID"));
+       // account = user.getAccount();
+    }
     private void refreshData() {
         Intent intent = new Intent(AccountsActivity.this, AccountsActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
     }
 
@@ -105,6 +130,7 @@ public class AccountsActivity extends Activity{
                 editbox(id);
             }
         });
+        //getUser();
         setAdapter();
     }
 
@@ -160,7 +186,8 @@ public class AccountsActivity extends Activity{
                     case 2:account.setSaving(Double.parseDouble(input.getText().toString())); break;
                     default: // error
                 }
-                refreshData();
+                finish();
+                //refreshData(); refresh data has problem loading not using for now
             }
 
         });
