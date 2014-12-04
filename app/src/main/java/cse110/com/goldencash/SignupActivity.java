@@ -18,6 +18,7 @@ import com.parse.ParseUser;
 import com.parse.SaveCallback;
 import com.parse.SignUpCallback;
 
+import java.util.List;
 import java.util.Random;
 
 import cse110.com.goldencash.modelAccount.*;
@@ -113,16 +114,16 @@ public class SignupActivity extends Activity implements View.OnClickListener {
         final cse110.com.goldencash.modelAccount.CreditAccount credit = ParseObject.create(cse110.com.goldencash.modelAccount.CreditAccount.class);
         final cse110.com.goldencash.modelAccount.SavingAccount saving = ParseObject.create(cse110.com.goldencash.modelAccount.SavingAccount.class);
         debit.put("accountnumber",accountnumber);
-        debit.put("opendebit",openDebit);
-        debit.put("debit", 100.1);
+        debit.put("openDebit",openDebit);
+        debit.put("Debit", 100.1);
         debit.saveInBackground();
         credit.put("accountnumber", accountnumber);
-        credit.put("opencredit", openCredit);
-        credit.put("credit", 100.1);
+        credit.put("openCredit", openCredit);
+        credit.put("Credit", 100.1);
         credit.saveInBackground();
         saving.put("accountnumber", accountnumber);
-        saving.put("opensaving", openSaving);
-        saving.put("saving", 100.1);
+        saving.put("openSaving", openSaving);
+        saving.put("Saving", 100.1);
         saving.saveInBackground(new SaveCallback() {
             public void done(ParseException e) {
                 if (e != null) {
@@ -136,9 +137,9 @@ public class SignupActivity extends Activity implements View.OnClickListener {
                     user.put("firstname", firstname);
                     user.put("lastname", lastname);
                     user.put("admin", false);
-                    user.put("debitaccount", debit);
-                    user.put("creditaccount", credit);
-                    user.put("savingaccount", saving);
+                    user.put("Debitaccount", debit);
+                    user.put("Creditaccount", credit);
+                    user.put("Savingaccount", saving);
 
                     // Call the Parse signup method
                     user.signUpInBackground(new SignUpCallback() {

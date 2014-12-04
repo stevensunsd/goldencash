@@ -35,9 +35,9 @@ public class AccountsActivity extends Activity{
     ListView listview;
 
     private User user = new User();
-    private cse110.com.goldencash.modelAccount.Account debit = user.getDebitAccount();
-    private cse110.com.goldencash.modelAccount.Account credit = user.getCreditAccount();
-    private cse110.com.goldencash.modelAccount.Account saving = user.getSavingAccount();
+    private cse110.com.goldencash.modelAccount.Account debit = user.getAccount2("Debit");
+    private cse110.com.goldencash.modelAccount.Account credit = user.getAccount2("Credit");
+    private cse110.com.goldencash.modelAccount.Account saving = user.getAccount2("Saving");
 
     protected ArrayAdapter<String> adapter;
 

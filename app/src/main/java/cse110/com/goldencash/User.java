@@ -69,28 +69,8 @@ public class User extends ParseUser {
              return account;
     }
 
-    public cse110.com.goldencash.modelAccount.Account getDebitAccount() {
-        cse110.com.goldencash.modelAccount.Account account = (cse110.com.goldencash.modelAccount.Account) user.getParseObject("debitaccount");
-        try {
-            account.fetchIfNeeded();
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        return account;
-    }
-
-    public cse110.com.goldencash.modelAccount.Account getCreditAccount() {
-        cse110.com.goldencash.modelAccount.Account account = (cse110.com.goldencash.modelAccount.Account) user.getParseObject("creditaccount");
-        try {
-            account.fetchIfNeeded();
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        return account;
-    }
-
-    public cse110.com.goldencash.modelAccount.Account getSavingAccount() {
-        cse110.com.goldencash.modelAccount.Account account = (cse110.com.goldencash.modelAccount.Account) user.getParseObject("savingaccount");
+    public cse110.com.goldencash.modelAccount.Account getAccount2(String accountType) {
+        cse110.com.goldencash.modelAccount.Account account = (cse110.com.goldencash.modelAccount.Account) user.getParseObject(accountType+"account");
         try {
             account.fetchIfNeeded();
         } catch (ParseException e) {
