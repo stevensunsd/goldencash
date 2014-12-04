@@ -19,7 +19,7 @@ public class Account extends ParseObject {
         put("debit",100.1);
         put("credit",100.1);
         put("saving",100.1);
-        put("number",accountNumberGenerator());
+        put("accountnumber",accountNumberGenerator());
     }
 
     public boolean isOpenDebit() {
@@ -113,7 +113,6 @@ public class Account extends ParseObject {
     }
 
     private String accountNumberGenerator(){
-        Random r = new Random();
-        return r.nextInt(999999-100000)+100000+"";
+        return new Random().nextInt(99999999)%(99999999-00000001+1)+00000001+"";
     }
 }
