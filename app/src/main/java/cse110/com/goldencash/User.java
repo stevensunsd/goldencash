@@ -15,9 +15,18 @@ import com.parse.ParseUser;
 @ParseClassName("User")
 public class User extends ParseUser {
     private ParseUser user;
-
+    /*
+    Default user constructor set as current user who has been logged in
+     */
     public User() {
         user = ParseUser.getCurrentUser();
+    }
+    /*
+    Construct a User object from given ParseUser object id
+     */
+    public User(String id) {
+
+
     }
 
     public boolean isAdmin() {

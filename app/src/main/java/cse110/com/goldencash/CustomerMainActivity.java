@@ -31,7 +31,6 @@ public class CustomerMainActivity extends Activity {
 
     protected String key;
     protected ListView listview;
-    protected Accounts accounts;
     protected String[] accountArray;
     protected ArrayAdapter<String> adapter;
 
@@ -74,29 +73,17 @@ public class CustomerMainActivity extends Activity {
             }
         });
 
-        set2();
-
+        setup();
+        setAdapter();
     }
-    private void set2() {
-        accounts = new Accounts();
-        accounts.setup(retrieveKey());
-        ParseQuery<ParseObject> query = ParseQuery.getQuery("Account");
-        query.getInBackground(retrieveKey(), new GetCallback<ParseObject>() {
-            @Override
-            public void done(ParseObject parseObject, ParseException e) {
-                if (e == null) {
-                    openDebit = parseObject.getBoolean("opendebit");
-                    openCredit = parseObject.getBoolean("opencredit");
-                    openSaving = parseObject.getBoolean("opensaving");
-                    debit = (float) parseObject.getDouble("debit");
-                    credit = (float) parseObject.getDouble("credit");
-                    saving = (float) parseObject.getDouble("saving");
-                    setAdapter();
-                } else {
-                    //TODO: error alert
-                }
-            }
-        });
+    private void setup(){
+        Account account = user.getAccount();
+        openDebit = account.isOpenDebit();
+        openCredit = account.isOpenCredit();
+        openSaving = account.isOpenSaving();
+        debit = (float) account.getDebit();
+        credit = (float) account.getCredit();
+        saving = (float) account.getSaving();
     }
 
     private void setAdapter(){
