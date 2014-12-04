@@ -4,6 +4,7 @@ package cse110.com.goldencash.modelAccount;
   * Created by stevensun on 12/4/14.
   */
  public interface AccountInterface {
+    public double getAmount();
     public boolean isOpen();
     public void withdraw(double value);
     public void deposit(double value);

@@ -11,8 +11,6 @@ public abstract class Account extends ParseObject implements AccountInterface{
 
     }
 
-    public abstract double getAmount();
-
     public Date getDailyTime() {return getDate("dailytime");}
 
     public String getAccountNumber() {
