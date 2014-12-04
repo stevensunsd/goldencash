@@ -9,6 +9,9 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
+import cse110.com.goldencash.modelAccount.DebitAccount;
+import cse110.com.goldencash.modelAccount.SavingAccount;
+
 /**
  * Created by Sun on 2014/11/20.
  */
@@ -37,13 +40,13 @@ public class User extends ParseUser {
         return user.getString("firstname");
     }
 
+    public String getLastName() {
+        return user.getString("lastname");
+    }
+
     public void setFirstName(String value) {
         user.put("firstname", value);
         user.saveInBackground();
-    }
-
-    public String getLastName() {
-        return user.getString("lastname");
     }
 
     public void setLastName(String value) {
@@ -55,8 +58,19 @@ public class User extends ParseUser {
         user.logOut();
     }
 
+    // need to remove this one
     public Account getAccount() {
-        Account account = (Account) user.getParseObject("account");
+             Account account = (Account) user.getParseObject("account");
+             try {
+                 account.fetchIfNeeded();
+             } catch (ParseException e) {
+                 e.printStackTrace();
+             }
+             return account;
+    }
+
+    public cse110.com.goldencash.modelAccount.Account getDebitAccount() {
+        cse110.com.goldencash.modelAccount.Account account = (cse110.com.goldencash.modelAccount.Account) user.getParseObject("debitaccount");
         try {
             account.fetchIfNeeded();
         } catch (ParseException e) {
@@ -65,4 +79,23 @@ public class User extends ParseUser {
         return account;
     }
 
+    public cse110.com.goldencash.modelAccount.Account getCreditAccount() {
+        cse110.com.goldencash.modelAccount.Account account = (cse110.com.goldencash.modelAccount.Account) user.getParseObject("creditaccount");
+        try {
+            account.fetchIfNeeded();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return account;
+    }
+
+    public cse110.com.goldencash.modelAccount.Account getSavingAccount() {
+        cse110.com.goldencash.modelAccount.Account account = (cse110.com.goldencash.modelAccount.Account) user.getParseObject("savingaccount");
+        try {
+            account.fetchIfNeeded();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return account;
+    }
 }

@@ -35,12 +35,14 @@ public class AccountsActivity extends Activity{
     ListView listview;
 
     private User user = new User();
-    private Account account = user.getAccount();
+    private cse110.com.goldencash.modelAccount.Account debit = user.getDebitAccount();
+    private cse110.com.goldencash.modelAccount.Account credit = user.getCreditAccount();
+    private cse110.com.goldencash.modelAccount.Account saving = user.getSavingAccount();
 
     protected ArrayAdapter<String> adapter;
 
     protected boolean flag = false;
-
+/*
     private void getUser(){
         Log.d("getting user","id: "+getIntent().getStringExtra("userID"));
         String userId = getIntent().getStringExtra("userID");
@@ -65,6 +67,7 @@ public class AccountsActivity extends Activity{
         //user = new User(getIntent().getStringExtra("userID"));
        // account = user.getAccount();
     }
+*/
     private void refreshData() {
         Intent intent = new Intent(AccountsActivity.this, AccountsActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -73,16 +76,16 @@ public class AccountsActivity extends Activity{
 
     private ArrayList<String> setAdapterarray(){
         ArrayList<String> account_list=new ArrayList<String>();
-        String stringCredit = "Credit Account\nAvailable Balance:" + account.getCredit();
-        String stringSaving = "Saving Account\nAvailable Balance:" + account.getSaving();
-        String stringDebit = "Debit Account\nAvailable Balance:" + account.getDebit();
-        if(account.isOpenDebit()){
+        String stringCredit = "Credit Account\nAvailable Balance:" + credit.getAmount();
+        String stringSaving = "Saving Account\nAvailable Balance:" + saving.getAmount();
+        String stringDebit = "Debit Account\nAvailable Balance:" + debit.getAmount();
+        if(debit.isOpen()){
             account_list.add(stringDebit);
         }
-        if(account.isOpenCredit()){
+        if(credit.isOpen()){
             account_list.add(stringCredit);
         }
-        if(account.isOpenSaving()){
+        if(saving.isOpen()){
             account_list.add(stringSaving);
         }
         return account_list;
@@ -165,25 +168,26 @@ public class AccountsActivity extends Activity{
             public void onClick(DialogInterface dialog,int which) {
                 switch (choose) {
                     case 0:
-                        if(account.isOpenDebit()) {
-                            account.setDebit(Double.parseDouble(input.getText().toString()));
+                        if(debit.isOpen()) {
+                            // add + -, and call debit.withdraw or debit.deposit
+                            //account.setDebit(Double.parseDouble(input.getText().toString()));
                             break;
                         }
-                        else if(account.isOpenCredit()) {
+                        else if(credit.isOpen()) {
                             flag = true;
-                            account.setCredit(Double.parseDouble(input.getText().toString())); break;
+                            //account.setCredit(Double.parseDouble(input.getText().toString())); break;
                         }
                         else {
-                            account.setSaving(Double.parseDouble(input.getText().toString())); break;
+                            //account.setSaving(Double.parseDouble(input.getText().toString())); break;
                         }
                     case 1:
-                        if(account.isOpenCredit()&&!flag) {
-                            account.setCredit(Double.parseDouble(input.getText().toString())); break;
+                        if(credit.isOpen()&&!flag) {
+                            //account.setCredit(Double.parseDouble(input.getText().toString())); break;
                         }
                         else {
-                            account.setSaving(Double.parseDouble(input.getText().toString())); break;
+                            //account.setSaving(Double.parseDouble(input.getText().toString())); break;
                         }
-                    case 2:account.setSaving(Double.parseDouble(input.getText().toString())); break;
+                    case 2://account.setSaving(Double.parseDouble(input.getText().toString())); break;
                     default: // error
                 }
                 finish();
