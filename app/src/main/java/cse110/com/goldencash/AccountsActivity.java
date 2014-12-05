@@ -109,7 +109,7 @@ public class AccountsActivity extends Activity{
         requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         setProgressBarIndeterminateVisibility(true);
         //set title
-        //setTitle(getIntent().getExtras().getString("username"));
+        setTitle("Welcome,Teller "+user.getUserName());
         //set view
         setContentView(R.layout.activity_accounts);
 

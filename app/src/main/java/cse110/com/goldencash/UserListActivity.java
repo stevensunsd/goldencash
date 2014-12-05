@@ -33,6 +33,8 @@ public class UserListActivity extends Activity
     ArrayAdapter<String> adapter;
     List<ParseObject> parseObjects;
 
+    private User user = new User();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,7 +43,7 @@ public class UserListActivity extends Activity
         setProgressBarIndeterminateVisibility(false);
 
         //set title
-        setTitle("Users");
+        setTitle("Welcome,Teller "+user.getUserName());
 
         setContentView(R.layout.activity_userlist);
         listView = (ListView)findViewById(R.id.listView_userlist);
@@ -88,11 +90,7 @@ public class UserListActivity extends Activity
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
         Intent intent = new Intent(this, AccountsActivity.class);
-        ParseObject po = parseObjects.get(i).getParseObject("account");
-        String id = po.getObjectId();
-        String username = parseObjects.get(i).getString("username");
-        intent.putExtra("username",username);
-        intent.putExtra("userID", id);
+        //intent.putExtra("username",username);
         startActivity(intent);
     }
 

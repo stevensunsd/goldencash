@@ -36,6 +36,8 @@ public class User extends ParseUser {
         return user.getBoolean("admin");
     }
 
+    public String getUserName() {return user.getString("username");}
+
     public String getFirstName() {
         return user.getString("firstname");
     }
