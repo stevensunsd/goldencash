@@ -42,9 +42,12 @@ public class TransactionActivity extends Activity{
     //false for within same account transfer
     private boolean transactionMode = false;
     protected User user = new User();
+    private cse110.com.goldencash.modelAccount.Account targetAccount;
     private cse110.com.goldencash.modelAccount.Account debit = user.getAccount2("Debit");
     private cse110.com.goldencash.modelAccount.Account credit = user.getAccount2("Credit");
     private cse110.com.goldencash.modelAccount.Account saving = user.getAccount2("Saving");
+
+    private String email;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -141,7 +144,7 @@ public class TransactionActivity extends Activity{
                 startLoading();
                 String amount = input.getText().toString();
                 if(transactionMode){
-                    makeTransactionToOther(debit,(double)Integer.parseInt(amount));
+                    makeTransactionToOther(targetAccount,(double)Integer.parseInt(amount));
                 }else {
                     makeTransaction(Integer.parseInt(amount), spinnerFrom.getSelectedItem().toString(),
                             spinnerTo.getSelectedItem().toString());
@@ -154,10 +157,10 @@ public class TransactionActivity extends Activity{
     }
     private void makeTransactionToOther(Account account,double value){
         user.getAccount2("Debit").transfer(account,value);
-       /* alertMsg("Successful",
-                "You have transferred $" + amount +
-                        " from your checking account to " + toAccount.getAccountNumber());
-                        */
+       alertMsg("Successful",
+                "You have transferred $" + value +
+                        " from your checking account to " + email);
+
     }
     private void makeTransaction(int amount,String from, String to){
         if(from.equals("Debit")) {
@@ -204,34 +207,42 @@ public class TransactionActivity extends Activity{
 
     private void showTransferAccountDialog(){
         final EditText input = new EditText(this);
-        input.setInputType(InputType.TYPE_CLASS_NUMBER);
+        input.setInputType(InputType.TYPE_CLASS_TEXT);
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Enter a account number").setIcon(android.R.drawable.ic_dialog_info).setView(input).setNegativeButton("Cancel",null);
+        builder.setTitle("Enter an email address").setIcon(android.R.drawable.ic_dialog_info).setView(input).setNegativeButton("Cancel",null);
         builder.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 setProgressBarIndeterminateVisibility(true);
                 transactionMode = true;
-                //checkAccountNumber(input.getText().toString());
+                email = input.getText().toString();
+                checkEmailEntered(email);
             }
 
         });
         builder.show();
     }
 
-    private void checkAccountNumber(String an){
-        ParseQuery<ParseObject> query = ParseQuery.getQuery("Account");
-        query.whereEqualTo("number", an);
+    private void checkEmailEntered(String email){
+        ParseQuery query = ParseUser.getQuery();
+        query.whereEqualTo("email", email);
         query.findInBackground(new FindCallback<ParseObject>() {
             @Override
             public void done(List<ParseObject> parseObjects, ParseException e) {
                 setProgressBarIndeterminateVisibility(false);
                 if (e == null) {
-                    Log.d("accountNumber", parseObjects.size() + " accounts found");
                     if (!parseObjects.isEmpty()) {
-                        //toAccount = (Account) parseObjects.get(0);
+                        Log.d("Got target email","");
+                        ParseObject po = parseObjects.get(0);
+                        ParseObject account = po.getParseObject("Debitaccount");
+                        try {
+                            account.fetch();
+                        } catch (ParseException e1) {
+                            e1.printStackTrace();
+                        }
+                        targetAccount = (Account)account;
                         editbox();
                     } else {
-                        alertMsg("Account Not Found",
+                        alertMsg("User Not Found",
                                 "There is no account associate to the number you entered.");
                     }
                 } else {

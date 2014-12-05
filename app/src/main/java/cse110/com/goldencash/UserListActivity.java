@@ -57,10 +57,10 @@ public class UserListActivity extends Activity
         query.findInBackground(new FindCallback<ParseObject>() {
             @Override
             public void done(List<ParseObject> parseObjects, ParseException e) {
+                setProgressBarIndeterminateVisibility(false);
                 if (e == null){
                     setupAdapter(parseObjects);
                 }else{
-                    setProgressBarIndeterminateVisibility(false);
                     Log.d(getString(R.string.debugInfo_text),"usernames error");
                     //TODO:display error message/networking
                 }
