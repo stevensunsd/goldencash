@@ -110,6 +110,8 @@ public class SignupActivity extends Activity implements View.OnClickListener {
 
     private void setupParse() {
         String accountnumber = new Random().nextInt(99999999) % (99999999 - 00000001 + 1) + 00000001 + "";
+        String log = "";
+
         // Set up new Account
         final cse110.com.goldencash.modelAccount.DebitAccount debit = ParseObject.create(cse110.com.goldencash.modelAccount.DebitAccount.class);
         final cse110.com.goldencash.modelAccount.CreditAccount credit = ParseObject.create(cse110.com.goldencash.modelAccount.CreditAccount.class);
@@ -117,16 +119,19 @@ public class SignupActivity extends Activity implements View.OnClickListener {
         debit.put("accountnumber",accountnumber);
         debit.put("openDebit",openDebit);
         debit.put("Debit", 100.1);
-        debit.put("interest",0.0);
+        debit.put("Interest",0.0);
+        debit.put("Log",log);
         debit.saveInBackground();
         credit.put("accountnumber", accountnumber);
         credit.put("openCredit", openCredit);
         credit.put("Credit", 100.1);
+        credit.put("Log",log);
         credit.saveInBackground();
         saving.put("accountnumber", accountnumber);
         saving.put("openSaving", openSaving);
         saving.put("Saving", 100.1);
-        saving.put("interest",0.0);
+        saving.put("Interest",0.0);
+        saving.put("Log",log);
         saving.saveInBackground(new SaveCallback() {
             public void done(ParseException e) {
                 if (e != null) {

@@ -37,6 +37,6 @@ public class StatementsActivity extends Activity {
 
     private void getStatementOnScreen(){
         statmentTV = (TextView) findViewById(R.id.statement_text);
-        statmentTV.setText("this is it");
+        statmentTV.setText(user.getAccount2("Debit").getLog());
     }
 }
