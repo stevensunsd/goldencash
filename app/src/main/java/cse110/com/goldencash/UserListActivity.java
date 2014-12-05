@@ -56,6 +56,7 @@ public class UserListActivity extends Activity
     private void queryUsers(){
         setProgressBarIndeterminateVisibility(true);
         ParseQuery query = ParseUser.getQuery();
+        query.whereEqualTo("admin",false);
         query.findInBackground(new FindCallback<ParseObject>() {
             @Override
             public void done(List<ParseObject> parseObjects, ParseException e) {

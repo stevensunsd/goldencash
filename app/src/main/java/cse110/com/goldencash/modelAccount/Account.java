@@ -5,6 +5,7 @@ import com.parse.ParseClassName;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.TimeZone;
 
 import cse110.com.goldencash.User;
 
@@ -65,19 +66,20 @@ public abstract class Account extends ParseObject implements AccountInterface{
 
     public void addLog(String choose,double value) {
         Date currentTime = new Date(System.currentTimeMillis());
-        SimpleDateFormat df =new SimpleDateFormat("EEE, d MMM yyyy, HH:mm");
+        SimpleDateFormat df =new SimpleDateFormat("d MMM yyyy HH:mm:ss");
+        df.setTimeZone(TimeZone.getTimeZone("America/Los_Angeles"));
         String currentTimeString = df.format(currentTime);
         String newLogFrom;
         String newLogTo = "";
         User user = new User();
         if(choose.equals("Debit")||choose.equals("Saving")||choose.equals("Credit")) {
-            newLogFrom = currentTimeString + " " + "Customer Transfer From " + accountType + " To " + choose + " Account" + " $" + value + '\n';
-            newLogTo = currentTimeString + " " + "Customer Transfer From " + accountType + " To " + choose + " Account" + " $" + value + '\n';
+            newLogFrom = currentTimeString + " " + "Transfer " + " $" + value + " + From " + accountType + " To " + choose + " Account" + '\n';
+            newLogTo = currentTimeString + " " + "Transfer " + " $" + value + " + From " + accountType + " To " + choose + " Account" + '\n';
             user.getAccount2(choose).put("Log",user.getAccount2(choose).getLog() + newLogTo);
             user.getAccount2(choose).saveInBackground();
         }
         else {
-            newLogFrom = currentTimeString + " " + "Teller " + choose + " " + accountType + " Account" + " $" + value + '\n';
+            newLogFrom = currentTimeString + " " + "Teller " + choose + " $" + value + " " + accountType + " Account" + '\n';
         }
         put("Log",getLog()+ newLogFrom );
         saveInBackground();
@@ -85,12 +87,13 @@ public abstract class Account extends ParseObject implements AccountInterface{
 
     public void addLog(Account account,double value) {
         Date currentTime = new Date(System.currentTimeMillis());
-        SimpleDateFormat df =new SimpleDateFormat("EEE, d MMM yyyy, HH:mm");
+        SimpleDateFormat df =new SimpleDateFormat("d MMM yyyy HH:mm:ss");
+        df.setTimeZone(TimeZone.getTimeZone("America/Los_Angeles"));
         String currentTimeString = df.format(currentTime);
         String newLogFrom;
         String newLogTo;
-        newLogFrom = currentTimeString + " " + "Customer Transfer From " + accountType + " To " + "Account Number: " + account.getAccountNumber() + " $" + value + '\n';
-        newLogTo = currentTimeString + " " + "Customer Transfer From " + "Account Number: " + getAccountNumber() + " $" + value + '\n';
+        newLogFrom = currentTimeString + " " + "Transfer " + " $" + value + " + From " + accountType + " To " + "Account Number: " + account.getAccountNumber() + '\n';
+        newLogTo = currentTimeString + " " + "Account Number: " + getAccountNumber() + "Transfer " + " $" + value + " Into Your Account" + '\n';
         put("Log",getLog()+ newLogFrom );
         account.put("Log",account.getLog() + newLogTo);
         saveInBackground();
