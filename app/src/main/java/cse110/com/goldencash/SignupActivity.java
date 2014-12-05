@@ -110,7 +110,7 @@ public class SignupActivity extends Activity implements View.OnClickListener {
 
     private void setupParse() {
         String accountnumber = new Random().nextInt(99999999) % (99999999 - 00000001 + 1) + 00000001 + "";
-        String log = "";
+        String log = " ";
 
         // Set up new Account
         final cse110.com.goldencash.modelAccount.DebitAccount debit = ParseObject.create(cse110.com.goldencash.modelAccount.DebitAccount.class);
