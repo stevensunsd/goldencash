@@ -152,8 +152,8 @@ public class TransactionActivity extends Activity{
         });
         builder.show();
     }
-    private void makeTransactionToOther(Account account,double value){
-        user.getAccount2("Debit").transfer(account,value);
+    private void makeTransactionToOther(Account otherAccount,double value){
+        debit.transfer(otherAccount,value);
        /* alertMsg("Successful",
                 "You have transferred $" + amount +
                         " from your checking account to " + toAccount.getAccountNumber());
