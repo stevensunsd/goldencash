@@ -51,7 +51,7 @@ public class CustomerMainActivity extends Activity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
-               // editbox();
+                gotoStatementsPage((int)id);
 
             }
         });
@@ -79,12 +79,14 @@ public class CustomerMainActivity extends Activity {
         if(debit.isOpen()){
             account_list.add(stringDebit+stringDebitInterest);
         }
-        if(credit.isOpen()){
-            account_list.add(stringCredit);
-        }
         if(saving.isOpen()){
             account_list.add(stringSaving+stringSavingInterest);
         }
+        if(credit.isOpen()){
+            account_list.add(stringCredit);
+
+        }
+
         return account_list;
     }
 
@@ -118,7 +120,7 @@ public class CustomerMainActivity extends Activity {
         }else if (id == R.id.action_close_account){
             closeAccount();
         }else if (id == R.id.action_statements){
-            gotoStatementsPage();
+            //gotoStatementsPage();
         }
         return super.onOptionsItemSelected(item);
     }
@@ -163,21 +165,21 @@ public class CustomerMainActivity extends Activity {
                             debit.closeAccount();
                             break;
                         }
-                        else if(credit.isOpen()) {
+                        else if(saving.isOpen()) {
                             flag = true;
-                            credit.closeAccount(); break;
-                        }
-                        else {
-                            saving.closeAccount();break;
-                        }
-                    case 1:
-                        if(credit.isOpen()&&!flag) {
-                            credit.closeAccount(); break;
-                        }
-                        else {
                             saving.closeAccount(); break;
                         }
-                    case 2: saving.closeAccount();break;
+                        else {
+                            credit.closeAccount();break;
+                        }
+                    case 1:
+                        if(saving.isOpen()&&!flag) {
+                            saving.closeAccount(); break;
+                        }
+                        else {
+                            credit.closeAccount(); break;
+                        }
+                    case 2: credit.closeAccount();break;
                     default: // error
                 }
                 refreshData();
@@ -201,9 +203,36 @@ public class CustomerMainActivity extends Activity {
         startActivity(intent);
     }
 
-    private void gotoStatementsPage(){
+    private void gotoStatementsPage(int i){
         Intent intent = new Intent(this, StatementsActivity.class);
-        //intent.addFlags(intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+        switch (i) {
+            case 0:
+                if(debit.isOpen()) {
+                    intent.putExtra("account","Debit");
+                    break;
+                }
+                else if(saving.isOpen()) {
+                    flag = true;
+                    intent.putExtra("account","Saving");
+                    break;
+                }
+                else {
+                    intent.putExtra("account","Credit");
+                    break;
+                }
+            case 1:
+                if(saving.isOpen()&&!flag) {
+                    intent.putExtra("account","Saving");
+                    break;
+                }
+                else {
+                    intent.putExtra("account","Credit");
+                    break;
+                }
+            case 2: intent.putExtra("account","Credit");
+                break;
+            default: //can't
+        }
         startActivity(intent);
     }
 

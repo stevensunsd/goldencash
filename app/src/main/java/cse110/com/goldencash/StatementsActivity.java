@@ -16,27 +16,30 @@ public class StatementsActivity extends Activity {
     private User user = new User();
     private TextView statmentTV;
     private Button print_button;
+    private String account;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_statements);
-        setTitle("Statements");
+        account =  getIntent().getExtras().getString("account");
+        setTitle(account+" Account Statement");
+        getStatementOnScreen();
         print_button = (Button)findViewById(R.id.button_print_statement);
         print_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent sendIntent = new Intent();
                 sendIntent.setAction(Intent.ACTION_SEND);
-                sendIntent.putExtra(Intent.EXTRA_TEXT, "This is my text to send.");
+                sendIntent.putExtra(Intent.EXTRA_TEXT, statmentTV.getText().toString());
                 sendIntent.setType("text/plain");
                 startActivity(Intent.createChooser(sendIntent, "Share via"));
             }
         });
-        getStatementOnScreen();
     }
 
     private void getStatementOnScreen(){
         statmentTV = (TextView) findViewById(R.id.statement_text);
-        statmentTV.setText(user.getAccount2("Debit").getLog());
+        statmentTV.setText(user.getAccount2(account).getLog());
     }
 }
