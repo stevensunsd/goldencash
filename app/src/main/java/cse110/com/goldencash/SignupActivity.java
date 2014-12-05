@@ -117,6 +117,7 @@ public class SignupActivity extends Activity implements View.OnClickListener {
         debit.put("accountnumber",accountnumber);
         debit.put("openDebit",openDebit);
         debit.put("Debit", 100.1);
+        debit.put("interest",0.0);
         debit.saveInBackground();
         credit.put("accountnumber", accountnumber);
         credit.put("openCredit", openCredit);
@@ -125,6 +126,7 @@ public class SignupActivity extends Activity implements View.OnClickListener {
         saving.put("accountnumber", accountnumber);
         saving.put("openSaving", openSaving);
         saving.put("Saving", 100.1);
+        saving.put("interest",0.0);
         saving.saveInBackground(new SaveCallback() {
             public void done(ParseException e) {
                 if (e != null) {
