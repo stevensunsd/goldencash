@@ -46,4 +46,14 @@
         android:id="@+id/signup_button"
         android:layout_centerInParent="true"
         android:text="@string/signup_text"/>
+
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Forgot password"
+        android:id="@+id/button_reset_password"
+        android:layout_below="@+id/signup_button"
+        android:layout_centerHorizontal="true" />
+
 </RelativeLayout>

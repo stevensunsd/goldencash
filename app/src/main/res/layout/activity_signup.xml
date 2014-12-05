@@ -56,8 +56,16 @@
         android:id="@+id/signup_lastname"/>
 
 
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textEmailAddress"
+            android:hint="myemail@example.com"
+            android:ems="10"
+            android:id="@+id/signup_email"
+            android:layout_gravity="right" />
 
-    <TextView
+        <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceSmall"
@@ -71,11 +79,7 @@
         android:id="@+id/check_debit" />
 
 
-    <CheckBox
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/Checking"
-        android:id="@+id/check_checking" />
+
 
     <CheckBox
         android:layout_width="wrap_content"

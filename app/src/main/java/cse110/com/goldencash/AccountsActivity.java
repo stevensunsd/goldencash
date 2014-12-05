@@ -68,6 +68,7 @@ public class AccountsActivity extends Activity{
        // account = user.getAccount();
     }
 */
+
     private void refreshData() {
         Intent intent = new Intent(AccountsActivity.this, AccountsActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -76,17 +77,20 @@ public class AccountsActivity extends Activity{
 
     private ArrayList<String> setAdapterarray(){
         ArrayList<String> account_list=new ArrayList<String>();
-        String stringCredit = "Credit Account\nAvailable Balance:" + credit.getAmount();
-        String stringSaving = "Saving Account\nAvailable Balance:" + saving.getAmount();
-        String stringDebit = "Debit Account\nAvailable Balance:" + debit.getAmount();
+        String stringCredit = "Credit Account\nBalance: " + credit.getAmount();
+        String stringSaving = "Saving Account\nAvailable Balance: " + saving.getAmount();
+        String stringDebit = "Debit Account\nAvailable Balance: " + debit.getAmount();
+        String stringSavingInterest = "\n Current Interest Rate: ";
+        String stringDebitInterest = "\n Current Interest Rate: ";
         if(debit.isOpen()){
-            account_list.add(stringDebit);
+            account_list.add(stringDebit+stringDebitInterest);
+        }
+
+        if(saving.isOpen()){
+            account_list.add(stringSaving+stringSavingInterest);
         }
         if(credit.isOpen()){
             account_list.add(stringCredit);
-        }
-        if(saving.isOpen()){
-            account_list.add(stringSaving);
         }
         return account_list;
     }
@@ -103,7 +107,7 @@ public class AccountsActivity extends Activity{
         super.onCreate(savedInstanceState);
         // 11. Add a spinning progress bar (and make sure it's off)
         requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
-        setProgressBarIndeterminateVisibility(false);
+        setProgressBarIndeterminateVisibility(true);
         //set title
         //setTitle(getIntent().getExtras().getString("username"));
         //set view
@@ -130,40 +134,47 @@ public class AccountsActivity extends Activity{
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
                 // add id to give choose about which account you want to change
-                editbox(id);
+                selectionBox(id);
+                //editbox(id);
             }
         });
         //getUser();
         setAdapter();
+        setProgressBarIndeterminateVisibility(false);
     }
 
     protected void selectionBox(long id){
+        final long index = id;
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-
-        builder.setPositiveButton("Withdraw",
+        builder.setTitle("Choose an action");
+        builder.setPositiveButton("Cancel", null);
+        builder.setNeutralButton("Deposit",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-
+                        editDeposit(index);
                     }
                 });
-        builder.setNegativeButton("Deposit",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-
-                    }
-                });
+        if(id != 2){
+            //Credit account cannot be withdraw
+            builder.setNegativeButton("Withdraw",
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            editWithdraw(index);
+                        }
+                    });
+        }
         //create alert dialog
         AlertDialog alert = builder.create();
         //show dialog on screen
         alert.show();
     }
 
-    protected void editbox(long id) {
+    protected void editDeposit(long id) {
         final EditText input = new EditText(this);
         final int choose = (int)id;
         input.setInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL);
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Please Enter The Amount You Want to Change").setIcon(android.R.drawable.ic_dialog_info).setView(input).setNegativeButton("Cancel",null);
+        builder.setTitle("Please Enter Deposit Amount").setIcon(android.R.drawable.ic_dialog_info).setView(input).setNegativeButton("Cancel",null);
         builder.setPositiveButton("Confirm",new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog,int which) {
                 switch (choose) {
@@ -173,21 +184,24 @@ public class AccountsActivity extends Activity{
                             //account.setDebit(Double.parseDouble(input.getText().toString()));
                             break;
                         }
-                        else if(credit.isOpen()) {
+                        else if(saving.isOpen()) {
                             flag = true;
                             //account.setCredit(Double.parseDouble(input.getText().toString())); break;
                         }
                         else {
+                            //credit
                             //account.setSaving(Double.parseDouble(input.getText().toString())); break;
                         }
                     case 1:
-                        if(credit.isOpen()&&!flag) {
+                        if(saving.isOpen()&&!flag) {
                             //account.setCredit(Double.parseDouble(input.getText().toString())); break;
                         }
                         else {
+                            //credit
                             //account.setSaving(Double.parseDouble(input.getText().toString())); break;
                         }
-                    case 2://account.setSaving(Double.parseDouble(input.getText().toString())); break;
+                    case 2: //credit
+                    //account.setSaving(Double.parseDouble(input.getText().toString())); break;
                     default: // error
                 }
                 finish();
@@ -197,5 +211,45 @@ public class AccountsActivity extends Activity{
         });
         builder.show();
     }
-
+    protected void editWithdraw(long id) {
+        final EditText input = new EditText(this);
+        final int choose = (int)id;
+        input.setInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Please Enter Withdraw Amount").setIcon(android.R.drawable.ic_dialog_info).setView(input).setNegativeButton("Cancel",null);
+        builder.setPositiveButton("Confirm",new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog,int which){
+                switch (choose) {
+                case 0:
+                    if(debit.isOpen()) {
+                        // add + -, and call debit.withdraw or debit.deposit
+                        //account.setDebit(Double.parseDouble(input.getText().toString()));
+                        break;
+                    }
+                    else if(saving.isOpen()) {
+                        flag = true;
+                        //account.setCredit(Double.parseDouble(input.getText().toString())); break;
+                    }
+                    else {
+                        //credit
+                        //account.setSaving(Double.parseDouble(input.getText().toString())); break;
+                    }
+                case 1:
+                    if(saving.isOpen()&&!flag) {
+                        //account.setCredit(Double.parseDouble(input.getText().toString())); break;
+                    }
+                    else {
+                        //credit
+                        //account.setSaving(Double.parseDouble(input.getText().toString())); break;
+                    }
+                case 2: //credit
+                    //account.setSaving(Double.parseDouble(input.getText().toString())); break;
+                default: // error
+            }
+            finish();
+            //refreshData(); refresh data has problem loading not using for now
+        }
+        });
+        builder.show();
+    }
 }
