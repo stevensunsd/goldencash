@@ -21,12 +21,14 @@ public class SigninActivityTest extends ActivityInstrumentationTestCase2<SigninA
     private SigninActivity t_signin;
     Button t_signinButton;
     Button t_signupButton;
+    Button t_forgotButton;
     EditText t_username_field;
     EditText t_password_field;
 
     public static final String GIVEN_USER = "USER";
     public static final String GIVEN_PASS = "pass";
     public static final int DPVALUE = 144;
+    public static final int FORGETVALUE = -2;
 
     public SigninActivityTest() {
         super(SigninActivity.class);
@@ -40,6 +42,7 @@ public class SigninActivityTest extends ActivityInstrumentationTestCase2<SigninA
 
         t_signinButton = (Button) t_signin.findViewById(R.id.signin_button);
         t_signupButton = (Button) t_signin.findViewById(R.id.signup_button);
+        t_forgotButton = (Button) t_signin.findViewById(R.id.button_reset_password);
         t_username_field = (EditText) t_signin.findViewById(R.id.usernameField);
         t_password_field = (EditText) t_signin.findViewById(R.id.passwordField);
     }
@@ -48,6 +51,7 @@ public class SigninActivityTest extends ActivityInstrumentationTestCase2<SigninA
         assertNotNull("signin is not null", t_signin);
         assertNotNull("signin button is not null", t_signinButton);
         assertNotNull("signup button is not null", t_signupButton);
+        assertNotNull("reset button is not null", t_forgotButton);
         assertNotNull("edittext username is not null", t_username_field);
         assertNotNull("edittext password is not null", t_password_field);
         assertEquals("username field is empty", "", t_username_field.getText().toString().trim());
@@ -67,28 +71,37 @@ public class SigninActivityTest extends ActivityInstrumentationTestCase2<SigninA
         assertNotNull(signup_layout);
         assertEquals(signup_layout.width, DPVALUE);
         assertEquals(signup_layout.height, WindowManager.LayoutParams.WRAP_CONTENT);
+
+        final ViewGroup.LayoutParams forgot_layout =
+                t_forgotButton.getLayoutParams();
+        assertNotNull(forgot_layout);
+        assertEquals(forgot_layout.width, FORGETVALUE);
+        assertEquals(forgot_layout.height, WindowManager.LayoutParams.WRAP_CONTENT);
     }
 
     public void testButtons_clicking() {
         Instrumentation.ActivityMonitor activityMonitor = getInstrumentation().addMonitor(SignupActivity.class.getName(), null, false);
-        final Button signinBtn =
-                (Button) t_signin
-                        .findViewById(R.id.signin_button);
-        final Button signupBtn =
-                (Button) t_signin
-                        .findViewById(R.id.signup_button);
+        Instrumentation.ActivityMonitor activityMonitor2 = getInstrumentation().addMonitor(ResetPasswordActivity.class.getName(), null, false);
 
         t_signin.runOnUiThread(
                 new Runnable() {
                     public void run() {
-                        signinBtn.performClick();
-                        signupBtn.performClick();
+                        t_signupButton.performClick();
+                        t_signinButton.performClick();
                     }
                 }
         );
 
         // assertNotNull(getInstrumentation().waitForMonitorWithTimeout(activityMonitor, 5000));
         (getInstrumentation().waitForMonitorWithTimeout(activityMonitor, 5000)).finish();
+        t_signin.runOnUiThread(
+                new Runnable() {
+                    public void run() {
+                        t_forgotButton.performClick();
+                    }
+                }
+        );
+        (getInstrumentation().waitForMonitorWithTimeout(activityMonitor2, 5000)).finish();
     }
 
     public void testStrings() {

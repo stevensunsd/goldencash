@@ -22,32 +22,24 @@ public class SignupActivityTest extends ActivityInstrumentationTestCase2<SignupA
     private SignupActivity t_signup;
     Button t_cancelButton;
     Button t_confirmButton;
-/*    boolean t_usernameOk;
-    String t_username;
-    String t_password1;
-    String t_password2;
-    String t_firstname;
-    String t_lastname;
-    String t_saltvalue;
-    boolean t_openDebit;
-    boolean t_openCredit;
-    boolean t_openSaving; */
 
     boolean t_finishTag = false;
-
-    ProgressDialog t_proDialog;
 
     EditText usertext;
     EditText passtext1;
     EditText passtext2;
     EditText nametext1;
     EditText nametext2;
+    EditText email;
     CheckBox debitbox;
     CheckBox creditbox;
     CheckBox savingbox;
 
     public static final String GIVEN_USER = "USER";
     public static final String GIVEN_PASS = "pass";
+    public static final String GIVEN_FIRST = "Albert";
+    public static final String GIVEN_LAST = "Wily";
+    public static final String GIVEN_EMAIL = "robom@ster.com";
     public static final int DPVALUE = 150;
 
     public SignupActivityTest() {
@@ -61,12 +53,12 @@ public class SignupActivityTest extends ActivityInstrumentationTestCase2<SignupA
         t_signup = getActivity();
         t_cancelButton = (Button) t_signup.findViewById(R.id.button_cancel);
         t_confirmButton = (Button) t_signup.findViewById(R.id.button_confirm);
-
         usertext = (EditText) t_signup.findViewById(R.id.signup_username);
         passtext1 = (EditText) t_signup.findViewById(R.id.signup_password);
         passtext2 = (EditText) t_signup.findViewById(R.id.signup_password2);
         nametext1 = (EditText) t_signup.findViewById(R.id.signup_firstname);
         nametext2 = (EditText) t_signup.findViewById(R.id.signup_lastname);
+        email = (EditText) t_signup.findViewById(R.id.signup_email);
         creditbox = (CheckBox) t_signup.findViewById(R.id.check_credit);
         debitbox = (CheckBox) t_signup.findViewById(R.id.check_debit);
         savingbox = (CheckBox) t_signup.findViewById(R.id.check_saving);
@@ -81,6 +73,7 @@ public class SignupActivityTest extends ActivityInstrumentationTestCase2<SignupA
         assertEquals("passtext2 field is empty", "", passtext2.getText().toString().trim());
         assertEquals("nametext1 field is empty", "", nametext1.getText().toString().trim());
         assertEquals("nametext2 field is empty", "", nametext2.getText().toString().trim());
+        assertEquals("email field is empty", "", email.getText().toString().trim());
         assertEquals("debit box is not checked", debitbox.isChecked(), false);
         assertEquals("credit box is not checked", creditbox.isChecked(), false);
         assertEquals("saving box is not checked", savingbox.isChecked(), false);
@@ -102,17 +95,11 @@ public class SignupActivityTest extends ActivityInstrumentationTestCase2<SignupA
     }
 
     public void testButtons_clicking() {
-        final Button confirmBtn =
-                (Button) t_signup
-                        .findViewById(R.id.button_confirm);
-        final Button cancelBtn =
-                (Button) t_signup
-                        .findViewById(R.id.button_cancel);
         t_signup.runOnUiThread(
                 new Runnable() {
                     public void run() {
-                        confirmBtn.performClick();
-                        cancelBtn.performClick();
+                        t_confirmButton.performClick();
+                        t_cancelButton.performClick();
                     }
                 }
         );
@@ -122,17 +109,21 @@ public class SignupActivityTest extends ActivityInstrumentationTestCase2<SignupA
         getInstrumentation().runOnMainSync(new Runnable() {
             @Override
             public void run() {
-                usertext.setText("USER", TextView.BufferType.EDITABLE);
-                passtext1.setText("pass", TextView.BufferType.EDITABLE);
-                passtext2.setText("pass", TextView.BufferType.EDITABLE);
-                nametext1.setText("Albert", TextView.BufferType.EDITABLE);
-                nametext2.setText("Wily", TextView.BufferType.EDITABLE);
+                usertext.setText(GIVEN_USER, TextView.BufferType.EDITABLE);
+                passtext1.setText(GIVEN_PASS, TextView.BufferType.EDITABLE);
+                passtext2.setText(GIVEN_PASS, TextView.BufferType.EDITABLE);
+                nametext1.setText(GIVEN_FIRST, TextView.BufferType.EDITABLE);
+                nametext2.setText(GIVEN_LAST, TextView.BufferType.EDITABLE);
+                email.setText(GIVEN_EMAIL, TextView.BufferType.EDITABLE);
             }
         });
 
         assertEquals(GIVEN_USER, usertext.getText().toString().trim());
         assertEquals(GIVEN_PASS, passtext1.getText().toString().trim());
         assertEquals(GIVEN_PASS, passtext2.getText().toString().trim());
+        assertEquals(GIVEN_FIRST, nametext1.getText().toString().trim());
+        assertEquals(GIVEN_LAST, nametext2.getText().toString().trim());
+        assertEquals(GIVEN_EMAIL, email.getText().toString().trim());
     }
 
     public void testCheckBoxes() {
