@@ -88,9 +88,11 @@ public class UserListActivity extends Activity
     }
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-
+        String username = parseObjects.get(i).getString("username");
+        String userId = parseObjects.get(i).getObjectId();
         Intent intent = new Intent(this, AccountsActivity.class);
-        //intent.putExtra("username",username);
+        intent.putExtra("username",username);
+        intent.putExtra("userId",userId);
         startActivity(intent);
     }
 
@@ -102,7 +104,7 @@ public class UserListActivity extends Activity
 
     private void AdminLogOut(){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-
+        builder.setTitle("Exit");
         builder.setPositiveButton("Log Out",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {

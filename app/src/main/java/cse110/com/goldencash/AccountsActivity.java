@@ -19,6 +19,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 
 //Our class
+import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
@@ -26,6 +27,9 @@ import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
 import java.util.ArrayList;
+import java.util.List;
+
+import cse110.com.goldencash.modelAccount.Account;
 
 /**
  * Created by Xin Wen on 10/27/14.
@@ -35,39 +39,46 @@ public class AccountsActivity extends Activity{
     ListView listview;
 
     private User user = new User();
-    private cse110.com.goldencash.modelAccount.Account debit = user.getAccount2("Debit");
-    private cse110.com.goldencash.modelAccount.Account credit = user.getAccount2("Credit");
-    private cse110.com.goldencash.modelAccount.Account saving = user.getAccount2("Saving");
+    private cse110.com.goldencash.modelAccount.Account debit;
+    private cse110.com.goldencash.modelAccount.Account credit;
+    private cse110.com.goldencash.modelAccount.Account saving;
 
     protected ArrayAdapter<String> adapter;
 
     protected boolean flag = false;
-/*
+
     private void getUser(){
-        Log.d("getting user","id: "+getIntent().getStringExtra("userID"));
-        String userId = getIntent().getStringExtra("userID");
+        Log.d("getting user","id: "+getIntent().getStringExtra("username"));
+        String userId = getIntent().getStringExtra("userId");
+        String username = getIntent().getStringExtra("username");
         ParseQuery query = ParseUser.getQuery();
-        query.getInBackground(userId,new GetCallback() {
+        query.whereEqualTo("username",username);
+        query.findInBackground(new FindCallback<ParseObject>() {
             @Override
-            public void done(ParseObject parseObject, ParseException e) {
-                if(e == null){
-                    Log.d("got user","id: "+parseObject.getObjectId());
-                    account =  (Account) parseObject.getParseObject("account");
+            public void done(List<ParseObject> parseObjects, ParseException e) {
+                if (e == null) {
+                    Log.d("got user", "id: " + parseObjects.get(0).getObjectId());
+                    debit = (Account) parseObjects.get(0).getParseObject("Debitaccount");
+                    credit = (Account) parseObjects.get(0).getParseObject("Creditaccount");
+                    saving = (Account) parseObjects.get(0).getParseObject("Savingaccount");
                     try {
-                        account.fetchIfNeeded();
+                        debit.fetch();
+                        credit.fetch();
+                        saving.fetch();
                     } catch (ParseException exc) {
                         exc.printStackTrace();
                     }
                     setAdapter();
-                }else{
+                } else {
                     //network error
+                    finish();
                 }
             }
         });
         //user = new User(getIntent().getStringExtra("userID"));
        // account = user.getAccount();
     }
-*/
+
 
     private void refreshData() {
         Intent intent = new Intent(AccountsActivity.this, AccountsActivity.class);
@@ -138,8 +149,8 @@ public class AccountsActivity extends Activity{
                 //editbox(id);
             }
         });
-        //getUser();
-        setAdapter();
+        getUser();
+        //setAdapter();
         setProgressBarIndeterminateVisibility(false);
     }
 
@@ -177,30 +188,37 @@ public class AccountsActivity extends Activity{
         builder.setTitle("Please Enter Deposit Amount").setIcon(android.R.drawable.ic_dialog_info).setView(input).setNegativeButton("Cancel",null);
         builder.setPositiveButton("Confirm",new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog,int which) {
+                double value = Double.parseDouble(input.getText().toString());
                 switch (choose) {
                     case 0:
                         if(debit.isOpen()) {
                             // add + -, and call debit.withdraw or debit.deposit
                             //account.setDebit(Double.parseDouble(input.getText().toString()));
+                            debit.deposit(value);
                             break;
                         }
                         else if(saving.isOpen()) {
                             flag = true;
                             //account.setCredit(Double.parseDouble(input.getText().toString())); break;
+                            saving.deposit(value);
                         }
                         else {
                             //credit
                             //account.setSaving(Double.parseDouble(input.getText().toString())); break;
+                            credit.deposit(value);
                         }
                     case 1:
                         if(saving.isOpen()&&!flag) {
                             //account.setCredit(Double.parseDouble(input.getText().toString())); break;
+                            saving.deposit(value);
                         }
                         else {
                             //credit
                             //account.setSaving(Double.parseDouble(input.getText().toString())); break;
+                            credit.deposit(value);
                         }
-                    case 2: //credit
+                    case 2: credit.deposit(value);
+                    //credit
                     //account.setSaving(Double.parseDouble(input.getText().toString())); break;
                     default: // error
                 }
@@ -219,24 +237,30 @@ public class AccountsActivity extends Activity{
         builder.setTitle("Please Enter Withdraw Amount").setIcon(android.R.drawable.ic_dialog_info).setView(input).setNegativeButton("Cancel",null);
         builder.setPositiveButton("Confirm",new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog,int which){
+                int amount = Integer.parseInt(input.getText().toString());
+                double value = amount;
                 switch (choose) {
                 case 0:
                     if(debit.isOpen()) {
                         // add + -, and call debit.withdraw or debit.deposit
                         //account.setDebit(Double.parseDouble(input.getText().toString()));
+                        debit.withdraw(value);
                         break;
                     }
                     else if(saving.isOpen()) {
                         flag = true;
                         //account.setCredit(Double.parseDouble(input.getText().toString())); break;
+                        saving.withdraw(value);
                     }
                     else {
                         //credit
                         //account.setSaving(Double.parseDouble(input.getText().toString())); break;
+                        credit.withdraw(value);
                     }
                 case 1:
                     if(saving.isOpen()&&!flag) {
                         //account.setCredit(Double.parseDouble(input.getText().toString())); break;
+                        saving.withdraw(value);
                     }
                     else {
                         //credit
