@@ -2,10 +2,8 @@ package cse110.com.goldencash;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -15,12 +13,6 @@ import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-
-import com.parse.GetCallback;
-import com.parse.ParseException;
-import com.parse.ParseObject;
-import com.parse.ParseQuery;
-import com.parse.ParseUser;
 
 import java.util.ArrayList;
 
@@ -125,8 +117,8 @@ public class CustomerMainActivity extends Activity {
             customerLogOut();
         }else if (id == R.id.action_close_account){
             closeAccount();
-        }else if (id == R.id.action_interests){
-            gotoInterestPage();
+        }else if (id == R.id.action_statements){
+            gotoStatementsPage();
         }
         return super.onOptionsItemSelected(item);
     }
@@ -209,8 +201,8 @@ public class CustomerMainActivity extends Activity {
         startActivity(intent);
     }
 
-    private void gotoInterestPage(){
-        Intent intent = new Intent(this, InterestActivity.class);
+    private void gotoStatementsPage(){
+        Intent intent = new Intent(this, StatementsActivity.class);
         //intent.addFlags(intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
     }

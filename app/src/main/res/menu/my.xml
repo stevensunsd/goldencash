@@ -4,8 +4,8 @@
         android:title="Transaction"
         android:orderInCategory="1"
         android:showAsAction="never" />
-    <item android:id="@+id/action_interests"
-        android:title="Interest"
+    <item android:id="@+id/action_statements"
+        android:title="Statements"
         android:orderInCategory="2"
         android:showAsAction="never" />
     <item android:id="@+id/action_close_account"

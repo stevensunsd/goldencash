@@ -24,7 +24,7 @@
         <activity android:name=".UserListActivity"/>
         <activity android:name=".CustomerMainActivity"/>
         <activity android:name=".TransactionActivity"/>
-        <activity android:name=".InterestActivity"/>
+        <activity android:name=".StatementsActivity"/>
         <activity android:name=".ResetPasswordActivity"/>
     </application>
 </manifest>
