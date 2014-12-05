@@ -73,15 +73,14 @@ public abstract class Account extends ParseObject implements AccountInterface{
         if(choose.equals("Debit")||choose.equals("Saving")||choose.equals("Credit")) {
             newLogFrom = currentTimeString + " " + "Customer Transfer From " + accountType + " To " + choose + " Account" + " $" + value + '\n';
             newLogTo = currentTimeString + " " + "Customer Transfer From " + accountType + " To " + choose + " Account" + " $" + value + '\n';
+            user.getAccount2(choose).put("Log",user.getAccount2(choose).getLog() + newLogTo);
+            user.getAccount2(choose).saveInBackground();
         }
         else {
             newLogFrom = currentTimeString + " " + "Teller " + choose + " " + accountType + " Account" + " $" + value + '\n';
         }
-
         put("Log",getLog()+ newLogFrom );
-        user.getAccount2(choose).put("Log",user.getAccount2(choose).getLog() + newLogTo);
         saveInBackground();
-        user.getAccount2(choose).saveInBackground();
     }
 
     public void addLog(Account account,double value) {
