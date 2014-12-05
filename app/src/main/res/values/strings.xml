@@ -19,11 +19,11 @@
     <string name="lastname_text">Last Name</string>
     <string name="button_confirm">Confirm</string>
     <string name="button_cancel">Cancel</string>
-    <string name="Debit_account">DEBIT ACCOUNT</string>
+    <string name="Debit_account">CHECKING</string>
     <string name="Checking">CHECKING</string>
     <string name="Saving">SAVING</string>
-    <string name="Credit_Account">CREDIT ACCOUNT</string>
-    <string name="account_type">ACCOUNT TYPE:</string>
+    <string name="Credit_Account">CREDIT</string>
+    <string name="account_type">CHOOSE TO ACTIVATE ACCOUNT:</string>
 
 
     <string name="ERROR_password"

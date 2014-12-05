@@ -24,7 +24,8 @@ public class SigninActivity extends Activity implements View.OnClickListener {
     private Button signupButton;
     private EditText username_field;
     private EditText password_field;
-
+    private Button forgotButton;
+    private int wrongInfo_counter = 0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,6 +36,8 @@ public class SigninActivity extends Activity implements View.OnClickListener {
         signinButton.setOnClickListener(this);
         signupButton = (Button) findViewById(R.id.signup_button);
         signupButton.setOnClickListener(this);
+        forgotButton = (Button) findViewById(R.id.button_reset_password);
+        forgotButton.setOnClickListener(this);
 
         username_field = (EditText) findViewById(R.id.usernameField);
         password_field = (EditText) findViewById(R.id.passwordField);
@@ -67,9 +70,16 @@ public class SigninActivity extends Activity implements View.OnClickListener {
         if(findViewById(R.id.signin_button).equals(view)) {
         //Log.d(getString(R.string.debugInfo_text), "Username entered: " +  username_field.getText().toString());
             checkInput();
-        }else{
+        }else if(findViewById(R.id.signup_button).equals(view)){
             gotoSignup();
+        }else{
+            gotoResetPassword();
         }
+    }
+
+    private void gotoResetPassword(){
+        Intent intent = new Intent(this,ResetPasswordActivity.class);
+        startActivity(intent);
     }
 
     private void gotoSignup() {
@@ -90,33 +100,48 @@ public class SigninActivity extends Activity implements View.OnClickListener {
         startActivity(intent);
     }
     private void signIn() {
-        final ProgressDialog dlg = new ProgressDialog(SigninActivity.this);
-        dlg.setMessage("Logging in.  Please wait.");
-        dlg.show();
-        // Call the Parse login method
-        User.logInInBackground(username_field.getText().toString(), password_field.getText()
-                .toString(), new LogInCallback() {
-            @Override
-            public void done(ParseUser user, ParseException e) {
-                dlg.dismiss();
-                if (e != null) {
-                    if(e.getCode() == 100){
-                        alertMsg("Connection Failed","Please check your Internet connection");
-                    }else {
-                        // Show the error message for general fail
-                        alertMsg("Logging in Fail", "User name and Password doesn't match");
-                    }
-                } else {
-                    Log.d(getString(R.string.debugInfo_text),""+user.getBoolean("admin"));
-                    // Start an intent for the dispatch activity
-                    if(user.getBoolean("admin")){
-                        gotoMainPage();
-                    }else{
-                        gotoCustomerMainPage();
+        if(wrongInfo_counter >= 3){
+            alertMsg("Logging in Fail", "Your account has been blocked, please contact customer service.");
+        }else {
+            final ProgressDialog dlg = new ProgressDialog(SigninActivity.this);
+            dlg.setMessage("Logging in.  Please wait.");
+            dlg.show();
+            // Call the Parse login method
+            User.logInInBackground(username_field.getText().toString(), password_field.getText()
+                    .toString(), new LogInCallback() {
+                @Override
+                public void done(ParseUser user, ParseException e) {
+                    dlg.dismiss();
+                    if (e != null) {
+                        if (e.getCode() == 100) {
+                            alertMsg("Connection Failed", "Please check your Internet connection");
+                        } else {
+                            // Show the error message for general fail
+                            ++wrongInfo_counter;
+                            if (wrongInfo_counter < 3) {
+                                alertMsg("Logging in Fail", "User name and Password doesn't match");
+                            } else {
+                                alertMsg("Logging in Fail", "Your account has been blocked, please contact customer service.");
+                            }
+                        }
+                    } else {
+                        Log.d(getString(R.string.debugInfo_text), "" + user.getBoolean("admin"));
+                        // Start an intent for the dispatch activity
+                        if (user.getBoolean("admin")) {
+                            gotoMainPage();
+                        } else {
+                            if (user.getParseObject("Creditaccount") != null ||
+                                    user.getParseObject("Debitaccount") != null ||
+                                    user.getParseObject("Savingaccount") != null) {
+                                gotoCustomerMainPage();
+                            } else {
+                                alertMsg("Unable to Sign in", "You don't have any active account, please contact customer service.");
+                            }
+                        }
                     }
                 }
-            }
-        });
+            });
+        }
     }
 
     private void alertMsg(String title, String msg){

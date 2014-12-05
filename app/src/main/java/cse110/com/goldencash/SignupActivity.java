@@ -37,6 +37,7 @@ public class SignupActivity extends Activity implements View.OnClickListener {
     String password2;
     String firstname;
     String lastname;
+    String email;
 
     boolean openDebit;
     boolean openCredit;
@@ -59,12 +60,12 @@ public class SignupActivity extends Activity implements View.OnClickListener {
 
     @Override
     public void onClick(View view) {
-        username = ((EditText)
-                findViewById(R.id.signup_username)).getText().toString().toLowerCase();
+        username = ((EditText)findViewById(R.id.signup_username)).getText().toString().toLowerCase();
         password1 = ((EditText) findViewById(R.id.signup_password)).getText().toString();
         password2 = ((EditText) findViewById(R.id.signup_password2)).getText().toString();
         firstname = ((EditText)findViewById(R.id.signup_firstname)).getText().toString();
         lastname = ((EditText)findViewById(R.id.signup_lastname)).getText().toString();
+        email = ((EditText) findViewById(R.id.signup_email)).getText().toString();
         openDebit = ((CheckBox)findViewById(R.id.check_debit)).isChecked();
         openCredit = ((CheckBox)findViewById(R.id.check_credit)).isChecked();
         openSaving  = ((CheckBox)findViewById(R.id.check_saving)).isChecked();
@@ -94,7 +95,7 @@ public class SignupActivity extends Activity implements View.OnClickListener {
             alertMsg("Sign Up Failed", "Please only enter letters for names.");
         }
         else if(!openCredit && !openDebit &&!openSaving) {
-            alertMsg("Sign Up Failed", "Please Check one Account type");
+            alertMsg("Sign Up Failed", "Please choose to activate at lease one account");
         }
         else {
             processSignup();
@@ -136,6 +137,7 @@ public class SignupActivity extends Activity implements View.OnClickListener {
                     user.setPassword(password1);
                     user.put("firstname", firstname);
                     user.put("lastname", lastname);
+                    user.setEmail(email);
                     user.put("admin", false);
                     user.put("Debitaccount", debit);
                     user.put("Creditaccount", credit);
