@@ -34,15 +34,20 @@ public abstract class Account extends ParseObject implements AccountInterface{
     public void transfer(String AccountType,double value) {
         User User = new User();
         put(accountType, getAmount() - value);
-        put(AccountType, User.getAccount2(AccountType).getAmount() + value);
+        User.getAccount2(AccountType).put(AccountType, User.getAccount2(AccountType).getAmount() + value);
         saveInBackground();
     }
 
-    public void transfer(DebitAccount account,double value) {
+    public void transfer(Account account,double value) {
         put(accountType,getAmount() - value);
         account.put("Debit",account.getAmount() + value);
         saveInBackground();
         account.saveInBackground();
+    }
+
+    public void closeAccount() {
+        put("open"+accountType,false);
+        saveInBackground();
     }
 
     public String getAccountNumber() {

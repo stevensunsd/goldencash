@@ -31,26 +31,17 @@ public class CustomerMainActivity extends Activity {
 
     protected String key;
     protected ListView listview;
-    protected String[] accountArray;
     protected ArrayAdapter<String> adapter;
 
-
-    protected boolean openDebit;
-    protected boolean openCredit;
-    protected boolean openSaving;
-    protected float debit;
-    protected float credit;
-    protected float saving;
-
     protected User user = new User();
+    private cse110.com.goldencash.modelAccount.Account debit = user.getAccount2("Debit");
+    private cse110.com.goldencash.modelAccount.Account credit = user.getAccount2("Credit");
+    private cse110.com.goldencash.modelAccount.Account saving = user.getAccount2("Saving");
 
     protected boolean flag = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
-
-        //key = retrieveKey();
 
         // 11. Add a spinning progress bar (and make sure it's off)
         requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
@@ -73,17 +64,7 @@ public class CustomerMainActivity extends Activity {
             }
         });
 
-        setup();
         setAdapter();
-    }
-    private void setup(){
-        Account account = user.getAccount();
-        openDebit = account.isOpenDebit();
-        openCredit = account.isOpenCredit();
-        openSaving = account.isOpenSaving();
-        debit = (float) account.getDebit();
-        credit = (float) account.getCredit();
-        saving = (float) account.getSaving();
     }
 
     private void setAdapter(){
@@ -98,16 +79,16 @@ public class CustomerMainActivity extends Activity {
 
     private ArrayList<String> setAdapterarray(){
         ArrayList<String> account_list=new ArrayList<String>();
-        String stringCredit = "Credit Account\nAvailable Balance:" + credit;
-        String stringSaving = "Saving Account\nAvailable Balance:" + saving;
-        String stringDebit = "Debit Account\nAvailable Balance:" + debit;
-        if(openDebit){
+        String stringCredit = "Credit Account\nAvailable Balance:" + credit.getAmount();
+        String stringSaving = "Saving Account\nAvailable Balance:" + saving.getAmount();
+        String stringDebit = "Debit Account\nAvailable Balance:" + debit.getAmount();
+        if(debit.isOpen()){
             account_list.add(stringDebit);
         }
-        if(openCredit){
+        if(credit.isOpen()){
             account_list.add(stringCredit);
         }
-        if(openSaving){
+        if(saving.isOpen()){
             account_list.add(stringSaving);
         }
         return account_list;
@@ -120,11 +101,6 @@ public class CustomerMainActivity extends Activity {
         customerLogOut();
     }
 
-    private String retrieveKey(){
-//        SharedPreferences prefs = getSharedPreferences("myFile", Context.MODE_PRIVATE);
-//        return prefs.getString("key","");
-        return user.getAccount().getObjectId();
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -173,11 +149,11 @@ public class CustomerMainActivity extends Activity {
     private void closeAccount(){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         ArrayList list = new ArrayList();
-        if(openDebit){
+        if(debit.isOpen()){
             list.add("Debit");
         }
-        if(openCredit){list.add("Credit");}
-        if(openSaving){
+        if(credit.isOpen()){list.add("Credit");}
+        if(saving.isOpen()){
             list.add("Saving");
         }
 
@@ -187,28 +163,27 @@ public class CustomerMainActivity extends Activity {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 //check close account
-                Account account = user.getAccount();
                 switch (i) {
                     case 0:
-                        if(account.isOpenDebit()) {
-                            account.setOpenDebit(false);
+                        if(debit.isOpen()) {
+                            debit.closeAccount();
                             break;
                         }
-                        else if(account.isOpenCredit()) {
+                        else if(credit.isOpen()) {
                             flag = true;
-                            account.setOpenCredit(false); break;
+                            credit.closeAccount(); break;
                         }
                         else {
-                            account.setOpenSaving(false); break;
+                            saving.closeAccount();break;
                         }
                     case 1:
-                        if(account.isOpenCredit()&&!flag) {
-                            account.setOpenCredit(false); break;
+                        if(credit.isOpen()&&!flag) {
+                            credit.closeAccount(); break;
                         }
                         else {
-                            account.setOpenSaving(false); break;
+                            saving.closeAccount(); break;
                         }
-                    case 2:account.setOpenSaving(false);break;
+                    case 2: saving.closeAccount();break;
                     default: // error
                 }
                 refreshData();

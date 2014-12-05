@@ -26,6 +26,9 @@ import com.parse.ParseUser;
 import java.util.ArrayList;
 import java.util.List;
 
+import cse110.com.goldencash.modelAccount.Account;
+import cse110.com.goldencash.modelAccount.DebitAccount;
+
 /**
  * Created by Xin Wen on 11/20/14.
  */
@@ -38,7 +41,10 @@ public class TransactionActivity extends Activity{
 
     //false for within same account transfer
     private boolean transactionMode = false;
-    private Account toAccount;
+    protected User user = new User();
+    private cse110.com.goldencash.modelAccount.Account debit = user.getAccount2("Debit");
+    private cse110.com.goldencash.modelAccount.Account credit = user.getAccount2("Credit");
+    private cse110.com.goldencash.modelAccount.Account saving = user.getAccount2("Saving");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -135,7 +141,7 @@ public class TransactionActivity extends Activity{
                 startLoading();
                 String amount = input.getText().toString();
                 if(transactionMode){
-                    makeTransactionToOther(Integer.parseInt(amount),toAccount);
+                    makeTransactionToOther(debit,(double)Integer.parseInt(amount));
                 }else {
                     makeTransaction(Integer.parseInt(amount), spinnerFrom.getSelectedItem().toString(),
                             spinnerTo.getSelectedItem().toString());
@@ -146,28 +152,19 @@ public class TransactionActivity extends Activity{
         });
         builder.show();
     }
-    private void makeTransactionToOther(int amount, Account targetAccount){
-        User user = new User();
-        Account currentAccount = user.getAccount();
-        currentAccount.withdrawDebit(amount);
-        targetAccount.depositDebit(amount);
-        currentAccount.saveAccount();
-        targetAccount.saveAccount();
+    private void makeTransactionToOther(Account account,double value){
+        user.getAccount2("Debit").transfer(account,value);
        /* alertMsg("Successful",
                 "You have transferred $" + amount +
                         " from your checking account to " + toAccount.getAccountNumber());
                         */
-
     }
     private void makeTransaction(int amount,String from, String to){
-        User user = new User();
-        Account account = user.getAccount();
         if(from.equals("Debit")) {
-            account.transferFromDebit(to,amount);
+            debit.transfer(to,amount);
         }else{
-            account.transferFromSaving(to,amount);
+            saving.transfer(to,amount);
         }
-        account.saveAccount();
         alertMsg("Successful", "You have transferred $" + amount + " from " + from + " to " + to);
     }
 
@@ -214,7 +211,7 @@ public class TransactionActivity extends Activity{
             public void onClick(DialogInterface dialog, int which) {
                 setProgressBarIndeterminateVisibility(true);
                 transactionMode = true;
-                checkAccountNumber(input.getText().toString());
+                //checkAccountNumber(input.getText().toString());
             }
 
         });
@@ -231,7 +228,7 @@ public class TransactionActivity extends Activity{
                 if (e == null) {
                     Log.d("accountNumber", parseObjects.size() + " accounts found");
                     if (!parseObjects.isEmpty()) {
-                        toAccount = (Account) parseObjects.get(0);
+                        //toAccount = (Account) parseObjects.get(0);
                         editbox();
                     } else {
                         alertMsg("Account Not Found",

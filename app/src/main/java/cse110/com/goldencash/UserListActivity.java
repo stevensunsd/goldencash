@@ -58,7 +58,6 @@ public class UserListActivity extends Activity
             @Override
             public void done(List<ParseObject> parseObjects, ParseException e) {
                 if (e == null){
-
                     setupAdapter(parseObjects);
                 }else{
                     setProgressBarIndeterminateVisibility(false);

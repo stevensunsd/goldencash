@@ -77,14 +77,13 @@ public class SigninActivity extends Activity implements View.OnClickListener {
         startActivity(intent);
     }
     private void gotoMainPage(){
-        Intent intent = new Intent(this, UserListActivity.class);
+        Intent intent = new Intent(this, AccountsActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
     }
     private void gotoCustomerMainPage(){
-        // need change CustomerMainActivity
-        //Intent intent = new Intent(this, CustomerMainActivity.class);
-        Intent intent = new Intent(this, AccountsActivity.class);
+        Intent intent = new Intent(this, CustomerMainActivity.class);
+        //Intent intent = new Intent(this, AccountsActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.putExtra("username",username_field.getText().toString());
         startActivity(intent);

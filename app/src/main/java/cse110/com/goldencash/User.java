@@ -58,6 +58,7 @@ public class User extends ParseUser {
         user.logOut();
     }
 
+    /*
     // need to remove this one
     public Account getAccount() {
              Account account = (Account) user.getParseObject("account");
@@ -68,6 +69,7 @@ public class User extends ParseUser {
              }
              return account;
     }
+    */
 
     public cse110.com.goldencash.modelAccount.Account getAccount2(String accountType) {
         cse110.com.goldencash.modelAccount.Account account = (cse110.com.goldencash.modelAccount.Account) user.getParseObject(accountType+"account");
