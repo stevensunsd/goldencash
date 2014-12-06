@@ -70,16 +70,21 @@ public abstract class Account extends ParseObject implements AccountInterface{
         df.setTimeZone(TimeZone.getTimeZone("America/Los_Angeles"));
         String currentTimeString = df.format(currentTime);
         String newLogFrom;
-        String newLogTo = "";
+        String newLogTo;
+
         User user = new User();
+
         if(choose.equals("Debit")||choose.equals("Saving")||choose.equals("Credit")) {
-            newLogFrom = currentTimeString + " " + "Transfer " + " $" + value + " + From " + accountType + " To " + choose + " Account" + '\n';
-            newLogTo = currentTimeString + " " + "Transfer " + " $" + value + " + From " + accountType + " To " + choose + " Account" + '\n';
+            newLogFrom = currentTimeString + " - $" + value + " Transfer To " + choose + " Account" + '\n';
+            newLogTo = currentTimeString + " + $" + value + " Transfer From " + accountType + " Account" + '\n';
             user.getAccount2(choose).put("Log",user.getAccount2(choose).getLog() + newLogTo);
             user.getAccount2(choose).saveInBackground();
         }
         else {
-            newLogFrom = currentTimeString + " " + "Teller " + choose + " $" + value + " " + accountType + " Account" + '\n';
+            if (choose == "Withdraw")
+                newLogFrom = currentTimeString + " - $" + value + " Teller Withdraw" +'\n';
+            else
+                newLogFrom = currentTimeString + " + $" + value + " Teller Deposit" + '\n';
         }
         put("Log",getLog()+ newLogFrom );
         saveInBackground();
@@ -92,8 +97,17 @@ public abstract class Account extends ParseObject implements AccountInterface{
         String currentTimeString = df.format(currentTime);
         String newLogFrom;
         String newLogTo;
-        newLogFrom = currentTimeString + " " + "Transfer " + " $" + value + " + From " + accountType + " To " + "Account Number: " + account.getAccountNumber() + '\n';
-        newLogTo = currentTimeString + " " + "Account Number: " + getAccountNumber() + "Transfer " + " $" + value + " Into Your Account" + '\n';
+
+        //format AccountNumber
+        String s = account.getAccountNumber();
+        String s1,s2,s3;
+        s1 = s.substring(0,3);
+        s2 = s.substring(3,5);
+        s3 = s.substring(5,8);
+        s = s1 + "-" + s2 + "-" + s3;
+
+        newLogFrom = currentTimeString + " - $" + value + " Transfer To Account Number: " + s + '\n';
+        newLogTo = currentTimeString + " + $" + value + " Account Number: " + s + " Transfer Into Debit Account" + '\n';
         put("Log",getLog()+ newLogFrom );
         account.put("Log",account.getLog() + newLogTo);
         saveInBackground();
