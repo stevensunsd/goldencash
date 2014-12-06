@@ -58,6 +58,7 @@ public class CustomerMainActivity extends Activity {
 
         setAdapter();
     }
+    /*
     @Override
     public void onRestart() {
         super.onRestart();
@@ -67,6 +68,7 @@ public class CustomerMainActivity extends Activity {
         credit = user.getAccount2("Credit");
         saving = user.getAccount2("Saving");
     }
+    */
 
     private void setAdapter(){
         ArrayList<String> templist=setAdapterarray();
