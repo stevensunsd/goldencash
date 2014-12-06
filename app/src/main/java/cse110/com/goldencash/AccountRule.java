@@ -50,17 +50,15 @@ public class AccountRule {
         }
         return true;
     }
-
-    private boolean checkCreditWithdraw(Account acc, double charge) {
-        return true;
-    }
-
-    public boolean checkWithdraw(Account acc, double charge) {
+    /*
+    Public functions for banking rule
+     */
+    public boolean canWithdraw(Account acc, double charge) {
         if(acc.getAccounttype().equals("Debit")) {
             return checkDebitWithdraw(acc, charge);
         }
         else if(acc.getAccounttype().equals("Credit")) {
-            return checkCreditWithdraw(acc, charge);
+            return false;
         }
         else if(acc.getAccounttype().equals("Saving")) {
             return checkSavingWithdraw(acc, charge);
@@ -69,19 +67,19 @@ public class AccountRule {
             return false;
     }
 
-    public boolean checkDeposit(Account acc, double value) {
+    public boolean canDeposit(Account acc, double value) {
         return true;
     }
 
-    public boolean checkTransfer(Account acc, double value) {
-        return checkWithdraw(acc, value);
+    public boolean canTransfer(Account acc, double value) {
+        return canWithdraw(acc, value);
     }
 
-    public boolean checkTransferToAnother(Account source, Account target, double value) {
-        return checkWithdraw(source, value);
+    public boolean canTransferToAnother(Account source, Account target, double value) {
+        return canWithdraw(source, value);
     }
 
-    public boolean recordTime(Account acc, double value) {
+    public boolean isAmountCorsstheLine(Account acc, double value) {
         double original = acc.getAmount();
         double result = original - value;
         if(original >= 100 && result < 100)
