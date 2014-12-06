@@ -18,6 +18,7 @@ import com.parse.ParseUser;
 import com.parse.SaveCallback;
 import com.parse.SignUpCallback;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
@@ -111,6 +112,7 @@ public class SignupActivity extends Activity implements View.OnClickListener {
     private void setupParse() {
         String accountnumber = new Random().nextInt(99999999) % (99999999 - 00000001 + 1) + 00000001 + "";
         String log = " ";
+        Date current = new Date(System.currentTimeMillis());
 
         // Set up new Account
         final cse110.com.goldencash.modelAccount.DebitAccount debit = ParseObject.create(cse110.com.goldencash.modelAccount.DebitAccount.class);
@@ -121,17 +123,20 @@ public class SignupActivity extends Activity implements View.OnClickListener {
         debit.put("Debit", 100.1);
         debit.put("Interest",0.0);
         debit.put("Log",log);
+        debit.put("UpdateTime",current);
         debit.saveInBackground();
         credit.put("accountnumber", accountnumber);
         credit.put("openCredit", openCredit);
         credit.put("Credit", 100.1);
         credit.put("Log",log);
+        credit.put("UpdateTime",current);
         credit.saveInBackground();
         saving.put("accountnumber", accountnumber);
         saving.put("openSaving", openSaving);
         saving.put("Saving", 100.1);
         saving.put("Interest",0.0);
         saving.put("Log",log);
+        saving.put("UpdateTime",current);
         saving.saveInBackground(new SaveCallback() {
             public void done(ParseException e) {
                 if (e != null) {

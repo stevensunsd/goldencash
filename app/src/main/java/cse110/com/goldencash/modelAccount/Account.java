@@ -10,7 +10,7 @@ import java.util.TimeZone;
 import cse110.com.goldencash.User;
 
 @ParseClassName("Account")
-public abstract class Account extends ParseObject implements AccountInterface{
+public abstract class Account extends ParseObject {
     protected String accountType;
 
     public Account() {
@@ -21,12 +21,16 @@ public abstract class Account extends ParseObject implements AccountInterface{
 
     public void withdraw(double value) {
         put(accountType,getAmount() - value);
+        //check rule then update Time
+        //updateTime();
         addLog("Withdraw", value);
         saveInBackground();
     }
 
     public void deposit(double value) {
         put(accountType,getAmount() + value);
+        //check rule then update Time
+        //updateTime();
         addLog("Deposit",value);
         saveInBackground();
     }
@@ -39,6 +43,11 @@ public abstract class Account extends ParseObject implements AccountInterface{
         User User = new User();
         put(accountType, getAmount() - value);
         User.getAccount2(AccountType).put(AccountType, User.getAccount2(AccountType).getAmount() + value);
+
+        //check rule then update Time
+        //updateTime();
+        //User.getAccount2(AccountType).updateTime();
+
         addLog(AccountType,value);
         saveInBackground();
     }
@@ -46,6 +55,11 @@ public abstract class Account extends ParseObject implements AccountInterface{
     public void transfer(Account account,double value) {
         put(accountType,getAmount() - value);
         account.put("Debit",account.getAmount() + value);
+
+        //check rule then update Time
+        //updateTime();
+        //account.updateTime();
+
         addLog(account,value);
         saveInBackground();
         account.saveInBackground();
@@ -114,7 +128,30 @@ public abstract class Account extends ParseObject implements AccountInterface{
         account.saveInBackground();
     }
 
+    public abstract double getMonthInterest();
+
+    public boolean isOver30days() {
+        Date currentTime = new Date(System.currentTimeMillis());
+        Date updateTime = getupdateTime();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        long days = 0;
+        try {
+            currentTime = sdf.parse(sdf.format(currentTime));
+            updateTime = sdf.parse(sdf.format(updateTime));
+            days= (currentTime.getTime()- updateTime.getTime()) / (1000*60*60*24);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+        return days>=30?true:false;
+    }
+
+    public void updateTime() { put("UpdateTime",System.currentTimeMillis());}
+
+    public Date getupdateTime(){ return getDate("UpdateTime"); }
+
     public Date getDailyTime() {return getDate("dailytime");}
+
 }
 
 
