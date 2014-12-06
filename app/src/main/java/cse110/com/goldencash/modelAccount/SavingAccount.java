@@ -27,10 +27,13 @@ public class SavingAccount extends Account{
                 rate = 2;
             else
                 rate = 0;
+
+            put("InterestRate",rate);
+            saveInBackground();
             return rate;
         }
         else
-            return getInt("Interest");
+            return getInt("InterestRate");
     }
 
     public double getMonthInterest() {

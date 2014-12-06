@@ -78,6 +78,22 @@ public abstract class Account extends ParseObject {
 
     public String getLog() {return getString("Log");}
 
+    public void addLog(double value) {
+        Date currentTime = new Date(System.currentTimeMillis());
+        SimpleDateFormat df =new SimpleDateFormat("d MMM yyyy HH:mm:ss");
+        df.setTimeZone(TimeZone.getTimeZone("America/Los_Angeles"));
+        String currentTimeString = df.format(currentTime);
+        String newLogFrom;
+
+        if(value>0)
+            newLogFrom = currentTimeString + " + $" + value + " Monthly Interest based on current Interest Rate %" + getInt("InterestRate") +'\n';
+        else
+            newLogFrom = currentTimeString + " - $" + value + " Penalty For Balance Below $100 over 30 days" + '\n';
+
+        put("Log",getLog()+ newLogFrom );
+        saveInBackground();
+    }
+
     public void addLog(String choose,double value) {
         Date currentTime = new Date(System.currentTimeMillis());
         SimpleDateFormat df =new SimpleDateFormat("d MMM yyyy HH:mm:ss");
@@ -133,15 +149,14 @@ public abstract class Account extends ParseObject {
     public void calculateAmountafterInterest() {
         double interest = getMonthInterest();
         put(accountType,getAmount() + interest);
-        // add log
+        addLog(interest);
         saveInBackground();
     }
 
     public boolean isOver30days() {
         Date currentTime = new Date(System.currentTimeMillis());
         Date updateTime = getupdateTime();
-        long days = 0;
-        days= (updateTime.getTime() - currentTime.getTime()) / (1000*60*60*24);
+        long days= (updateTime.getTime() - currentTime.getTime()) / (1000*60*60*24);
         return days>=30?true:false;
     }
 
