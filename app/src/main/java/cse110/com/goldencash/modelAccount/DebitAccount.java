@@ -27,10 +27,13 @@ public class DebitAccount extends Account{
                 rate = 1;
             else
                 rate = 0;
+
+            put("InterestRate",rate);
+            saveInBackground();
             return rate;
         }
         else {
-            return getInt("Interest");
+            return getInt("InterestRate");
         }
     }
 
