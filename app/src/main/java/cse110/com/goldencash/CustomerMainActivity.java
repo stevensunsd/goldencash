@@ -58,6 +58,15 @@ public class CustomerMainActivity extends Activity {
 
         setAdapter();
     }
+    @Override
+    public void onRestart() {
+        super.onRestart();
+        //When BACK BUTTON is pressed, the activity on the stack is restarted
+        //Do what you want on the refresh procedure here
+        debit = user.getAccount2("Debit");
+        credit = user.getAccount2("Credit");
+        saving = user.getAccount2("Saving");
+    }
 
     private void setAdapter(){
         ArrayList<String> templist=setAdapterarray();
@@ -119,8 +128,6 @@ public class CustomerMainActivity extends Activity {
             customerLogOut();
         }else if (id == R.id.action_close_account){
             closeAccount();
-        }else if (id == R.id.action_statements){
-            //gotoStatementsPage();
         }
         return super.onOptionsItemSelected(item);
     }
