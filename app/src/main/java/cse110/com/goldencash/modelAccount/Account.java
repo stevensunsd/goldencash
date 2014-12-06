@@ -52,6 +52,7 @@ public abstract class Account extends ParseObject {
         user.getAccount2(AccountType).updateTime();
 
         addLog(AccountType,value);
+        user.getAccount2(AccountType).saveInBackground();
         saveInBackground();
     }
 
@@ -165,7 +166,7 @@ public abstract class Account extends ParseObject {
         return days>=30?true:false;
     }
 
-    public void updateTime() { put("UpdateTime",new Date(System.currentTimeMillis()));}
+    public void updateTime() { put("UpdateTime",new Date(System.currentTimeMillis())); saveInBackground();}
 
     public Date getupdateTime(){ return getDate("UpdateTime"); }
 
