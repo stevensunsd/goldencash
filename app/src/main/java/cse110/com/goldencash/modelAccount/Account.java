@@ -86,7 +86,7 @@ public abstract class Account extends ParseObject {
         String newLogFrom;
 
         if(value>0)
-            newLogFrom = currentTimeString + " + $" + value + " Monthly Interest based on current Interest Rate %" + getInt("InterestRate") +'\n';
+            newLogFrom = currentTimeString + " + $" + value + " Monthly Interest based on current Interest Rate " + getInt("InterestRate") + "%" +'\n';
         else
             newLogFrom = currentTimeString + " - $" + value + " Penalty For Balance Below $100 over 30 days" + '\n';
 
@@ -145,6 +145,7 @@ public abstract class Account extends ParseObject {
     }
 
     public abstract double getMonthInterest();
+    public abstract int getInterestRate();
 
     public void calculateAmountafterInterest() {
         double interest = getMonthInterest();
@@ -160,7 +161,7 @@ public abstract class Account extends ParseObject {
         return days>=30?true:false;
     }
 
-    public void updateTime() { put("UpdateTime",System.currentTimeMillis());}
+    public void updateTime() { put("UpdateTime",new Date(System.currentTimeMillis()));}
 
     public Date getupdateTime(){ return getDate("UpdateTime"); }
 

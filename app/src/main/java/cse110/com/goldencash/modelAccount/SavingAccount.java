@@ -8,7 +8,7 @@ import java.util.Date;
 import cse110.com.goldencash.User;
 
 @ParseClassName("SavingAccount")
-public class SavingAccount extends Account{
+public class SavingAccount extends Account {
     private int dailyAmount;
 
     public SavingAccount(){
