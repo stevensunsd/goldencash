@@ -22,12 +22,13 @@ import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
+import com.parse.SaveCallback;
+import com.parse.SignUpCallback;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import cse110.com.goldencash.modelAccount.Account;
-import cse110.com.goldencash.modelAccount.DebitAccount;
 
 /**
  * Created by Xin Wen on 11/20/14.
@@ -174,7 +175,7 @@ public class TransactionActivity extends Activity{
         builder.show();
     }
     private void makeTransactionToOther(Account account,double value){
-       sourceAccount.transfer(account,value);
+       sourceAccount.transferOut(account,value);
        alertMsg("Successful",
                 "You have transferred $" + value +
                         " from " + sourceAccount.getAccounttype() + " account to " + email);
@@ -182,11 +183,17 @@ public class TransactionActivity extends Activity{
     }
     private void makeTransaction(int amount,String from, String to){
         if(from.equals("Debit")) {
-            debit.transfer(to,amount);
-        }else{
-            saving.transfer(to,amount);
+            if (to.equals("Saving"))
+                debit.transferIn(saving,amount);
+            else
+                debit.transferIn(credit,amount);
+        } else {
+            if (to.equals("Debit"))
+                saving.transferIn(debit,amount);
+            else
+                debit.transferIn(credit,amount);
         }
-        alertMsg("Successful", "You have transferred $" + amount + " from " + from + " to " + to);
+        alertMsg("Successful", "Transaction Success");
     }
 
     protected void startLoading() {
