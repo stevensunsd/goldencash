@@ -1,5 +1,7 @@
 package cse110.com.goldencash.modelAccount;
 
+import android.util.Log;
+
 import com.parse.ParseObject;
 import com.parse.ParseClassName;
 
@@ -8,11 +10,12 @@ import java.util.Date;
 import java.util.TimeZone;
 
 import cse110.com.goldencash.User;
-
+import cse110.com.goldencash.AccountRule;
 @ParseClassName("Account")
 public abstract class Account extends ParseObject {
     protected String accountType;
-
+    private AccountRule rule;
+    private User user = new User();
     public Account() {
 
     }
@@ -22,15 +25,15 @@ public abstract class Account extends ParseObject {
     public void withdraw(double value) {
         put(accountType,getAmount() - value);
         //check rule then update Time
-        //updateTime();
+        if(rule.isAmountCorsstheLine(user.getAccount2(accountType), -value)) updateTime();
         addLog("Withdraw", value);
         saveInBackground();
     }
 
     public void deposit(double value) {
         put(accountType,getAmount() + value);
-        //check rule then update Time
-        //updateTime();
+        //check rule then update time stamp for interest
+        if(rule.isAmountCorsstheLine(user.getAccount2(accountType),value)) updateTime();
         addLog("Deposit",value);
         saveInBackground();
     }
@@ -40,13 +43,13 @@ public abstract class Account extends ParseObject {
     }
 
     public void transfer(String AccountType,double value) {
-        User User = new User();
         put(accountType, getAmount() - value);
-        User.getAccount2(AccountType).put(AccountType, User.getAccount2(AccountType).getAmount() + value);
+        user.getAccount2(AccountType).put(AccountType, user.getAccount2(AccountType).getAmount() + value);
 
         //check rule then update Time
-        //updateTime();
-        //User.getAccount2(AccountType).updateTime();
+        if(rule.isAmountCorsstheLine(user.getAccount2(accountType),-value)) updateTime();
+        if(rule.isAmountCorsstheLine(user.getAccount2(AccountType),value))
+        user.getAccount2(AccountType).updateTime();
 
         addLog(AccountType,value);
         saveInBackground();
@@ -54,11 +57,12 @@ public abstract class Account extends ParseObject {
 
     public void transfer(Account account,double value) {
         put(accountType,getAmount() - value);
-        account.put("Debit",account.getAmount() + value);
+        account.put("Debit", account.getAmount() + value);
 
         //check rule then update Time
-        //updateTime();
-        //account.updateTime();
+        if(rule.isAmountCorsstheLine(user.getAccount2(accountType),-value)) updateTime();
+        if(rule.isAmountCorsstheLine(account, value))
+        account.updateTime();
 
         addLog(account,value);
         saveInBackground();
@@ -66,7 +70,7 @@ public abstract class Account extends ParseObject {
     }
 
     public void closeAccount() {
-        put("open"+accountType,false);
+        put("open" + accountType, false);
         saveInBackground();
     }
 
@@ -140,8 +144,7 @@ public abstract class Account extends ParseObject {
     public boolean isOver30days() {
         Date currentTime = new Date(System.currentTimeMillis());
         Date updateTime = getupdateTime();
-        long days = 0;
-        days= (updateTime.getTime() - currentTime.getTime()) / (1000*60*60*24);
+        long days= (updateTime.getTime() - currentTime.getTime()) / (1000*60*60*24);
         return days>=30?true:false;
     }
 

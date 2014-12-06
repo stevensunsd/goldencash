@@ -74,8 +74,8 @@ public class CustomerMainActivity extends Activity {
         String stringCredit = "Credit Account\nAvailable Balance:" + credit.getAmount();
         String stringSaving = "Saving Account\nAvailable Balance:" + saving.getAmount();
         String stringDebit = "Debit Account\nAvailable Balance:" + debit.getAmount();
-        String stringSavingInterest = "\n Current Interest Rate: ";
-        String stringDebitInterest = "\n Current Interest Rate: ";
+        String stringSavingInterest = "\n Current Monthly Interest Rate: %" + saving.getMonthInterest();
+        String stringDebitInterest = "\n Current Interest Rate: %" + debit.getMonthInterest();
         if(debit.isOpen()){
             account_list.add(stringDebit+stringDebitInterest);
         }

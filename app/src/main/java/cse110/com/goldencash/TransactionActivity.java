@@ -136,29 +136,31 @@ public class TransactionActivity extends Activity{
         return adapter;
     }
 
-    protected void editbox() {
+    private void editbox() {
         final EditText input = new EditText(this);
         input.setInputType(InputType.TYPE_CLASS_NUMBER);
         input.setHint("$");
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Enter Amount").setIcon(android.R.drawable.ic_dialog_info).setView(input).setNegativeButton("Cancel",null);
-
-        String[] options = {"From Checking Account","From Saving Account"};
-        int selected = 0; // or whatever you want
-        builder.setSingleChoiceItems(options, selected, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int item) {
-                if(item >= 0){
-                    sourceAccount = saving;
-                }else{
-                    sourceAccount = debit;
+        if(transactionMode) {
+            String[] options = {"From Checking Account", "From Saving Account"};
+            int selected = 0; // or whatever you want
+            builder.setSingleChoiceItems(options, selected, new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int item) {
+                    if (item >= 0) {
+                        sourceAccount = saving;
+                    } else {
+                        sourceAccount = debit;
+                    }
                 }
-            }});
-
+            });
+        }
         builder.setPositiveButton("Confirm",new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog,int which) {
                 startLoading();
                 String amount = input.getText().toString();
+                Log.d("amount",amount);
                 if(transactionMode){
                     makeTransactionToOther(targetAccount,(double)Integer.parseInt(amount));
                 }else {
