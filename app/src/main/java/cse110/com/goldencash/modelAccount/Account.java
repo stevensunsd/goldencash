@@ -14,7 +14,7 @@ import cse110.com.goldencash.AccountRule;
 @ParseClassName("Account")
 public abstract class Account extends ParseObject {
     protected String accountType;
-    private AccountRule rule;
+    private AccountRule rule = new AccountRule();
     private User user = new User();
     public Account() {
 
