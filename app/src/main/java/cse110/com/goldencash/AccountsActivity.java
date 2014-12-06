@@ -46,6 +46,7 @@ public class AccountsActivity extends Activity{
     protected ArrayAdapter<String> adapter;
 
     protected boolean flag = false;
+    protected boolean [] flagArray = new boolean[] {false,false,false};
 
     private void getUser(){
         Log.d("getting user","id: "+getIntent().getStringExtra("username"));
@@ -76,7 +77,7 @@ public class AccountsActivity extends Activity{
             }
         });
         //user = new User(getIntent().getStringExtra("userID"));
-       // account = user.getAccount();
+        // account = user.getAccount();
     }
 
 
@@ -95,13 +96,16 @@ public class AccountsActivity extends Activity{
         String stringDebitInterest = "\n Current Interest Rate: ";
         if(debit.isOpen()){
             account_list.add(stringDebit+stringDebitInterest);
+            flagArray[0] = true;
         }
 
         if(saving.isOpen()){
             account_list.add(stringSaving+stringSavingInterest);
+            flagArray[1] = true;
         }
         if(credit.isOpen()){
             account_list.add(stringCredit);
+            flagArray[2] = true;
         }
         return account_list;
     }
@@ -165,7 +169,16 @@ public class AccountsActivity extends Activity{
                         editDeposit(index);
                     }
                 });
-        if(id != 2){
+
+        // convert flagArray to string
+        StringBuilder str = new StringBuilder();
+        for (int i = 0; i < flagArray.length; i++) {
+            if (flagArray[i]) str.append("1"); else str.append("0");
+        }
+        String s = str.toString();
+
+        // check case for Show Withdraw
+        if(flagArray[2]!=true||s.equals("001")){
             //Credit account cannot be withdraw
             builder.setNegativeButton("Withdraw",
                     new DialogInterface.OnClickListener() {
@@ -174,6 +187,29 @@ public class AccountsActivity extends Activity{
                         }
                     });
         }
+        else if (s.equals("011")||s.equals("101")){
+            if(id!=1) {
+                //Credit account cannot be withdraw
+                builder.setNegativeButton("Withdraw",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                editWithdraw(index);
+                            }
+                        });
+            }
+        }
+        else {
+            if(id!=2) {
+                //Credit account cannot be withdraw
+                builder.setNegativeButton("Withdraw",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                editWithdraw(index);
+                            }
+                        });
+            }
+        }
+
         //create alert dialog
         AlertDialog alert = builder.create();
         //show dialog on screen
@@ -218,8 +254,8 @@ public class AccountsActivity extends Activity{
                             credit.deposit(value);
                         }
                     case 2: credit.deposit(value);
-                    //credit
-                    //account.setSaving(Double.parseDouble(input.getText().toString())); break;
+                        //credit
+                        //account.setSaving(Double.parseDouble(input.getText().toString())); break;
                     default: // error
                 }
                 finish();
@@ -240,39 +276,39 @@ public class AccountsActivity extends Activity{
                 int amount = Integer.parseInt(input.getText().toString());
                 double value = amount;
                 switch (choose) {
-                case 0:
-                    if(debit.isOpen()) {
-                        // add + -, and call debit.withdraw or debit.deposit
-                        //account.setDebit(Double.parseDouble(input.getText().toString()));
-                        debit.withdraw(value);
-                        break;
-                    }
-                    else if(saving.isOpen()) {
-                        flag = true;
-                        //account.setCredit(Double.parseDouble(input.getText().toString())); break;
-                        saving.withdraw(value);
-                    }
-                    else {
-                        //credit
+                    case 0:
+                        if(debit.isOpen()) {
+                            // add + -, and call debit.withdraw or debit.deposit
+                            //account.setDebit(Double.parseDouble(input.getText().toString()));
+                            debit.withdraw(value);
+                            break;
+                        }
+                        else if(saving.isOpen()) {
+                            flag = true;
+                            //account.setCredit(Double.parseDouble(input.getText().toString())); break;
+                            saving.withdraw(value);
+                        }
+                        else {
+                            //credit
+                            //account.setSaving(Double.parseDouble(input.getText().toString())); break;
+                            credit.withdraw(value);
+                        }
+                    case 1:
+                        if(saving.isOpen()&&!flag) {
+                            //account.setCredit(Double.parseDouble(input.getText().toString())); break;
+                            saving.withdraw(value);
+                        }
+                        else {
+                            //credit
+                            //account.setSaving(Double.parseDouble(input.getText().toString())); break;
+                        }
+                    case 2: //credit
                         //account.setSaving(Double.parseDouble(input.getText().toString())); break;
-                        credit.withdraw(value);
-                    }
-                case 1:
-                    if(saving.isOpen()&&!flag) {
-                        //account.setCredit(Double.parseDouble(input.getText().toString())); break;
-                        saving.withdraw(value);
-                    }
-                    else {
-                        //credit
-                        //account.setSaving(Double.parseDouble(input.getText().toString())); break;
-                    }
-                case 2: //credit
-                    //account.setSaving(Double.parseDouble(input.getText().toString())); break;
-                default: // error
+                    default: // error
+                }
+                finish();
+                //refreshData(); refresh data has problem loading not using for now
             }
-            finish();
-            //refreshData(); refresh data has problem loading not using for now
-        }
         });
         builder.show();
     }
