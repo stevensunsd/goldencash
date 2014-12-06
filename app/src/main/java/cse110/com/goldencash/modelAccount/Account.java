@@ -130,19 +130,18 @@ public abstract class Account extends ParseObject {
 
     public abstract double getMonthInterest();
 
+    public void calculateAmountafterInterest() {
+        double interest = getMonthInterest();
+        put(accountType,getAmount() + interest);
+        // add log
+        saveInBackground();
+    }
+
     public boolean isOver30days() {
         Date currentTime = new Date(System.currentTimeMillis());
         Date updateTime = getupdateTime();
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         long days = 0;
-        try {
-            currentTime = sdf.parse(sdf.format(currentTime));
-            updateTime = sdf.parse(sdf.format(updateTime));
-            days= (currentTime.getTime()- updateTime.getTime()) / (1000*60*60*24);
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-        }
+        days= (updateTime.getTime() - currentTime.getTime()) / (1000*60*60*24);
         return days>=30?true:false;
     }
 
