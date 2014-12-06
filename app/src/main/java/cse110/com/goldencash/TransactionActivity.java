@@ -47,6 +47,8 @@ public class TransactionActivity extends Activity{
     private cse110.com.goldencash.modelAccount.Account credit = user.getAccount2("Credit");
     private cse110.com.goldencash.modelAccount.Account saving = user.getAccount2("Saving");
 
+    private Account sourceAccount = debit;
+
     private String email;
 
     @Override
@@ -137,8 +139,22 @@ public class TransactionActivity extends Activity{
     protected void editbox() {
         final EditText input = new EditText(this);
         input.setInputType(InputType.TYPE_CLASS_NUMBER);
+        input.setHint("$");
+
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Enter Amount").setIcon(android.R.drawable.ic_dialog_info).setView(input).setNegativeButton("Cancel",null);
+
+        String[] options = {"From Checking Account","From Saving Account"};
+        int selected = 0; // or whatever you want
+        builder.setSingleChoiceItems(options, selected, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int item) {
+                if(item >= 0){
+                    sourceAccount = saving;
+                }else{
+                    sourceAccount = debit;
+                }
+            }});
+
         builder.setPositiveButton("Confirm",new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog,int which) {
                 startLoading();
@@ -156,10 +172,10 @@ public class TransactionActivity extends Activity{
         builder.show();
     }
     private void makeTransactionToOther(Account account,double value){
-        user.getAccount2("Debit").transfer(account,value);
+       sourceAccount.transfer(account,value);
        alertMsg("Successful",
                 "You have transferred $" + value +
-                        " from your checking account to " + email);
+                        " from " + sourceAccount.getAccounttype() + " account to " + email);
 
     }
     private void makeTransaction(int amount,String from, String to){
