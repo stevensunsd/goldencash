@@ -53,8 +53,6 @@ public class TransactionActivity extends Activity{
     private AccountRule rule = new AccountRule();
     private String email;
 
-    private SetEditText setEditText = new SetEditTextImp();
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -143,8 +141,7 @@ public class TransactionActivity extends Activity{
     private void editbox() {
         final EditText input = new EditText(this);
         input.setHint("$");
-        setEditText.setPricePoint(input);
-
+        input.setInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL);
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Enter Amount").setIcon(android.R.drawable.ic_dialog_info).setView(input).setNegativeButton("Cancel",null);
         if(transactionMode) {

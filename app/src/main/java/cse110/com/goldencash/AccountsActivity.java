@@ -48,7 +48,7 @@ public class AccountsActivity extends Activity{
     protected ArrayAdapter<String> adapter;
     private ArrayList<Account> accountArray = new ArrayList<Account>();
     private AccountRule rule = new AccountRule();
-    private SetEditText setEditText = new SetEditTextImp();
+
 
     private void getUser(){
         setProgressBarIndeterminateVisibility(true);
@@ -196,8 +196,7 @@ public class AccountsActivity extends Activity{
         final int index = (int) id;
         final EditText input = new EditText(this);
         input.setHint("$");
-        setEditText.setPricePoint(input);
-        //input.setInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL);
+        input.setInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL);
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Please Enter Deposit Amount").setIcon(android.R.drawable.ic_dialog_info).setView(input).setNegativeButton("Cancel",null);
         builder.setPositiveButton("Confirm",new DialogInterface.OnClickListener() {
@@ -214,7 +213,7 @@ public class AccountsActivity extends Activity{
     protected void editWithdraw(long id) {
         final EditText input = new EditText(this);
         input.setHint("$");
-        setEditText.setPricePoint(input);
+        input.setInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL);
         final int index = (int)id;
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Please Enter Withdraw Amount").setIcon(android.R.drawable.ic_dialog_info).setView(input).setNegativeButton("Cancel",null);
