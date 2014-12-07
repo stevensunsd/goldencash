@@ -314,7 +314,7 @@ public class AccountsActivity extends Activity{
                         //account.setSaving(Double.parseDouble(input.getText().toString())); break;
                     default: // error
                 }
-                alertMsg("Success","You have withdrawn $" + amount);
+                alertMsg("Success","You have withdrawn $" + value);
                 //refreshData(); refresh data has problem loading not using for now
             }
         });
