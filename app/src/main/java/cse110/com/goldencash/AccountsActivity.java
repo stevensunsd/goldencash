@@ -29,6 +29,7 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
+import java.math.BigDecimal;
 import org.w3c.dom.Text;
 
 import java.text.DateFormat;
@@ -116,13 +117,18 @@ public class AccountsActivity extends Activity{
 
     private ArrayList<String> setAdapterarray(){
         ArrayList<String> account_list=new ArrayList<String>();
-        String stringCredit = "Credit Account\nAvailable Balance:" + String.format("%.2f",credit.getAmount());
-        String stringSaving = "Saving Account\nAvailable Balance:" + String.format("%.2f", saving.getAmount());
-        String stringDebit = "Debit Account\nAvailable Balance:" + String.format("%.2f", debit.getAmount());
+        if(true) {
+            credit.calculateInterest();
+            saving.calculateInterest();
+            debit.calculateInterest();
+        }
+        String stringCredit = "Credit Account\nAvailable Balance:" + credit.getAmount();
+        String stringSaving = "Saving Account\nAvailable Balance:" + saving.getAmount();
+        String stringDebit = "Debit Account\nAvailable Balance:" +  debit.getAmount();
         String stringSavingInterest = "\nCurrent Interest Rate: " + saving.getCurrentInterestRate()+"%";
         String stringDebitInterest = "\nCurrent Interest Rate: " + debit.getCurrentInterestRate() + "%";
         if(debit.isOpen()){
-            account_list.add(stringDebit+stringDebitInterest);
+            account_list.add(stringDebit + stringDebitInterest);
             accountArray.add(debit);
         }
 
@@ -224,6 +230,7 @@ public class AccountsActivity extends Activity{
         builder.setPositiveButton("Confirm",new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog,int which) {
                 double value = Double.parseDouble(input.getText().toString());
+                value = NumberFormater(value);
                 Account account = accountArray.get(index);
                 accountArray.get(index).deposit(value);
                 alertMsg("Success", "You have deposited $" + value);
@@ -242,6 +249,7 @@ public class AccountsActivity extends Activity{
         builder.setPositiveButton("Confirm",new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog,int which){
                 double value = Double.parseDouble(input.getText().toString());
+                value = NumberFormater(value);
                 Account account = accountArray.get(index);
                 Pair<Boolean,String> resultPair = rule.canWithdraw(account,value);
                 if(resultPair.first){
@@ -267,5 +275,10 @@ public class AccountsActivity extends Activity{
                     }
                 });
         builder.show();
+    }
+
+    private double NumberFormater(double value) {
+        BigDecimal number = new BigDecimal(value);
+        return number.setScale(2,BigDecimal.ROUND_HALF_UP).doubleValue();
     }
 }
