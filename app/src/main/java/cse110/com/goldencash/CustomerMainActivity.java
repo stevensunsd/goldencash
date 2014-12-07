@@ -59,9 +59,7 @@ public class CustomerMainActivity extends Activity {
 
             }
         });
-
         setAdapter();
-        applyInterest();
     }
     /*
     @Override
@@ -87,9 +85,14 @@ public class CustomerMainActivity extends Activity {
 
     private ArrayList<String> setAdapterarray(){
         ArrayList<String> account_list=new ArrayList<String>();
-        String stringCredit = "Credit Account\nAvailable Balance:" + String.format("%.2f",credit.getAmount());
-        String stringSaving = "Saving Account\nAvailable Balance:" + String.format("%.2f",saving.getAmount());
-        String stringDebit = "Debit Account\nAvailable Balance:" + String.format("%.2f",debit.getAmount());
+        if(true) {
+            credit.calculateInterest();
+            saving.calculateInterest();
+            debit.calculateInterest();
+        }
+        String stringCredit = "Credit Account\nAvailable Balance:" + credit.getAmount();
+        String stringSaving = "Saving Account\nAvailable Balance:" + saving.getAmount();
+        String stringDebit = "Debit Account\nAvailable Balance:" + debit.getAmount();
         String stringSavingInterest = "\nCurrent Interest Rate: " + saving.getCurrentInterestRate()+"%";
         String stringDebitInterest = "\nCurrent Interest Rate: " + debit.getCurrentInterestRate() + "%";
         if(debit.isOpen()){
@@ -211,10 +214,5 @@ public class CustomerMainActivity extends Activity {
         Intent intent = new Intent(CustomerMainActivity.this, CustomerMainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
-    }
-
-    private void applyInterest(){
-        debit.calculateInterest();
-        saving.calculateInterest();
     }
 }

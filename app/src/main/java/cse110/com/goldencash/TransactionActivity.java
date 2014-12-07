@@ -26,6 +26,7 @@ import com.parse.ParseUser;
 import com.parse.SaveCallback;
 import com.parse.SignUpCallback;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -161,6 +162,7 @@ public class TransactionActivity extends Activity{
             public void onClick(DialogInterface dialog,int which) {
                 startLoading();
                 Double amount = Double.parseDouble(input.getText().toString());
+                amount = NumberFormater(amount);
                 if(transactionMode){
                     makeTransactionToOther(targetAccount,amount);
                 }else {
@@ -213,6 +215,11 @@ public class TransactionActivity extends Activity{
     protected void stopLoading() {
         proDialog.dismiss();
         proDialog = null;
+    }
+
+    private double NumberFormater(double value) {
+        BigDecimal number = new BigDecimal(value);
+        return number.setScale(2,BigDecimal.ROUND_HALF_UP).doubleValue();
     }
 
     private void alertMsg(String title, String msg){

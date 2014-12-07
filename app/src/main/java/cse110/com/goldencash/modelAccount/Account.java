@@ -6,6 +6,7 @@ import android.util.Log;
 import com.parse.ParseObject;
 import com.parse.ParseClassName;
 
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
@@ -143,6 +144,7 @@ public abstract class Account extends ParseObject {
 
     public void calculateInterest() {
         double interest = getMonthInterest();
+        interest = NumberFormater(interest);
         put(accountType,getAmount() + interest);
         addInterestLog(interest);
         saveInBackground();
@@ -174,10 +176,10 @@ public abstract class Account extends ParseObject {
         return getDouble("dailyamount");
     }
 
-    protected boolean isOver30days() {
+    public boolean isOver30days() {
         Date currentTime = new Date(System.currentTimeMillis());
         Date updateTime = getupdateTime();
-        long days= (updateTime.getTime() - currentTime.getTime()) / (1000*60*60*24);
+        long days= (currentTime.getTime() - updateTime.getTime()) / (1000*60*60*24);
         return days>=30?true:false;
     }
 
@@ -192,8 +194,9 @@ public abstract class Account extends ParseObject {
         String newLogFrom;
         if(value>0)
             newLogFrom = currentTimeString() + " + $" + value + " Monthly Interest based on your Interest Rate " + getMonthInterestRate() + "%" +'\n';
-        else
-            newLogFrom = currentTimeString() + " - $" + value + " Penalty For Balance Below $100 over 30 days" + '\n';
+        else if(value<0)
+            newLogFrom = currentTimeString() + " - $" + Math.abs(value) + " Penalty For Balance Below $100 over 30 days" + '\n';
+        else newLogFrom = currentTimeString() + " No Interest or Penalty Apply" + '\n';
         return newLogFrom;
     }
 
@@ -204,6 +207,11 @@ public abstract class Account extends ParseObject {
         else
             newLogFrom = currentTimeString() + " + $" + value + " Teller Deposit" + '\n';
         return newLogFrom;
+    }
+
+    private double NumberFormater(double value) {
+        BigDecimal number = new BigDecimal(value);
+        return number.setScale(2,BigDecimal.ROUND_HALF_UP).doubleValue();
     }
 }
 
