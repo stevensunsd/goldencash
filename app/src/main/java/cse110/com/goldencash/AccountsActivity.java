@@ -201,16 +201,10 @@ public class AccountsActivity extends Activity{
             public void onClick(DialogInterface dialog,int which) {
                 double value = Double.parseDouble(input.getText().toString());
                 Account account = accountArray.get(index);
-                Pair<Boolean,String> resultPair = rule.canWithdraw(account,value);
-                if(resultPair.first){
-                    accountArray.get(index).deposit(value);
-                    alertMsg("Success", "You have deposited $" + value);
-                }else{
-                    alertMsg("Unable to Deposit",resultPair.second);
-                }
+                accountArray.get(index).deposit(value);
+                alertMsg("Success", "You have deposited $" + value);
                 //refreshData(); refresh data has problem loading not using for now
             }
-
         });
         builder.show();
     }
@@ -232,8 +226,6 @@ public class AccountsActivity extends Activity{
                 }else{
                     alertMsg("Unable to Withdraw", resultPair.second);
                 }
-
-
                 //refreshData(); refresh data has problem loading not using for now
             }
         });

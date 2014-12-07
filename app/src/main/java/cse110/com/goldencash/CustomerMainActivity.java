@@ -16,6 +16,8 @@ import android.widget.ListView;
 
 import java.util.ArrayList;
 
+import cse110.com.goldencash.modelAccount.Account;
+
 /**
  * Created by Xin Wen on 11/17/14.
  */
@@ -29,6 +31,8 @@ public class CustomerMainActivity extends Activity {
     private cse110.com.goldencash.modelAccount.Account debit = user.getAccount2("Debit");
     private cse110.com.goldencash.modelAccount.Account credit = user.getAccount2("Credit");
     private cse110.com.goldencash.modelAccount.Account saving = user.getAccount2("Saving");
+
+    private ArrayList<Account> accountArray = new ArrayList<Account>();
 
     protected boolean flag = false;
     @Override
@@ -89,13 +93,15 @@ public class CustomerMainActivity extends Activity {
         String stringDebitInterest = "\nCurrent Interest Rate: " + debit.getCurrentInterestRate() + "%";
         if(debit.isOpen()){
             account_list.add(stringDebit+stringDebitInterest);
+            accountArray.add(debit);
         }
         if(saving.isOpen()){
             account_list.add(stringSaving+stringSavingInterest);
+            accountArray.add(debit);
         }
         if(credit.isOpen()){
             account_list.add(stringCredit);
-
+            accountArray.add(credit);
         }
 
         return account_list;
@@ -157,9 +163,11 @@ public class CustomerMainActivity extends Activity {
         if(debit.isOpen()){
             list.add("Debit");
         }
-        if(credit.isOpen()){list.add("Credit");}
         if(saving.isOpen()){
             list.add("Saving");
+        }
+        if(credit.isOpen()){
+            list.add("Credit");
         }
 
         ArrayAdapter adapter = new ArrayAdapter<String>(this,
@@ -168,29 +176,8 @@ public class CustomerMainActivity extends Activity {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 //check close account
-                switch (i) {
-                    case 0:
-                        if(debit.isOpen()) {
-                            debit.closeAccount();
-                            break;
-                        }
-                        else if(saving.isOpen()) {
-                            flag = true;
-                            saving.closeAccount(); break;
-                        }
-                        else {
-                            credit.closeAccount();break;
-                        }
-                    case 1:
-                        if(saving.isOpen()&&!flag) {
-                            saving.closeAccount(); break;
-                        }
-                        else {
-                            credit.closeAccount(); break;
-                        }
-                    case 2: credit.closeAccount();break;
-                    default: // error
-                }
+                Account account = accountArray.get(i);
+                account.closeAccount();
                 refreshData();
             }
         });
@@ -214,34 +201,7 @@ public class CustomerMainActivity extends Activity {
 
     private void gotoStatementsPage(int i){
         Intent intent = new Intent(this, StatementsActivity.class);
-        switch (i) {
-            case 0:
-                if(debit.isOpen()) {
-                    intent.putExtra("account","Debit");
-                    break;
-                }
-                else if(saving.isOpen()) {
-                    flag = true;
-                    intent.putExtra("account","Saving");
-                    break;
-                }
-                else {
-                    intent.putExtra("account","Credit");
-                    break;
-                }
-            case 1:
-                if(saving.isOpen()&&!flag) {
-                    intent.putExtra("account","Saving");
-                    break;
-                }
-                else {
-                    intent.putExtra("account","Credit");
-                    break;
-                }
-            case 2: intent.putExtra("account","Credit");
-                break;
-            default: //can't
-        }
+        intent.putExtra("account", accountArray.get(i).getAccounttype());
         startActivity(intent);
     }
 
@@ -252,6 +212,7 @@ public class CustomerMainActivity extends Activity {
     }
 
     private void applyInterest(){
-
+        debit.calculateInterest();
+        saving.calculateInterest();
     }
 }
