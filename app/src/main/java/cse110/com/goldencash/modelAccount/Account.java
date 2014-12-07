@@ -30,6 +30,8 @@ public abstract class Account extends ParseObject {
         if(rule.isAmountCorsstheLine(user.getAccount2(accountType), -value))
             updateTime();
         addLog("Withdraw", value);
+        updateDailyTime();
+        updateDailyAmount(value);
         saveInBackground();
     }
 
@@ -150,8 +152,27 @@ public abstract class Account extends ParseObject {
 
     public Date getDailyTime() {return getDate("dailytime");}
 
+    private void updateTime() {
+        put("UpdateTime",new Date(System.currentTimeMillis()));
+        saveInBackground();
+    }
 
-    private void updateTime() { put("UpdateTime",new Date(System.currentTimeMillis())); saveInBackground();}
+    private void updateDailyTime(){
+        put("dailytime", new Date(System.currentTimeMillis()));
+        saveInBackground();
+    }
+
+    private void updateDailyAmount(double amount){
+        put("dailyamount",amount);
+    }
+
+    private void resetDailyAmount(){
+        put("dailyamount",0.0);
+    }
+
+    private double getDailyAmount(){
+        return getDouble("dailyamount");
+    }
 
     protected boolean isOver30days() {
         Date currentTime = new Date(System.currentTimeMillis());

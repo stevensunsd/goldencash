@@ -34,7 +34,6 @@ public class CustomerMainActivity extends Activity {
 
     private ArrayList<Account> accountArray = new ArrayList<Account>();
 
-    protected boolean flag = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,12 +54,13 @@ public class CustomerMainActivity extends Activity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
-                gotoStatementsPage((int)id);
+                gotoStatementsPage(position);
 
             }
         });
 
         setAdapter();
+        applyInterest();
     }
     /*
     @Override
@@ -201,6 +201,7 @@ public class CustomerMainActivity extends Activity {
 
     private void gotoStatementsPage(int i){
         Intent intent = new Intent(this, StatementsActivity.class);
+        Log.d("CustomerMain","go Statement with: "+accountArray.get(i).getAccounttype());
         intent.putExtra("account", accountArray.get(i).getAccounttype());
         startActivity(intent);
     }
