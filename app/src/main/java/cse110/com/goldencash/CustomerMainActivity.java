@@ -54,6 +54,7 @@ public class CustomerMainActivity extends Activity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
+                Log.d("CustomerMain","item clicked at: "+position+id);
                 gotoStatementsPage(position);
 
             }
@@ -97,7 +98,7 @@ public class CustomerMainActivity extends Activity {
         }
         if(saving.isOpen()){
             account_list.add(stringSaving+stringSavingInterest);
-            accountArray.add(debit);
+            accountArray.add(saving);
         }
         if(credit.isOpen()){
             account_list.add(stringCredit);
