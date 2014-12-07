@@ -142,6 +142,14 @@ public abstract class Account extends ParseObject {
     public abstract int getMonthInterestRate();
     public abstract int getCurrentInterestRate();
 
+    public void applyInterest() {
+        if(isOver30days()) {
+            calculateInterest();
+            put("UpdateTime",System.currentTimeMillis());
+            saveInBackground();
+        }
+    }
+
     public void calculateInterest() {
         double interest = getMonthInterest();
         interest = NumberFormater(interest);

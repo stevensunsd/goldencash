@@ -85,11 +85,9 @@ public class CustomerMainActivity extends Activity {
 
     private ArrayList<String> setAdapterarray(){
         ArrayList<String> account_list=new ArrayList<String>();
-        if(true) {
-            credit.calculateInterest();
-            saving.calculateInterest();
-            debit.calculateInterest();
-        }
+        credit.applyInterest();
+        saving.applyInterest();
+        debit.applyInterest();
         String stringCredit = "Credit Account\nAvailable Balance:" + credit.getAmount();
         String stringSaving = "Saving Account\nAvailable Balance:" + saving.getAmount();
         String stringDebit = "Debit Account\nAvailable Balance:" + debit.getAmount();
