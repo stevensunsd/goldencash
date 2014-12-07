@@ -15,7 +15,7 @@ public class DebitAccount extends Account {
         this.accountType = "Debit";
     }
 
-    public int getInterestRate() {
+    public void setInterestRate() {
         if(isOver30days()) {
             double balance = getAmount();
             int rate;
@@ -30,15 +30,11 @@ public class DebitAccount extends Account {
 
             put("InterestRate",rate);
             saveInBackground();
-            return rate;
-        }
-        else {
-            return getInt("InterestRate");
         }
     }
 
     public double getMonthInterest() {
-        return getAmount()>100? getAmount() * getInterestRate()/100:-25;
+        return getAmount()>100? getAmount() * getInt("InterestRate")/100:-25;
     }
 
 

@@ -15,8 +15,8 @@ public class SavingAccount extends Account {
         this.accountType = "Saving";
     }
 
-    public int getInterestRate() {
-        if(isOver30days()) {
+    public void setInterestRate() {
+        if (isOver30days()) {
             double balance = getAmount();
             int rate;
             if (balance >= 3000)
@@ -28,16 +28,13 @@ public class SavingAccount extends Account {
             else
                 rate = 0;
 
-            put("InterestRate",rate);
+            put("InterestRate", rate);
             saveInBackground();
-            return rate;
         }
-        else
-            return getInt("InterestRate");
     }
 
     public double getMonthInterest() {
-        return getAmount()>100? getAmount() * getInterestRate()/100:-25;
+        return getAmount()>100? getAmount() * getInt("InterestRate")/100:-25;
     }
 }
 
