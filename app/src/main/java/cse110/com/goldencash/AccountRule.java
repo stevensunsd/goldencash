@@ -4,6 +4,8 @@ package cse110.com.goldencash;
  * Created by Yang on 12/3/2014.
  */
 
+import android.util.Pair;
+
 import cse110.com.goldencash.modelAccount.Account;
 
 public class AccountRule {
@@ -25,46 +27,48 @@ public class AccountRule {
         return true;
     }
 
-    private boolean checkDebitWithdraw(Account acc, double charge) {
+    private Pair<Boolean,String> checkDebitWithdraw(Account acc, double charge) {
         double balance = acc.getAmount();
         if(!checkSufficientFund(balance, charge)) {
             // alert msg: insufficient fund
-            return false;
+
+            return Pair.create(false,"Insufficient Fund");
         }
         if(!checkDailyLimit(acc, charge)) {
             //alert msg: exceeded daily limit
-            return false;
+            return Pair.create(false,"Exceeded Daily Limit");
         }
-        return true;
+        return Pair.create(true,"");
     }
 
-    private boolean checkSavingWithdraw(Account acc, double charge) {
+    private Pair<Boolean,String> checkSavingWithdraw(Account acc, double charge) {
         double balance = acc.getAmount();
         if(!checkSufficientFund(balance, charge)) {
             //alert msg: insufficient fund
-            return false;
+            return Pair.create(false, "Insufficient Fund");
         }
         if(!checkDailyLimit(acc, charge)) {
             //alert msg: exceeded daily limit
-            return false;
+            return Pair.create(false,"Exceeded Daily Limit");
         }
-        return true;
+        return Pair.create(true, "");
     }
     /*
     Public functions for banking rule
      */
-    public boolean canWithdraw(Account acc, double charge) {
+    public Pair<Boolean, String> canWithdraw(Account acc, double charge) {
         if(acc.getAccounttype().equals("Debit")) {
+
             return checkDebitWithdraw(acc, charge);
         }
         else if(acc.getAccounttype().equals("Credit")) {
-            return false;
+            return Pair.create(false, "Can Not Withdraw Credit Account");
         }
         else if(acc.getAccounttype().equals("Saving")) {
             return checkSavingWithdraw(acc, charge);
         }
         else
-            return false;
+            return Pair.create(false,"Account Type Error");
     }
 
     public boolean canDeposit(Account acc, double value) {
@@ -72,11 +76,11 @@ public class AccountRule {
     }
 
     public boolean canTransfer(Account acc, double value) {
-        return canWithdraw(acc, value);
+        return canWithdraw(acc, value).first;
     }
 
     public boolean canTransferToAnother(Account source, Account target, double value) {
-        return canWithdraw(source, value);
+        return canWithdraw(source, value).first;
     }
     public boolean canTransferToThis(Account account){
         return account.isOpen();

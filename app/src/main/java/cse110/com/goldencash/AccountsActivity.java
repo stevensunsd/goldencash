@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.app.Activity;
 import android.text.InputType;
 import android.util.Log;
+import android.util.Pair;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -38,16 +39,14 @@ import cse110.com.goldencash.modelAccount.Account;
 public class AccountsActivity extends Activity{
 
     ListView listview;
-
     private User user = new User();
     private cse110.com.goldencash.modelAccount.Account debit;
     private cse110.com.goldencash.modelAccount.Account credit;
     private cse110.com.goldencash.modelAccount.Account saving;
 
     protected ArrayAdapter<String> adapter;
-
-    protected boolean flag = false;
-    protected boolean [] flagArray = new boolean[] {false,false,false};
+    private ArrayList<Account> accountArray = new ArrayList<Account>();
+    private AccountRule rule = new AccountRule();
 
     private void getUser(){
         setProgressBarIndeterminateVisibility(true);
@@ -101,16 +100,16 @@ public class AccountsActivity extends Activity{
         String stringDebitInterest = "\nCurrent Interest Rate: " + debit.getInterestRate() + "%";
         if(debit.isOpen()){
             account_list.add(stringDebit+stringDebitInterest);
-            flagArray[0] = true;
+            accountArray.add(debit);
         }
 
         if(saving.isOpen()){
             account_list.add(stringSaving+stringSavingInterest);
-            flagArray[1] = true;
+            accountArray.add(saving);
         }
         if(credit.isOpen()){
             account_list.add(stringCredit);
-            flagArray[2] = true;
+            accountArray.add(credit);
         }
         return account_list;
     }
@@ -163,7 +162,7 @@ public class AccountsActivity extends Activity{
     }
 
     protected void selectionBox(long id){
-        final long index = id;
+        final int index = (int)id;
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Choose an action");
         builder.setPositiveButton("Cancel", null);
@@ -174,15 +173,8 @@ public class AccountsActivity extends Activity{
                     }
                 });
 
-        // convert flagArray to string
-        StringBuilder str = new StringBuilder();
-        for (int i = 0; i < flagArray.length; i++) {
-            if (flagArray[i]) str.append("1"); else str.append("0");
-        }
-        String s = str.toString();
-
         // check case for Show Withdraw
-        if(flagArray[2]!=true){
+        if(accountArray.get(index) != credit){
             //Credit account cannot be withdraw
             builder.setNegativeButton("Withdraw",
                     new DialogInterface.OnClickListener() {
@@ -191,31 +183,6 @@ public class AccountsActivity extends Activity{
                         }
                     });
         }
-        else if (s.equals("001")){
-            // not show
-        }
-        else if (s.equals("011")||s.equals("101")){
-            if(id!=1) {
-                //Credit account cannot be withdraw
-                builder.setNegativeButton("Withdraw",
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                editWithdraw(index);
-                            }
-                        });
-            }
-        }
-        else {
-            if(id!=2) {
-                //Credit account cannot be withdraw
-                builder.setNegativeButton("Withdraw",
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                editWithdraw(index);
-                            }
-                        });
-            }
-        }
 
         //create alert dialog
         AlertDialog alert = builder.create();
@@ -223,50 +190,24 @@ public class AccountsActivity extends Activity{
         alert.show();
     }
 
-    protected void editDeposit(long id) {
+    protected void editDeposit( long id) {
+        final int index = (int) id;
         final EditText input = new EditText(this);
         input.setHint("$");
-        final int choose = (int)id;
         input.setInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL);
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Please Enter Deposit Amount").setIcon(android.R.drawable.ic_dialog_info).setView(input).setNegativeButton("Cancel",null);
         builder.setPositiveButton("Confirm",new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog,int which) {
                 double value = Double.parseDouble(input.getText().toString());
-                switch (choose) {
-                    case 0:
-                        if(debit.isOpen()) {
-                            // add + -, and call debit.withdraw or debit.deposit
-                            //account.setDebit(Double.parseDouble(input.getText().toString()));
-                            debit.deposit(value);
-                            break;
-                        }
-                        else if(saving.isOpen()) {
-                            flag = true;
-                            //account.setCredit(Double.parseDouble(input.getText().toString())); break;
-                            saving.deposit(value);
-                        }
-                        else {
-                            //credit
-                            //account.setSaving(Double.parseDouble(input.getText().toString())); break;
-                            credit.deposit(value);
-                        }
-                    case 1:
-                        if(saving.isOpen()&&!flag) {
-                            //account.setCredit(Double.parseDouble(input.getText().toString())); break;
-                            saving.deposit(value);
-                        }
-                        else {
-                            //credit
-                            //account.setSaving(Double.parseDouble(input.getText().toString())); break;
-                            credit.deposit(value);
-                        }
-                    case 2: credit.deposit(value);
-                        //credit
-                        //account.setSaving(Double.parseDouble(input.getText().toString())); break;
-                    default: // error
+                Account account = accountArray.get(index);
+                Pair<Boolean,String> resultPair = rule.canWithdraw(account,value);
+                if(resultPair.first){
+                    accountArray.get(index).deposit(value);
+                    alertMsg("Success", "You have deposited $" + value);
+                }else{
+                    alertMsg("Unable to Deposit",resultPair.second);
                 }
-                alertMsg("Success", "You have deposited $" + value);
                 //refreshData(); refresh data has problem loading not using for now
             }
 
@@ -276,45 +217,23 @@ public class AccountsActivity extends Activity{
     protected void editWithdraw(long id) {
         final EditText input = new EditText(this);
         input.setHint("$");
-        final int choose = (int)id;
+        final int index = (int)id;
         input.setInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL);
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Please Enter Withdraw Amount").setIcon(android.R.drawable.ic_dialog_info).setView(input).setNegativeButton("Cancel",null);
         builder.setPositiveButton("Confirm",new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog,int which){
                 double value = Double.parseDouble(input.getText().toString());
-                switch (choose) {
-                    case 0:
-                        if(debit.isOpen()) {
-                            // add + -, and call debit.withdraw or debit.deposit
-                            //account.setDebit(Double.parseDouble(input.getText().toString()));
-                            debit.withdraw(value);
-                            break;
-                        }
-                        else if(saving.isOpen()) {
-                            flag = true;
-                            //account.setCredit(Double.parseDouble(input.getText().toString())); break;
-                            saving.withdraw(value);
-                        }
-                        else {
-                            //credit
-                            //account.setSaving(Double.parseDouble(input.getText().toString())); break;
-                            credit.withdraw(value);
-                        }
-                    case 1:
-                        if(saving.isOpen()&&!flag) {
-                            //account.setCredit(Double.parseDouble(input.getText().toString())); break;
-                            saving.withdraw(value);
-                        }
-                        else {
-                            //credit
-                            //account.setSaving(Double.parseDouble(input.getText().toString())); break;
-                        }
-                    case 2: //credit
-                        //account.setSaving(Double.parseDouble(input.getText().toString())); break;
-                    default: // error
+                Account account = accountArray.get(index);
+                Pair<Boolean,String> resultPair = rule.canWithdraw(account,value);
+                if(resultPair.first){
+                    accountArray.get(index).withdraw(value);
+                    alertMsg("Success", "You have withdrawn $" + value);
+                }else{
+                    alertMsg("Unable to Withdraw", resultPair.second);
                 }
-                alertMsg("Success","You have withdrawn $" + value);
+
+
                 //refreshData(); refresh data has problem loading not using for now
             }
         });
