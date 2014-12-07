@@ -94,11 +94,11 @@ public class AccountsActivity extends Activity{
 
     private ArrayList<String> setAdapterarray(){
         ArrayList<String> account_list=new ArrayList<String>();
-        String stringCredit = "Credit Account\nBalance: " + credit.getAmount();
-        String stringSaving = "Saving Account\nAvailable Balance: " + saving.getAmount();
-        String stringDebit = "Debit Account\nAvailable Balance: " + debit.getAmount();
-        String stringSavingInterest = "\n Current Interest Rate: ";
-        String stringDebitInterest = "\n Current Interest Rate: ";
+        String stringCredit = "Credit Account\nAvailable Balance:" + credit.getAmount();
+        String stringSaving = "Saving Account\nAvailable Balance:" + saving.getAmount();
+        String stringDebit = "Debit Account\nAvailable Balance:" + debit.getAmount();
+        String stringSavingInterest = "\nCurrent Interest Rate: " + saving.getInterestRate()+"%";
+        String stringDebitInterest = "\nCurrent Interest Rate: " + debit.getInterestRate() + "%";
         if(debit.isOpen()){
             account_list.add(stringDebit+stringDebitInterest);
             flagArray[0] = true;
@@ -282,8 +282,7 @@ public class AccountsActivity extends Activity{
         builder.setTitle("Please Enter Withdraw Amount").setIcon(android.R.drawable.ic_dialog_info).setView(input).setNegativeButton("Cancel",null);
         builder.setPositiveButton("Confirm",new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog,int which){
-                int amount = Integer.parseInt(input.getText().toString());
-                double value = amount;
+                double value = Double.parseDouble(input.getText().toString());
                 switch (choose) {
                     case 0:
                         if(debit.isOpen()) {
