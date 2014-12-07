@@ -225,7 +225,20 @@ public class TransactionActivity extends Activity{
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         gotoCustomerMainPage();
+                    }
+                });
+        builder.show();
+    }
 
+    private void alertMsg2(String title, String msg){
+        //build dialog
+        AlertDialog.Builder builder= new AlertDialog.Builder(this);
+        builder.setTitle(title);
+        builder.setMessage(msg);
+        builder.setPositiveButton("OK",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        showTransferAccountDialog();
                     }
                 });
         builder.show();
@@ -257,7 +270,8 @@ public class TransactionActivity extends Activity{
     private void checkEmailEntered(final String email){
         Log.d("transaction","Target email: "+email+" Owner Email: "+user.getEmail());
         if(email.isEmpty() || email.equals( user.getEmail())){
-            alertMsg("Invalid Email Address","Please enter an correct email address");
+            setProgressBarIndeterminateVisibility(false);
+            alertMsg2("Invalid Email Address","Please enter an correct email address");
         }else {
             //find target account in database
             ParseQuery query = ParseUser.getQuery();
