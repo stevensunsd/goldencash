@@ -160,12 +160,11 @@ public class TransactionActivity extends Activity{
         builder.setPositiveButton("Confirm",new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog,int which) {
                 startLoading();
-                String amount = input.getText().toString();
-                Log.d("amount",amount);
+                Double amount = Double.parseDouble(input.getText().toString());
                 if(transactionMode){
-                    makeTransactionToOther(targetAccount,(double)Integer.parseInt(amount));
+                    makeTransactionToOther(targetAccount,amount);
                 }else {
-                    makeTransaction(Integer.parseInt(amount), spinnerFrom.getSelectedItem().toString(),
+                    makeTransaction(amount, spinnerFrom.getSelectedItem().toString(),
                             spinnerTo.getSelectedItem().toString());
                 }
                 stopLoading();
@@ -181,7 +180,7 @@ public class TransactionActivity extends Activity{
                         " from " + sourceAccount.getAccounttype() + " account to " + email);
 
     }
-    private void makeTransaction(int amount,String from, String to){
+    private void makeTransaction(double amount,String from, String to){
         if(from.equals("Debit")) {
             if (to.equals("Saving"))
                 debit.transferIn(saving,amount);
