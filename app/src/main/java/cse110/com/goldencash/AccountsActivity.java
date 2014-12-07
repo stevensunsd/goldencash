@@ -18,6 +18,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 //Our class
@@ -29,8 +30,12 @@ import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
 import java.math.BigDecimal;
+import org.w3c.dom.Text;
+
+import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Date;
 
 import cse110.com.goldencash.modelAccount.Account;
 
@@ -41,6 +46,9 @@ import cse110.com.goldencash.modelAccount.Account;
 public class AccountsActivity extends Activity{
 
     ListView listview;
+    private TextView usernameText, nameText, lastloginText, accountNumberText,accountEmailText;
+
+
     private User user = new User();
     private cse110.com.goldencash.modelAccount.Account debit;
     private cse110.com.goldencash.modelAccount.Account credit;
@@ -50,6 +58,13 @@ public class AccountsActivity extends Activity{
     private ArrayList<Account> accountArray = new ArrayList<Account>();
     private AccountRule rule = new AccountRule();
 
+    private void setupTextViews(){
+        usernameText = (TextView) findViewById(R.id.accounts_username);
+        nameText = (TextView) findViewById(R.id.accounts_name);
+        lastloginText = (TextView) findViewById(R.id.accounts_last_sign_in);
+        accountNumberText = (TextView) findViewById(R.id.accounts_account_number);
+        accountEmailText = (TextView)findViewById(R.id.accounts_email);
+    }
 
     private void getUser(){
         setProgressBarIndeterminateVisibility(true);
@@ -64,6 +79,7 @@ public class AccountsActivity extends Activity{
                 setProgressBarIndeterminateVisibility(false);
                 if (e == null) {
                     Log.d("got user", "id: " + parseObjects.get(0).getObjectId());
+                    ParseUser foundUser = (ParseUser) parseObjects.get(0);
                     debit = (Account) parseObjects.get(0).getParseObject("Debitaccount");
                     credit = (Account) parseObjects.get(0).getParseObject("Creditaccount");
                     saving = (Account) parseObjects.get(0).getParseObject("Savingaccount");
@@ -74,6 +90,11 @@ public class AccountsActivity extends Activity{
                     } catch (ParseException exc) {
                         exc.printStackTrace();
                     }
+                    usernameText.setText("Username: "+foundUser.getUsername());
+                    accountNumberText.setText("Account Number: "+debit.getAccountNumber());
+                    nameText.setText("Name: "+foundUser.getString("firstname")+" "+foundUser.getString("lastname"));
+                    lastloginText.setText("Last Sign In: "+DateFormat.getDateTimeInstance().format(foundUser.getUpdatedAt()));
+                    accountEmailText.setText("Email: "+foundUser.getEmail());
                     setAdapter();
                 } else {
                     //network error
@@ -137,7 +158,7 @@ public class AccountsActivity extends Activity{
         setTitle("Welcome,Teller "+user.getUserName());
         //set view
         setContentView(R.layout.activity_accounts);
-
+        setupTextViews();
         //Intent intent = getIntent();
         //String id = intent.getExtras().getString("userID");
 
@@ -165,6 +186,7 @@ public class AccountsActivity extends Activity{
         });
         getUser();
         //setAdapter();
+
     }
 
     protected void selectionBox(long id){

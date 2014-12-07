@@ -13,6 +13,7 @@ import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 
@@ -26,6 +27,7 @@ public class CustomerMainActivity extends Activity {
     protected String key;
     protected ListView listview;
     protected ArrayAdapter<String> adapter;
+    protected TextView accountNumberText;
 
     protected User user = new User();
     private cse110.com.goldencash.modelAccount.Account debit = user.getAccount2("Debit");
@@ -44,7 +46,8 @@ public class CustomerMainActivity extends Activity {
 
         setTitle("Welcome, "+user.getFirstName());
         setContentView(R.layout.activity_customermain);
-
+        accountNumberText = (TextView) findViewById(R.id.customer_main_account_number);
+        accountNumberText.setText("Account Number: "+debit.getAccountNumber());
         //get listview from XML
         listview = (ListView) findViewById(R.id.listView_accounts_customer);
 
