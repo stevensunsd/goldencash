@@ -12,6 +12,7 @@ import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.parse.FindCallback;
 import com.parse.ParseException;
@@ -64,8 +65,9 @@ public class UserListActivity extends Activity
                 if (e == null){
                     setupAdapter(parseObjects);
                 }else{
-                    Log.d(getString(R.string.debugInfo_text),"usernames error");
-                    //TODO:display error message/networking
+                    Log.d(getString(R.string.debugInfo_text),e.getMessage());
+                    Toast.makeText(getApplicationContext(), "Network error, please try again.",
+                            Toast.LENGTH_LONG).show();
                 }
             }
         });

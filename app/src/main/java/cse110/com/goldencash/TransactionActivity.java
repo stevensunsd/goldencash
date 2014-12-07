@@ -15,6 +15,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.parse.FindCallback;
 import com.parse.GetCallback;
@@ -270,7 +271,8 @@ public class TransactionActivity extends Activity{
                                 "There is no account associate to the number you entered.");
                     }
                 } else {
-                    //TODO:Newwork Error Msg
+                    Toast.makeText(getApplicationContext(), "Network error, please try again.",
+                            Toast.LENGTH_LONG).show();
                 }
             }
         });
