@@ -185,7 +185,7 @@ public class TransactionActivity extends Activity{
         }
     }
     private void makeTransaction(double amount,String from, String to){
-        if(rule.canTransfer(user.getAccount2(from),amount)) {
+        if(rule.canTransfer(user.getAccount2(from), amount)) {
             if (from.equals("Debit")) {
                 if (to.equals("Saving"))
                     debit.transferIn(saving, amount);
@@ -254,7 +254,7 @@ public class TransactionActivity extends Activity{
         builder.show();
     }
 
-    private void checkEmailEntered(String email){
+    private void checkEmailEntered(final String email){
         Log.d("transaction","Target email: "+email+" Owner Email: "+user.getEmail());
         if(email.isEmpty() || email.equals( user.getEmail())){
             alertMsg("Invalid Email Address","Please enter an correct email address");
@@ -277,7 +277,11 @@ public class TransactionActivity extends Activity{
                                 e1.printStackTrace();
                             }
                             targetAccount = (Account) account;
-                            editbox();
+                            if(!rule.canTransferToThis(targetAccount)){
+                                alertMsg("Unable to Transfer","User "+email+" doesn't have a active Debit account");
+                            }else {
+                                editbox();
+                            }
                         } else {
                             alertMsg("User Not Found",
                                     "There is no user associate to the email you entered.");

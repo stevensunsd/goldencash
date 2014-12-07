@@ -78,7 +78,9 @@ public class AccountRule {
     public boolean canTransferToAnother(Account source, Account target, double value) {
         return canWithdraw(source, value);
     }
-
+    public boolean canTransferToThis(Account account){
+        return account.isOpen();
+    }
     public boolean isAmountCorsstheLine(Account acc, double value) {
         double original = acc.getAmount();
         double result = original - value;
