@@ -95,6 +95,9 @@ public class SignupActivity extends Activity implements View.OnClickListener {
         else if (!(firstname.matches("[a-zA-Z]+")) || !(lastname.matches("[a-zA-Z]+"))) {
             alertMsg("Sign Up Failed", "Please only enter letters for names.");
         }
+        else if(isEmpty(email)){
+            alertMsg("Sign Up Failed", "Please Enter an Email Address");
+        }
         else if(!openCredit && !openDebit &&!openSaving) {
             alertMsg("Sign Up Failed", "Please choose to activate at lease one account");
         }

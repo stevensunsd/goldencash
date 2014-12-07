@@ -42,7 +42,7 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Transfer to an account"
+        android:text="Transfer to a user"
         android:id="@+id/button_transfer_to_account"
         android:layout_gravity="center_horizontal"/>
 </LinearLayout>

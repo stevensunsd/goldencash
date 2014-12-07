@@ -59,7 +59,7 @@ public class User extends ParseUser {
     public void LogOut() {
         user.logOut();
     }
-
+    public String getEmail(){return user.getString("email");}
     /*
     // need to remove this one
     public Account getAccount() {

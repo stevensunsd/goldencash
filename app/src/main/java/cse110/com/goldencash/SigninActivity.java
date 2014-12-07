@@ -118,9 +118,9 @@ public class SigninActivity extends Activity implements View.OnClickListener {
                             // Show the error message for general fail
                             ++wrongInfo_counter;
                             if (wrongInfo_counter < 3) {
-                                alertMsg("Logging in Fail", "User name and Password doesn't match");
+                                alertMsg("Sign in failed", "Invalid username or password.");
                             } else {
-                                alertMsg("Logging in Fail", "Your account has been blocked, please contact customer service.");
+                                alertMsg("Log in failed", "Your account has been blocked, please contact customer service.");
                             }
                         }
                     } else {
@@ -164,10 +164,10 @@ public class SigninActivity extends Activity implements View.OnClickListener {
 
     private void checkInput(){
         if(isEmpty(username_field.getText().toString())){
-            alertMsg("Logging in Fail", "Please Enter Username");
+            alertMsg("Log in failed", "Please Enter Username");
         }
         else if (isEmpty(password_field.getText().toString())){
-            alertMsg("Logging in Fail", "Please Enter Password");
+            alertMsg("Log in failed", "Please Enter Password");
         }
         else {
             signIn();

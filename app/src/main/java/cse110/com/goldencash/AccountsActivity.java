@@ -17,6 +17,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Toast;
 
 //Our class
 import com.parse.FindCallback;
@@ -49,6 +50,7 @@ public class AccountsActivity extends Activity{
     protected boolean [] flagArray = new boolean[] {false,false,false};
 
     private void getUser(){
+        setProgressBarIndeterminateVisibility(true);
         Log.d("getting user","id: "+getIntent().getStringExtra("username"));
         String userId = getIntent().getStringExtra("userId");
         String username = getIntent().getStringExtra("username");
@@ -57,6 +59,7 @@ public class AccountsActivity extends Activity{
         query.findInBackground(new FindCallback<ParseObject>() {
             @Override
             public void done(List<ParseObject> parseObjects, ParseException e) {
+                setProgressBarIndeterminateVisibility(false);
                 if (e == null) {
                     Log.d("got user", "id: " + parseObjects.get(0).getObjectId());
                     debit = (Account) parseObjects.get(0).getParseObject("Debitaccount");
@@ -72,6 +75,8 @@ public class AccountsActivity extends Activity{
                     setAdapter();
                 } else {
                     //network error
+                    Toast.makeText(getApplicationContext(), "Network error, please try again.",
+                            Toast.LENGTH_LONG).show();
                     finish();
                 }
             }
@@ -122,7 +127,7 @@ public class AccountsActivity extends Activity{
         super.onCreate(savedInstanceState);
         // 11. Add a spinning progress bar (and make sure it's off)
         requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
-        setProgressBarIndeterminateVisibility(true);
+        setProgressBarIndeterminateVisibility(false);
         //set title
         setTitle("Welcome,Teller "+user.getUserName());
         //set view
@@ -155,7 +160,6 @@ public class AccountsActivity extends Activity{
         });
         getUser();
         //setAdapter();
-        setProgressBarIndeterminateVisibility(false);
     }
 
     protected void selectionBox(long id){
@@ -221,6 +225,7 @@ public class AccountsActivity extends Activity{
 
     protected void editDeposit(long id) {
         final EditText input = new EditText(this);
+        input.setHint("$");
         final int choose = (int)id;
         input.setInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL);
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -261,7 +266,7 @@ public class AccountsActivity extends Activity{
                         //account.setSaving(Double.parseDouble(input.getText().toString())); break;
                     default: // error
                 }
-                finish();
+                alertMsg("Success", "You have deposited $" + value);
                 //refreshData(); refresh data has problem loading not using for now
             }
 
@@ -270,6 +275,7 @@ public class AccountsActivity extends Activity{
     }
     protected void editWithdraw(long id) {
         final EditText input = new EditText(this);
+        input.setHint("$");
         final int choose = (int)id;
         input.setInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL);
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -309,10 +315,23 @@ public class AccountsActivity extends Activity{
                         //account.setSaving(Double.parseDouble(input.getText().toString())); break;
                     default: // error
                 }
-                finish();
+                alertMsg("Success","You have withdrawn $" + amount);
                 //refreshData(); refresh data has problem loading not using for now
             }
         });
+        builder.show();
+    }
+    private void alertMsg(String title, String msg){
+        //build dialog
+        AlertDialog.Builder builder= new AlertDialog.Builder(this);
+        builder.setTitle(title);
+        builder.setMessage(msg);
+        builder.setPositiveButton("OK",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        finish();
+                    }
+                });
         builder.show();
     }
 }

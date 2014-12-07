@@ -50,7 +50,7 @@ public class TransactionActivity extends Activity{
     private cse110.com.goldencash.modelAccount.Account saving = user.getAccount2("Saving");
 
     private Account sourceAccount = debit;
-
+    private AccountRule rule = new AccountRule();
     private String email;
 
     @Override
@@ -176,25 +176,32 @@ public class TransactionActivity extends Activity{
         builder.show();
     }
     private void makeTransactionToOther(Account account,double value){
-       sourceAccount.transferOut(account,value);
-       alertMsg("Successful",
-                "You have transferred $" + value +
-                        " from " + sourceAccount.getAccounttype() + " account to " + email);
-
+        if(rule.canTransferToAnother(sourceAccount,targetAccount,value)) {
+            sourceAccount.transferOut(account, value);
+            alertMsg("Successful",
+                    "You have transferred $" + value +
+                            " from " + sourceAccount.getAccounttype() + " account to " + email);
+        }else{
+            alertMsg("Failed","Insufficient fund in the "+sourceAccount.getAccounttype()+ " account.");
+        }
     }
     private void makeTransaction(int amount,String from, String to){
-        if(from.equals("Debit")) {
-            if (to.equals("Saving"))
-                debit.transferIn(saving,amount);
-            else
-                debit.transferIn(credit,amount);
-        } else {
-            if (to.equals("Debit"))
-                saving.transferIn(debit,amount);
-            else
-                debit.transferIn(credit,amount);
+        if(rule.canTransfer(user.getAccount2(from),amount)) {
+            if (from.equals("Debit")) {
+                if (to.equals("Saving"))
+                    debit.transferIn(saving, amount);
+                else
+                    debit.transferIn(credit, amount);
+            } else {
+                if (to.equals("Debit"))
+                    saving.transferIn(debit, amount);
+                else
+                    debit.transferIn(credit, amount);
+            }
+            alertMsg("Successful", "Transaction Success");
+        }else{
+            alertMsg("Failed","Insufficient fund in the "+sourceAccount.getAccounttype()+ " account.");
         }
-        alertMsg("Successful", "Transaction Success");
     }
 
     protected void startLoading() {
@@ -249,33 +256,39 @@ public class TransactionActivity extends Activity{
     }
 
     private void checkEmailEntered(String email){
-        ParseQuery query = ParseUser.getQuery();
-        query.whereEqualTo("email", email);
-        query.findInBackground(new FindCallback<ParseObject>() {
-            @Override
-            public void done(List<ParseObject> parseObjects, ParseException e) {
-                setProgressBarIndeterminateVisibility(false);
-                if (e == null) {
-                    if (!parseObjects.isEmpty()) {
-                        Log.d("Got target email","");
-                        ParseObject po = parseObjects.get(0);
-                        ParseObject account = po.getParseObject("Debitaccount");
-                        try {
-                            account.fetch();
-                        } catch (ParseException e1) {
-                            e1.printStackTrace();
+        Log.d("transaction","Target email: "+email+" Owner Email: "+user.getEmail());
+        if(email.isEmpty() || email.equals( user.getEmail())){
+            alertMsg("Invalid Email Address","Please enter an correct email address");
+        }else {
+            //find target account in database
+            ParseQuery query = ParseUser.getQuery();
+            query.whereEqualTo("email", email);
+            query.findInBackground(new FindCallback<ParseObject>() {
+                @Override
+                public void done(List<ParseObject> parseObjects, ParseException e) {
+                    setProgressBarIndeterminateVisibility(false);
+                    if (e == null) {
+                        if (!parseObjects.isEmpty()) {
+                            Log.d("Got target email", "");
+                            ParseObject po = parseObjects.get(0);
+                            ParseObject account = po.getParseObject("Debitaccount");
+                            try {
+                                account.fetch();
+                            } catch (ParseException e1) {
+                                e1.printStackTrace();
+                            }
+                            targetAccount = (Account) account;
+                            editbox();
+                        } else {
+                            alertMsg("User Not Found",
+                                    "There is no user associate to the email you entered.");
                         }
-                        targetAccount = (Account)account;
-                        editbox();
                     } else {
-                        alertMsg("User Not Found",
-                                "There is no account associate to the number you entered.");
+                        Toast.makeText(getApplicationContext(), "Network error, please try again.",
+                                Toast.LENGTH_LONG).show();
                     }
-                } else {
-                    Toast.makeText(getApplicationContext(), "Network error, please try again.",
-                            Toast.LENGTH_LONG).show();
                 }
-            }
-        });
+            });
+        }
     }
 }
