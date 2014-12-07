@@ -298,12 +298,12 @@ public class TransactionActivity extends Activity{
                             }
                             targetAccount = (Account) account;
                             if(!rule.canTransferToThis(targetAccount)){
-                                alertMsg("Unable to Transfer","User "+email+" doesn't have a active Debit account");
+                                alertMsg2("Unable to Transfer","User "+email+" doesn't have a active Debit account");
                             }else {
                                 editbox();
                             }
                         } else {
-                            alertMsg("User Not Found",
+                            alertMsg2("User Not Found",
                                     "There is no user associate to the email you entered.");
                         }
                     } else {

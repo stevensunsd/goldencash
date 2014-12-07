@@ -114,7 +114,7 @@ public class SignupActivity extends Activity implements View.OnClickListener {
 
     private void setupParse() {
         String accountnumber = new Random().nextInt(99999999) % (99999999 - 00000001 + 1) + 00000001 + "";
-        String log = " ";
+        String log = "\n";
         Date current = new Date(System.currentTimeMillis());
 
         // Set up new Account
@@ -126,6 +126,8 @@ public class SignupActivity extends Activity implements View.OnClickListener {
         debit.put("Debit", 0);
         debit.put("Log",log);
         debit.put("UpdateTime",current);
+        debit.put("DailyTime",current);
+        debit.put("DailyLimit",0);
         debit.saveInBackground();
         credit.put("accountnumber", accountnumber);
         credit.put("openCredit", openCredit);
@@ -138,6 +140,8 @@ public class SignupActivity extends Activity implements View.OnClickListener {
         saving.put("Saving", 0);
         saving.put("Log",log);
         saving.put("UpdateTime",current);
+        saving.put("DailyTime",current);
+        saving.put("DailyLimit",0);
         saving.saveInBackground(new SaveCallback() {
             public void done(ParseException e) {
                 if (e != null) {
@@ -155,7 +159,7 @@ public class SignupActivity extends Activity implements View.OnClickListener {
                     user.put("Debitaccount", debit);
                     user.put("Creditaccount", credit);
                     user.put("Savingaccount", saving);
-
+                    user.put("Disable",false);
                     // Call the Parse signup method
                     user.signUpInBackground(new SignUpCallback() {
                         public void done(ParseException e) {

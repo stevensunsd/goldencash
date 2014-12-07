@@ -26,6 +26,7 @@ public class SigninActivity extends Activity implements View.OnClickListener {
     private EditText password_field;
     private Button forgotButton;
     private int wrongInfo_counter = 0;
+    private String username;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -100,8 +101,12 @@ public class SigninActivity extends Activity implements View.OnClickListener {
     }
     private void signIn() {
         if(wrongInfo_counter >= 3){
-            alertMsg("Logging in Fail", "Your account has been blocked, please contact customer service.");
+            alertMsg("Logging in Fail", "Your account has been blocked, Please contact Customer Service.");
         }else {
+            if(username==null||!username.equals(username_field.getText().toString())) {
+                username = username_field.getText().toString();
+                wrongInfo_counter = 0;
+            }
             final ProgressDialog dlg = new ProgressDialog(SigninActivity.this);
             dlg.setMessage("Logging in.  Please wait.");
             dlg.show();
@@ -116,12 +121,11 @@ public class SigninActivity extends Activity implements View.OnClickListener {
                             alertMsg("Connection Failed", "Please check your Internet connection");
                         } else {
                             // Show the error message for general fail
-                            ++wrongInfo_counter;
-                            if (wrongInfo_counter < 3) {
-                                alertMsg("Sign in failed", "Invalid username or password.");
-                            } else {
-                                alertMsg("Log in failed", "Your account has been blocked, please contact customer service.");
-                            }
+                            if(username.equals(username_field.getText().toString()))
+                                wrongInfo_counter++;
+                            if(wrongInfo_counter==3)
+                                alertMsg("Logging in Fail", "Your account has been blocked, Please contact Customer Service.\"");
+                            alertMsg("Sign in failed", "Invalid username or password.");
                         }
                     } else {
                         Log.d(getString(R.string.debugInfo_text), "" + user.getBoolean("admin"));
@@ -129,12 +133,10 @@ public class SigninActivity extends Activity implements View.OnClickListener {
                         if (user.getBoolean("admin")) {
                             gotoMainPage();
                         } else {
-                            if (user.getParseObject("Creditaccount") != null ||
-                                    user.getParseObject("Debitaccount") != null ||
-                                    user.getParseObject("Savingaccount") != null) {
+                            if (!user.getBoolean("Disable")) {
                                 gotoCustomerMainPage();
                             } else {
-                                alertMsg("Unable to Sign in", "You don't have any active account, please contact customer service.");
+                                alertMsg("Unable to Sign in", "You don't have any active account, Please contact Customer Service.");
                             }
                         }
                     }

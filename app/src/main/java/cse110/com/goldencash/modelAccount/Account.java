@@ -39,7 +39,7 @@ public abstract class Account extends ParseObject {
     public void deposit(double value) {
         put(accountType,getAmount() + value);
         //check rule then update time stamp for interest
-        if(rule.isAmountCorsstheLine(user.getAccount2(accountType),value))
+        if(rule.isAmountCorsstheLine(this,value))
             updateTime();
         addLog("Deposit",value);
         saveInBackground();
@@ -54,10 +54,10 @@ public abstract class Account extends ParseObject {
         account.put(account.accountType, account.getAmount() + value);
 
         //check rule then update Time
-        if(rule.isAmountCorsstheLine(user.getAccount2(account.accountType),-value))
+        if(rule.isAmountCorsstheLine(this,-value))
             updateTime();
 
-        if(rule.isAmountCorsstheLine(user.getAccount2(account.accountType), value))
+        if(rule.isAmountCorsstheLine(account, value))
             account.updateTime();
 
         addTransferInLog(account,value);
@@ -69,7 +69,7 @@ public abstract class Account extends ParseObject {
         account.put("Debit", account.getAmount() + value);
 
         //check rule then update Time
-        if(rule.isAmountCorsstheLine(user.getAccount2(accountType),-value))
+        if(rule.isAmountCorsstheLine(this,-value))
             updateTime();
 
         if(rule.isAmountCorsstheLine(account, value))
@@ -122,16 +122,8 @@ public abstract class Account extends ParseObject {
         String newLogFrom;
         String newLogTo;
 
-        //format AccountNumber
-        String s = account.getAccountNumber();
-        String s1,s2,s3;
-        s1 = s.substring(0,3);
-        s2 = s.substring(3,5);
-        s3 = s.substring(5,8);
-        s = s1 + "-" + s2 + "-" + s3;
-
-        newLogFrom = currentTimeString() + " - $" + value + " Transfer To Account Number: " + s + '\n';
-        newLogTo = currentTimeString() + " + $" + value + " Account Number: " + s + " Transfer Into Debit Account" + '\n';
+        newLogFrom = currentTimeString() + " - $" + value + " Transfer To Account Number: " + account.getAccountNumber() + '\n';
+        newLogTo = currentTimeString() + " + $" + value + " Account Number: " + account.getAccountNumber() + " Transfer Into Debit Account" + '\n';
         put("Log",getLog()+ newLogFrom );
         account.put("Log",account.getLog() + newLogTo);
         saveInBackground();

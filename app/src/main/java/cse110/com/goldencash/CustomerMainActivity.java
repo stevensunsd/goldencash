@@ -15,6 +15,8 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.parse.ParseUser;
+
 import java.util.ArrayList;
 
 import cse110.com.goldencash.modelAccount.Account;
@@ -164,7 +166,7 @@ public class CustomerMainActivity extends Activity {
 
     private void closeAccount(){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        ArrayList list = new ArrayList();
+        final ArrayList list = new ArrayList();
         if(debit.isOpen()){
             list.add("Debit");
         }
@@ -183,7 +185,14 @@ public class CustomerMainActivity extends Activity {
                 //check close account
                 Account account = accountArray.get(i);
                 account.closeAccount();
-                refreshData();
+                if(list.size()==1) {
+                    ParseUser.getCurrentUser().put("Disable", true);
+                    ParseUser.getCurrentUser().saveInBackground();
+                    alertMsg("Warning", "You have closed all your account, Your account is disabled.");
+                }
+                else {
+                    refreshData();
+                }
             }
         });
         builder.setTitle("Choose an account").setIcon(android.R.drawable.ic_dialog_info);
@@ -213,6 +222,26 @@ public class CustomerMainActivity extends Activity {
 
     private void refreshData() {
         Intent intent = new Intent(CustomerMainActivity.this, CustomerMainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+    }
+
+    private void alertMsg(String title, String msg){
+        //build dialog
+        AlertDialog.Builder builder= new AlertDialog.Builder(this);
+        builder.setTitle(title);
+        builder.setMessage(msg);
+        builder.setPositiveButton("OK",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        gotoSigninPage();
+                    }
+                });
+        builder.show();
+    }
+
+    private void gotoSigninPage(){
+        Intent intent = new Intent(this,SigninActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
     }
