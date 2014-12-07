@@ -120,21 +120,21 @@ public class SignupActivity extends Activity implements View.OnClickListener {
         final cse110.com.goldencash.modelAccount.SavingAccount saving = ParseObject.create(cse110.com.goldencash.modelAccount.SavingAccount.class);
         debit.put("accountnumber",accountnumber);
         debit.put("openDebit",openDebit);
-        debit.put("Debit", 100.1);
-        debit.put("InterestRate",0.0);
+        debit.put("Debit", 0);
+        debit.put("InterestRate",0);
         debit.put("Log",log);
         debit.put("UpdateTime",current);
         debit.saveInBackground();
         credit.put("accountnumber", accountnumber);
         credit.put("openCredit", openCredit);
-        credit.put("Credit", 100.1);
+        credit.put("Credit", 0);
         credit.put("Log",log);
         credit.put("UpdateTime",current);
         credit.saveInBackground();
         saving.put("accountnumber", accountnumber);
         saving.put("openSaving", openSaving);
-        saving.put("Saving", 100.1);
-        saving.put("InterestRate",0.0);
+        saving.put("Saving", 0);
+        saving.put("InterestRate",0);
         saving.put("Log",log);
         saving.put("UpdateTime",current);
         saving.saveInBackground(new SaveCallback() {
@@ -144,7 +144,7 @@ public class SignupActivity extends Activity implements View.OnClickListener {
                     alertMsg("User Account Sign Up Failed", e.getMessage());
                 } else {
                     // Set up a new User
-                    User user = new User();
+                    ParseUser user = new ParseUser();
                     user.setUsername(username);
                     user.setPassword(password1);
                     user.put("firstname", firstname);
@@ -160,6 +160,9 @@ public class SignupActivity extends Activity implements View.OnClickListener {
                         public void done(ParseException e) {
                             stopLoading();
                             if (e != null) {
+                                debit.deleteInBackground();
+                                credit.deleteInBackground();
+                                saving.deleteInBackground();
                                 alertMsg("User Sign Up Failed", e.getMessage());
                             } else {
                                 //sign up successful

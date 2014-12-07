@@ -178,7 +178,7 @@ public class AccountsActivity extends Activity{
         String s = str.toString();
 
         // check case for Show Withdraw
-        if(flagArray[2]!=true||s.equals("001")){
+        if(flagArray[2]!=true){
             //Credit account cannot be withdraw
             builder.setNegativeButton("Withdraw",
                     new DialogInterface.OnClickListener() {
@@ -186,6 +186,9 @@ public class AccountsActivity extends Activity{
                             editWithdraw(index);
                         }
                     });
+        }
+        else if (s.equals("001")){
+            // not show
         }
         else if (s.equals("011")||s.equals("101")){
             if(id!=1) {
