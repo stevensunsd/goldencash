@@ -33,6 +33,7 @@ import java.util.List;
 
 import cse110.com.goldencash.modelAccount.Account;
 
+
 /**
  * Created by Xin Wen on 10/27/14.
  */
@@ -47,6 +48,7 @@ public class AccountsActivity extends Activity{
     protected ArrayAdapter<String> adapter;
     private ArrayList<Account> accountArray = new ArrayList<Account>();
     private AccountRule rule = new AccountRule();
+    private SetEditText setEditText = new SetEditTextImp();
 
     private void getUser(){
         setProgressBarIndeterminateVisibility(true);
@@ -94,8 +96,8 @@ public class AccountsActivity extends Activity{
     private ArrayList<String> setAdapterarray(){
         ArrayList<String> account_list=new ArrayList<String>();
         String stringCredit = "Credit Account\nAvailable Balance:" + String.format("%.2f",credit.getAmount());
-        String stringSaving = "Saving Account\nAvailable Balance:" + String.format("%.2f",saving.getAmount());
-        String stringDebit = "Debit Account\nAvailable Balance:" + String.format("%.2f",debit.getAmount());
+        String stringSaving = "Saving Account\nAvailable Balance:" + String.format("%.2f", saving.getAmount());
+        String stringDebit = "Debit Account\nAvailable Balance:" + String.format("%.2f", debit.getAmount());
         String stringSavingInterest = "\nCurrent Interest Rate: " + saving.getCurrentInterestRate()+"%";
         String stringDebitInterest = "\nCurrent Interest Rate: " + debit.getCurrentInterestRate() + "%";
         if(debit.isOpen()){
@@ -194,7 +196,8 @@ public class AccountsActivity extends Activity{
         final int index = (int) id;
         final EditText input = new EditText(this);
         input.setHint("$");
-        input.setInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL);
+        setEditText.setPricePoint(input);
+        //input.setInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL);
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Please Enter Deposit Amount").setIcon(android.R.drawable.ic_dialog_info).setView(input).setNegativeButton("Cancel",null);
         builder.setPositiveButton("Confirm",new DialogInterface.OnClickListener() {
@@ -211,8 +214,8 @@ public class AccountsActivity extends Activity{
     protected void editWithdraw(long id) {
         final EditText input = new EditText(this);
         input.setHint("$");
+        setEditText.setPricePoint(input);
         final int index = (int)id;
-        input.setInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL);
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Please Enter Withdraw Amount").setIcon(android.R.drawable.ic_dialog_info).setView(input).setNegativeButton("Cancel",null);
         builder.setPositiveButton("Confirm",new DialogInterface.OnClickListener() {
