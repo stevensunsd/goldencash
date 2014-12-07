@@ -9,11 +9,11 @@
     <!-- ActionBar styles -->
     <style name="MyActionBar"
         parent="@android:style/Widget.Holo.Light.ActionBar.Solid.Inverse">
-        <item name="android:background">@color/HarvestGold</item>
+        <item name="android:background">@color/BrightGold</item>
     </style>
 
     <style name="PoppupMenu" parent="android:Widget.PopupMenu">
-        <item name="android:popupBackground">@color/HarvestGold</item>
+        <item name="android:popupBackground">@color/BrightGold</item>
     </style>
 
     <color name="Black">#000000</color>
