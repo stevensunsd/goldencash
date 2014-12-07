@@ -27,10 +27,8 @@ public abstract class Account extends ParseObject {
     public void withdraw(double value) {
         put(accountType,getAmount() - value);
         //check rule then update Time
-        if(rule.isAmountCorsstheLine(user.getAccount2(accountType), -value)) {
+        if(rule.isAmountCorsstheLine(user.getAccount2(accountType), -value))
             updateTime();
-            setInterestRate();
-        }
         addLog("Withdraw", value);
         saveInBackground();
     }
@@ -38,10 +36,8 @@ public abstract class Account extends ParseObject {
     public void deposit(double value) {
         put(accountType,getAmount() + value);
         //check rule then update time stamp for interest
-        if(rule.isAmountCorsstheLine(user.getAccount2(accountType),value)) {
+        if(rule.isAmountCorsstheLine(user.getAccount2(accountType),value))
             updateTime();
-            setInterestRate();
-        }
         addLog("Deposit",value);
         saveInBackground();
     }
@@ -55,14 +51,12 @@ public abstract class Account extends ParseObject {
         account.put(account.accountType, account.getAmount() + value);
 
         //check rule then update Time
-        if(rule.isAmountCorsstheLine(user.getAccount2(account.accountType),-value)) {
+        if(rule.isAmountCorsstheLine(user.getAccount2(account.accountType),-value))
             updateTime();
-            setInterestRate();
-        }
-        if(rule.isAmountCorsstheLine(user.getAccount2(account.accountType), value)) {
+
+        if(rule.isAmountCorsstheLine(user.getAccount2(account.accountType), value))
             account.updateTime();
-            account.setInterestRate();
-        }
+
         addTransferInLog(account,value);
         saveInBackground();
     }
@@ -72,14 +66,12 @@ public abstract class Account extends ParseObject {
         account.put("Debit", account.getAmount() + value);
 
         //check rule then update Time
-        if(rule.isAmountCorsstheLine(user.getAccount2(accountType),-value)) {
+        if(rule.isAmountCorsstheLine(user.getAccount2(accountType),-value))
             updateTime();
-            setInterestRate();
-        }
-        if(rule.isAmountCorsstheLine(account, value)) {
+
+        if(rule.isAmountCorsstheLine(account, value))
             account.updateTime();
-            account.setInterestRate();
-        }
+
         addTransferOutLog(account,value);
         saveInBackground();
         account.saveInBackground();
@@ -144,15 +136,10 @@ public abstract class Account extends ParseObject {
     }
 
     public abstract double getMonthInterest();
-    public abstract void setInterestRate();
+    public abstract int getMonthInterestRate();
+    public abstract int getCurrentInterestRate();
 
-    // For UI display
-    public int getInterestRate() {
-        return getInt("InterestRate");
-    }
-
-
-    public void calculateAmountafterInterest() {
+    public void calculateInterest() {
         double interest = getMonthInterest();
         put(accountType,getAmount() + interest);
         addInterestLog(interest);
@@ -183,7 +170,7 @@ public abstract class Account extends ParseObject {
     private String stringFormater(double value){
         String newLogFrom;
         if(value>0)
-            newLogFrom = currentTimeString() + " + $" + value + " Monthly Interest based on current Interest Rate " + getInt("InterestRate") + "%" +'\n';
+            newLogFrom = currentTimeString() + " + $" + value + " Monthly Interest based on your Interest Rate " + getMonthInterestRate() + "%" +'\n';
         else
             newLogFrom = currentTimeString() + " - $" + value + " Penalty For Balance Below $100 over 30 days" + '\n';
         return newLogFrom;

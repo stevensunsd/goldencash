@@ -10,7 +10,9 @@ public class CreditAccount extends Account {
         this.accountType = "Credit";
     }
 
-    public void setInterestRate() { }
+    public int getCurrentInterestRate() {return 0; }
+
+    public int getMonthInterestRate() {return 0; }
 
     public double getMonthInterest() {
         return getAmount() < 100 ? -25:0;

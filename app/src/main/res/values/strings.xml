@@ -24,7 +24,8 @@
     <string name="Saving">SAVING</string>
     <string name="Credit_Account">CREDIT</string>
     <string name="account_type">CHOOSE TO ACTIVATE ACCOUNT:</string>
-
+    <string name="Choose_Account_From">Choose an account transfer from:</string>
+    <string name="Choose_Account_To">Choose an account transfer to:</string>
 
     <string name="ERROR_password"
         >The Username or Password you entered is incorrect.</string>

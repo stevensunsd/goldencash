@@ -96,8 +96,8 @@ public class AccountsActivity extends Activity{
         String stringCredit = "Credit Account\nAvailable Balance:" + credit.getAmount();
         String stringSaving = "Saving Account\nAvailable Balance:" + saving.getAmount();
         String stringDebit = "Debit Account\nAvailable Balance:" + debit.getAmount();
-        String stringSavingInterest = "\nCurrent Interest Rate: " + saving.getInterestRate()+"%";
-        String stringDebitInterest = "\nCurrent Interest Rate: " + debit.getInterestRate() + "%";
+        String stringSavingInterest = "\nCurrent Interest Rate: " + saving.getCurrentInterestRate()+"%";
+        String stringDebitInterest = "\nCurrent Interest Rate: " + debit.getCurrentInterestRate() + "%";
         if(debit.isOpen()){
             account_list.add(stringDebit+stringDebitInterest);
             accountArray.add(debit);
