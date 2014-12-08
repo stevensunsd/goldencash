@@ -41,6 +41,8 @@ public class AccountRule {
             if (daily + charge > limit) {
                 return false;
             }
+        }else{
+            acc.resetDailyAmount();
         }
         return true;
     }

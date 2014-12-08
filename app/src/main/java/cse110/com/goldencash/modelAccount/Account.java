@@ -45,7 +45,7 @@ public abstract class Account extends ParseObject {
     }
 
     public boolean isOpen() {
-        return getBoolean("open"+ accountType);
+        return getBoolean("open");
     }
 
     public void transferIn(Account account,double value) {
@@ -151,7 +151,7 @@ public abstract class Account extends ParseObject {
 
     public Date getupdateTime(){ return getDate("UpdateTime"); }
 
-    public Date getDailyTime() {return getDate("dailytime");}
+    public Date getDailyTime() {return getDate("DailyTime");}
 
     private void updateTime() {
         put("UpdateTime",new Date(System.currentTimeMillis()));
@@ -159,20 +159,20 @@ public abstract class Account extends ParseObject {
     }
 
     private void updateDailyTime(){
-        put("dailytime", new Date(System.currentTimeMillis()));
+        put("DailyTime", new Date(System.currentTimeMillis()));
         saveInBackground();
     }
 
     private void updateDailyAmount(double amount){
-        put("dailyamount",amount);
+        put("DailyAmount",amount);
     }
 
-    private void resetDailyAmount(){
-        put("dailyamount",0.0);
+    public void resetDailyAmount(){
+        put("DailyAmount",0.0);
     }
 
     public double getDailyAmount(){
-        return getDouble("dailyamount");
+        return getDouble("DailyAmount");
     }
 
     public boolean isOver30days() {

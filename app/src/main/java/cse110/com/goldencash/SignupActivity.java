@@ -122,26 +122,26 @@ public class SignupActivity extends Activity implements View.OnClickListener {
         final cse110.com.goldencash.modelAccount.CreditAccount credit = ParseObject.create(cse110.com.goldencash.modelAccount.CreditAccount.class);
         final cse110.com.goldencash.modelAccount.SavingAccount saving = ParseObject.create(cse110.com.goldencash.modelAccount.SavingAccount.class);
         debit.put("accountnumber",accountnumber);
-        debit.put("openDebit",openDebit);
+        debit.put("open",openDebit);
         debit.put("Debit", 0);
         debit.put("Log",log);
         debit.put("UpdateTime",current);
         debit.put("DailyTime",current);
-        debit.put("DailyLimit",0);
+        debit.put("DailyAmount",0);
         debit.saveInBackground();
         credit.put("accountnumber", accountnumber);
-        credit.put("openCredit", openCredit);
+        credit.put("open", openCredit);
         credit.put("Credit", 0);
         credit.put("Log",log);
         credit.put("UpdateTime",current);
         credit.saveInBackground();
         saving.put("accountnumber", accountnumber);
-        saving.put("openSaving", openSaving);
+        saving.put("open", openSaving);
         saving.put("Saving", 0);
         saving.put("Log",log);
         saving.put("UpdateTime",current);
         saving.put("DailyTime",current);
-        saving.put("DailyLimit",0);
+        saving.put("DailyAmount",0);
         saving.saveInBackground(new SaveCallback() {
             public void done(ParseException e) {
                 if (e != null) {
