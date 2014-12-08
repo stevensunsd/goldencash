@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputType;
 import android.util.Log;
+import android.util.Pair;
 import android.view.View;
 import android.view.Window;
 import android.widget.AdapterView;
@@ -187,7 +188,8 @@ public class TransactionActivity extends Activity{
     }
     private void makeTransaction(double amount,String from, String to){
         if(rule.canDeposit(user.getAccount2(to),amount)) {
-            if (rule.canTransfer(user.getAccount2(from), amount)) {
+            Pair<Boolean,String > result = rule.canTransfer(user.getAccount2(from), amount);
+            if (result.first) {
                 if (from.equals("Debit")) {
                     if (to.equals("Saving"))
                         debit.transferIn(saving, amount);
@@ -201,7 +203,7 @@ public class TransactionActivity extends Activity{
                 }
                 alertMsg("Successful", "Transaction Success");
             } else {
-                alertMsg("Failed", "Insufficient fund in the " + from + " account.");
+                alertMsg("Failed", result.second);
             }
         }else{
             alertMsg("Failed", "You don't have an active "+to+" account");
