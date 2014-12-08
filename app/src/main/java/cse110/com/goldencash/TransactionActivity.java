@@ -186,21 +186,25 @@ public class TransactionActivity extends Activity{
         }
     }
     private void makeTransaction(double amount,String from, String to){
-        if(rule.canTransfer(user.getAccount2(from), amount)) {
-            if (from.equals("Debit")) {
-                if (to.equals("Saving"))
-                    debit.transferIn(saving, amount);
-                else
-                    debit.transferIn(credit, amount);
+        if(rule.canDeposit(user.getAccount2(to),amount)) {
+            if (rule.canTransfer(user.getAccount2(from), amount)) {
+                if (from.equals("Debit")) {
+                    if (to.equals("Saving"))
+                        debit.transferIn(saving, amount);
+                    else
+                        debit.transferIn(credit, amount);
+                } else {
+                    if (to.equals("Debit"))
+                        saving.transferIn(debit, amount);
+                    else
+                        debit.transferIn(credit, amount);
+                }
+                alertMsg("Successful", "Transaction Success");
             } else {
-                if (to.equals("Debit"))
-                    saving.transferIn(debit, amount);
-                else
-                    debit.transferIn(credit, amount);
+                alertMsg("Failed", "Insufficient fund in the " + from + " account.");
             }
-            alertMsg("Successful", "Transaction Success");
         }else{
-            alertMsg("Failed","Insufficient fund in the "+sourceAccount.getAccounttype()+ " account.");
+            alertMsg("Failed", "You don't have an active "+to+" account");
         }
     }
 
@@ -298,7 +302,7 @@ public class TransactionActivity extends Activity{
                             }
                             targetAccount = (Account) account;
                             if(!rule.canTransferToThis(targetAccount)){
-                                alertMsg2("Unable to Transfer","User "+email+" doesn't have a active Debit account");
+                                alertMsg2("Unable to Transfer", "User " + email + " doesn't have a active Debit account");
                             }else {
                                 editbox();
                             }

@@ -11,7 +11,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
 
-import cse110.com.goldencash.TransactionActivity;
 import cse110.com.goldencash.User;
 import cse110.com.goldencash.AccountRule;
 @ParseClassName("Account")
@@ -172,7 +171,7 @@ public abstract class Account extends ParseObject {
         put("dailyamount",0.0);
     }
 
-    private double getDailyAmount(){
+    public double getDailyAmount(){
         return getDouble("dailyamount");
     }
 

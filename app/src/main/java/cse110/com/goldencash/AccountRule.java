@@ -6,6 +6,9 @@ package cse110.com.goldencash;
 
 import android.util.Pair;
 
+import java.util.Calendar;
+import java.util.Date;
+
 import cse110.com.goldencash.modelAccount.Account;
 
 public class AccountRule {
@@ -13,16 +16,31 @@ public class AccountRule {
         return balance - charge >= 0;
     }
 
+    private boolean isDailyTimeToday(Account account){
+        Calendar cal1 = Calendar.getInstance();
+        Calendar cal2 = Calendar.getInstance();
+        Date daily = account.getDailyTime();
+        cal1.setTime(daily);
+        cal2.setTime(new Date(System.currentTimeMillis()));
+        boolean sameDay = cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR) &&
+                cal1.get(Calendar.DAY_OF_YEAR) == cal2.get(Calendar.DAY_OF_YEAR);
+        return sameDay;
+    }
+
     private boolean checkDailyLimit(Account acc, double charge) {
         double limit = 0;
-        double daily = 0;
-        //double daily = acc.getDailyAmount();
-        if(acc.getAccounttype().equals("Saving"))
+        if (acc.getAccounttype().equals("Saving"))
             limit = 5000;
-        else if(acc.getAccounttype().equals("Debit"))
+        else if (acc.getAccounttype().equals("Debit"))
             limit = 10000;
-        if(daily + charge > limit) {
+        if(charge > limit){
             return false;
+        }
+        if(isDailyTimeToday(acc)) {
+            double daily = acc.getDailyAmount();
+            if (daily + charge > limit) {
+                return false;
+            }
         }
         return true;
     }
@@ -72,7 +90,7 @@ public class AccountRule {
     }
 
     public boolean canDeposit(Account acc, double value) {
-        return true;
+        return acc.isOpen();
     }
 
     public boolean canTransfer(Account acc, double value) {

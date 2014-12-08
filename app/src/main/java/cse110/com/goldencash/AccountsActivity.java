@@ -249,6 +249,7 @@ public class AccountsActivity extends Activity{
                 double value = Double.parseDouble(input.getText().toString());
                 value = NumberFormater(value);
                 Account account = accountArray.get(index);
+
                 Pair<Boolean,String> resultPair = rule.canWithdraw(account,value);
                 if(resultPair.first){
                     accountArray.get(index).withdraw(value);
