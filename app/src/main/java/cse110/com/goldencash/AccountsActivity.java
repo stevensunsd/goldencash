@@ -227,12 +227,21 @@ public class AccountsActivity extends Activity{
         builder.setTitle("Please Enter Deposit Amount").setIcon(android.R.drawable.ic_dialog_info).setView(input).setNegativeButton("Cancel",null);
         builder.setPositiveButton("Confirm",new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog,int which) {
-                double value = Double.parseDouble(input.getText().toString());
-                value = NumberFormater(value);
-                Account account = accountArray.get(index);
-                accountArray.get(index).deposit(value);
-                alertMsg("Success", "You have deposited $" + value);
-                //refreshData(); refresh data has problem loading not using for now
+                if(isValidInput(input)) {
+                    double value = Double.parseDouble(input.getText().toString());
+                    value = NumberFormater(value);
+                    Account account = accountArray.get(index);
+                    Pair<Boolean, String> resultPair = rule.canWithdraw(account, value);
+                    if (resultPair.first) {
+                        account.deposit(value);
+                        alertMsg("Success", "You have deposited $" + value);
+                    }else{
+                        alertMsg("Failed",resultPair.second);
+                    }
+                    //refreshData(); refresh data has problem loading not using for now
+                }else{
+                    alertMsg("Failed", input.getText().toString()+" is not a valid number");
+                }
             }
         });
         builder.show();
@@ -246,18 +255,22 @@ public class AccountsActivity extends Activity{
         builder.setTitle("Please Enter Withdraw Amount").setIcon(android.R.drawable.ic_dialog_info).setView(input).setNegativeButton("Cancel",null);
         builder.setPositiveButton("Confirm",new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog,int which){
-                double value = Double.parseDouble(input.getText().toString());
-                value = NumberFormater(value);
-                Account account = accountArray.get(index);
+                if(isValidInput(input)) {
+                    double value = Double.parseDouble(input.getText().toString());
+                    value = NumberFormater(value);
+                    Account account = accountArray.get(index);
 
-                Pair<Boolean,String> resultPair = rule.canWithdraw(account,value);
-                if(resultPair.first){
-                    accountArray.get(index).withdraw(value);
-                    alertMsg("Success", "You have withdrawn $" + value);
+                    Pair<Boolean, String> resultPair = rule.canWithdraw(account, value);
+                    if (resultPair.first) {
+                        accountArray.get(index).withdraw(value);
+                        alertMsg("Success", "You have withdrawn $" + value);
+                    } else {
+                        alertMsg("Unable to Withdraw", resultPair.second);
+                    }
+                    //refreshData(); refresh data has problem loading not using for now
                 }else{
-                    alertMsg("Unable to Withdraw", resultPair.second);
+                    alertMsg("Failed",input.getText().toString()+" is not a valid number");
                 }
-                //refreshData(); refresh data has problem loading not using for now
             }
         });
         builder.show();
@@ -279,5 +292,16 @@ public class AccountsActivity extends Activity{
     private double NumberFormater(double value) {
         BigDecimal number = new BigDecimal(value);
         return number.setScale(2,BigDecimal.ROUND_HALF_UP).doubleValue();
+    }
+
+    private boolean isValidInput(EditText input){
+        String s = input.getText().toString();
+        //Double d = Double.parseDouble(s);
+        if(s.matches("")){
+            return false;
+        }else if(!s.matches("[0-9.]+")){
+            return false;
+        }
+        return true;
     }
 }
