@@ -199,7 +199,7 @@ public class TransactionActivity extends Activity{
                     if (to.equals("Debit"))
                         saving.transferIn(debit, amount);
                     else
-                        debit.transferIn(credit, amount);
+                        saving.transferIn(credit, amount);
                 }
                 alertMsg("Successful", "Transaction Success");
             } else {
