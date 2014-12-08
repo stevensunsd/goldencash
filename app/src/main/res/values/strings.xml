@@ -28,6 +28,7 @@
     <string name="Choose_Account_To">Choose an account transfer to:</string>
     <string name="Transfer"><u>Transfer to Other User Account</u></string>
     <string name="ForgetPassword"><u>Forgot Password?</u></string>
+    <string name="TeamInfo">Team GoldenCash CSE 110 FALL 2014 &#174;</string>
 
     <string name="ERROR_password"
         >The Username or Password you entered is incorrect.</string>

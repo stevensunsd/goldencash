@@ -66,4 +66,13 @@
         android:layout_below="@+id/signin_button"
         android:layout_centerHorizontal="true" />
 
+    <TextView
+        android:text="@string/TeamInfo"
+        android:layout_centerInParent="true"
+        android:layout_below="@id/button_reset_password"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+     />
+
 </RelativeLayout>
