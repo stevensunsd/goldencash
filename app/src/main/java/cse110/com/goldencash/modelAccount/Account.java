@@ -80,7 +80,7 @@ public abstract class Account extends ParseObject {
     }
 
     public void closeAccount() {
-        put("open" + accountType, false);
+        put("open", false);
         saveInBackground();
     }
 
