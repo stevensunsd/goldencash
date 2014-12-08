@@ -83,6 +83,9 @@ public class AccountRule {
     Public functions for banking rule
      */
     public Pair<Boolean, String> canWithdraw(Account acc, double charge) {
+        if(charge <= 0.01){
+            return Pair.create(false, "Amount has to be greater than $0.01");
+        }
         if(acc.getAccounttype().equals("Debit")) {
 
             return checkDebitWithdraw(acc, charge);
@@ -97,8 +100,13 @@ public class AccountRule {
             return Pair.create(false,"Account Type Error");
     }
 
-    public boolean canDeposit(Account acc, double value) {
-        return acc.isOpen();
+    public Pair<Boolean, String> canDeposit(Account acc, double value){
+        if(value < 0.01){
+            return Pair.create(false, "Amount has to be greater than $0.01");
+        }else if(!acc.isOpen()){
+            return Pair.create(false, acc.getAccounttype()+" account is not an active account");
+        }
+        return Pair.create(true, "");
     }
 
     public Pair<Boolean, String> canTransfer(Account acc, double value) {

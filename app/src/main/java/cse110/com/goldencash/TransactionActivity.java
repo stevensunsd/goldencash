@@ -161,18 +161,21 @@ public class TransactionActivity extends Activity{
         }
         builder.setPositiveButton("Confirm",new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog,int which) {
-                startLoading();
-                Double amount = Double.parseDouble(input.getText().toString());
-                amount = NumberFormater(amount);
-                if(transactionMode){
-                    makeTransactionToOther(targetAccount,amount);
-                }else {
-                    makeTransaction(amount, spinnerFrom.getSelectedItem().toString(),
-                            spinnerTo.getSelectedItem().toString());
+                if (isValidInput(input)) {
+                    startLoading();
+                    Double amount = Double.parseDouble(input.getText().toString());
+                    amount = NumberFormater(amount);
+                    if (transactionMode) {
+                        makeTransactionToOther(targetAccount, amount);
+                    } else {
+                        makeTransaction(amount, spinnerFrom.getSelectedItem().toString(),
+                                spinnerTo.getSelectedItem().toString());
+                    }
+                    stopLoading();
+                } else {
+                    alertMsg("Failed", input.getText().toString() + " is not a valid number");
                 }
-                stopLoading();
-                }
-
+            }
         });
         builder.show();
     }
@@ -187,7 +190,8 @@ public class TransactionActivity extends Activity{
         }
     }
     private void makeTransaction(double amount,String from, String to){
-        if(rule.canDeposit(user.getAccount2(to),amount)) {
+        Pair<Boolean, String> resultPair = rule.canDeposit(user.getAccount2(to),amount);
+        if(resultPair.first) {
             Pair<Boolean,String > result = rule.canTransfer(user.getAccount2(from), amount);
             if (result.first) {
                 if (from.equals("Debit")) {
@@ -206,7 +210,7 @@ public class TransactionActivity extends Activity{
                 alertMsg("Failed", result.second);
             }
         }else{
-            alertMsg("Failed", "You don't have an active "+to+" account");
+            alertMsg("Failed", resultPair.second );
         }
     }
 
@@ -319,5 +323,15 @@ public class TransactionActivity extends Activity{
                 }
             });
         }
+    }
+    private boolean isValidInput(EditText input){
+        String s = input.getText().toString();
+        //Double d = Double.parseDouble(s);
+        if(s.matches("")){
+            return false;
+        }else if(!s.matches("[0-9.]+")){
+            return false;
+        }
+        return true;
     }
 }

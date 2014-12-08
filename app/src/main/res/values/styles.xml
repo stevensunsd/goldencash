@@ -16,6 +16,12 @@
         <item name="android:popupBackground">@color/BrightGold</item>
     </style>
 
+    <!-- EditTextStyle Not Used-->
+    <style name="EditTextStyle" parent="@android:style/Widget.EditText">
+        <item name="android:inputType">numberDecimal</item>
+        <item name="android:digits">0123456789.</item>
+    </style>
+
     <color name="Black">#000000</color>
     <color name="Gunmetal">#2C3539</color>
     <color name="Midnight">#2B1B17</color>
