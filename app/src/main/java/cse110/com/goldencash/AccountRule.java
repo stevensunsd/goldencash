@@ -49,6 +49,9 @@ public class AccountRule {
 
     private Pair<Boolean,String> checkDebitWithdraw(Account acc, double charge) {
         double balance = acc.getAmount();
+        if(!acc.isOpen()){
+            return Pair.create(false,"Account "+acc.getAccounttype()+" is not an active account");
+        }
         if(!checkSufficientFund(balance, charge)) {
             // alert msg: insufficient fund
 
@@ -63,6 +66,9 @@ public class AccountRule {
 
     private Pair<Boolean,String> checkSavingWithdraw(Account acc, double charge) {
         double balance = acc.getAmount();
+        if(!acc.isOpen()){
+            return Pair.create(false,"Account "+acc.getAccounttype()+" is not an active account");
+        }
         if(!checkSufficientFund(balance, charge)) {
             //alert msg: insufficient fund
             return Pair.create(false, "Insufficient Fund");
@@ -95,8 +101,8 @@ public class AccountRule {
         return acc.isOpen();
     }
 
-    public boolean canTransfer(Account acc, double value) {
-        return canWithdraw(acc, value).first;
+    public Pair<Boolean, String> canTransfer(Account acc, double value) {
+        return canWithdraw(acc, value);
     }
 
     public boolean canTransferToAnother(Account source, Account target, double value) {
