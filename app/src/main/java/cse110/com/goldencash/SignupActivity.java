@@ -128,13 +128,13 @@ public class SignupActivity extends Activity implements View.OnClickListener {
         debit.put("UpdateTime",current);
         debit.put("DailyTime",current);
         debit.put("DailyAmount",0);
-        debit.saveInBackground();
+
         credit.put("accountnumber", accountnumber);
         credit.put("open", openCredit);
         credit.put("Credit", 0);
         credit.put("Log",log);
         credit.put("UpdateTime",current);
-        credit.saveInBackground();
+
         saving.put("accountnumber", accountnumber);
         saving.put("open", openSaving);
         saving.put("Saving", 0);
@@ -142,44 +142,75 @@ public class SignupActivity extends Activity implements View.OnClickListener {
         saving.put("UpdateTime",current);
         saving.put("DailyTime",current);
         saving.put("DailyAmount",0);
-        saving.saveInBackground(new SaveCallback() {
+        debit.saveInBackground(new SaveCallback() {
+            @Override
             public void done(ParseException e) {
-                if (e != null) {
-                    stopLoading();
-                    alertMsg("User Account Sign Up Failed", e.getMessage());
-                } else {
-                    // Set up a new User
-                    ParseUser user = new ParseUser();
-                    user.setUsername(username);
-                    user.setPassword(password1);
-                    user.put("firstname", firstname);
-                    user.put("lastname", lastname);
-                    user.setEmail(email);
-                    user.put("admin", false);
-                    user.put("Debitaccount", debit);
-                    user.put("Creditaccount", credit);
-                    user.put("Savingaccount", saving);
-                    user.put("Disable",false);
-                    // Call the Parse signup method
-                    user.signUpInBackground(new SignUpCallback() {
-                        public void done(ParseException e) {
-                            stopLoading();
-                            if (e != null) {
-                                debit.deleteInBackground();
-                                credit.deleteInBackground();
-                                saving.deleteInBackground();
-                                alertMsg("User Sign Up Failed", e.getMessage());
-                            } else {
-                                //sign up successful
-                                clearAlltext();
-                                finishTag = true;
-                                alertMsg("Success!", "You have successfully signed up.");
-                            }
-                        }
-                    });
+                if(e!=null){
+                    if (e.getCode() == 100)
+                        alertMsg("Connection Failed", "Please check your Internet connection");
+                    else
+                        alertMsg("Debit Account Sign up Failed",e.getMessage());
                 }
-            }
-        });
+                credit.saveInBackground(new SaveCallback() {
+                    @Override
+                    public void done(ParseException e) {
+                        if(e!=null) {
+                            debit.deleteInBackground();
+                            if (e.getCode() == 100)
+                                alertMsg("Connection Failed", "Please check your Internet connection");
+                            else
+                                alertMsg("Credit Account Sign up Failed", e.getMessage());
+                        }
+                        saving.saveInBackground(new SaveCallback() {
+                            public void done(ParseException e) {
+                                if (e != null) {
+                                    stopLoading();
+                                    debit.deleteInBackground();
+                                    credit.deleteInBackground();
+                                    if (e.getCode() == 100)
+                                        alertMsg("Connection Failed", "Please check your Internet connection");
+                                    else
+                                        alertMsg("Saving Account Sign Up Failed", e.getMessage());
+                                } else {
+                                    // Set up a new User
+                                    ParseUser user = new ParseUser();
+                                    user.setUsername(username);
+                                    user.setPassword(password1);
+                                    user.put("firstname", firstname);
+                                    user.put("lastname", lastname);
+                                    user.setEmail(email);
+                                    user.put("admin", false);
+                                    user.put("Debitaccount", debit);
+                                    user.put("Creditaccount", credit);
+                                    user.put("Savingaccount", saving);
+                                    user.put("Disable",false);
+                                    // Call the Parse signup method
+                                    user.signUpInBackground(new SignUpCallback() {
+                                        public void done(ParseException e) {
+                                            stopLoading();
+                                            if (e != null) {
+                                                debit.deleteInBackground();
+                                                credit.deleteInBackground();
+                                                saving.deleteInBackground();
+                                                if (e.getCode() == 100)
+                                                    alertMsg("Connection Failed", "Please check your Internet connection");
+                                                else
+                                                    alertMsg("User Sign Up Failed", e.getMessage());
+                                            } else {
+                                                //sign up successful
+                                                clearAlltext();
+                                                finishTag = true;
+                                                alertMsg("Success!", "You have successfully signed up.");
+                                            }
+                                        }
+                                    });
+                                }
+                            }
+                        });
+                    }
+                });
+                    }
+                });
     }
 
     //this function will be using when need to clear the text user entered in the textfields
