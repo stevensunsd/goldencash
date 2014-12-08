@@ -8,12 +8,12 @@
 
 
     <string name="app_name">GoldenCash</string>
-    <string name="signin_textview">Sign in</string>
+    <string name="signin_textview">Welcome to GoldenCash Bank...</string>
     <string name="action_settings">Settings</string>
     <string name="Username_text">Username</string>
     <string name="password_text">Password</string>
-    <string name="signin_text">Sign in</string>
-    <string name="signup_text">Sign up</string>
+    <string name="signin_text">Log in</string>
+    <string name="signup_text"><u>New To GoldenCash</u></string>
     <string name="open_account_text">OPEN ACCOUNT</string>
     <string name="firstname_text">First Name</string>
     <string name="lastname_text">Last Name</string>
@@ -26,6 +26,8 @@
     <string name="account_type">CHOOSE TO ACTIVATE ACCOUNT:</string>
     <string name="Choose_Account_From">Choose an account transfer from:</string>
     <string name="Choose_Account_To">Choose an account transfer to:</string>
+    <string name="Transfer"><u>Transfer to Other User Account</u></string>
+    <string name="ForgetPassword"><u>Forgot Password?</u></string>
 
     <string name="ERROR_password"
         >The Username or Password you entered is incorrect.</string>

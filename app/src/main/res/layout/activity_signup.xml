@@ -4,7 +4,8 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="fill_parent"
+    android:background="@drawable/icon2"
     >
 
     <LinearLayout
@@ -71,16 +72,14 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:text="@string/account_type"
-        android:id="@+id/account_type" />
+        android:id="@+id/account_type"
+        android:layout_marginTop="20dp"/>
 
     <CheckBox
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/Debit_account"
-        android:id="@+id/check_debit" />
-
-
-
+        android:id="@+id/check_debit"/>
 
     <CheckBox
         android:layout_width="wrap_content"
@@ -94,6 +93,10 @@
         android:text="@string/Credit_Account"
         android:id="@+id/check_credit" />
 
+<RelativeLayout
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="20dp">
 
     <Button
         android:layout_width="100dp"
@@ -104,8 +107,12 @@
     <Button
         android:layout_width="100dp"
         android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
         android:text="@string/button_cancel"
         android:id="@+id/button_cancel"/>
+
+    </RelativeLayout>
+
 
     </LinearLayout>
 </ScrollView>
