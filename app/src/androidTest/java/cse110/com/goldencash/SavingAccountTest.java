@@ -58,7 +58,7 @@ public class SavingAccountTest extends AndroidTestCase {
         //t_account.transfer("Saving", 15.50);
         //assertEquals("account has transferred 15.50 to anonymous account",
          //       t_account.getAmount(), 84.50);
-        t_account.transfer(t_acc2, 5.00);
+        t_account.transferOut(t_acc2, 5.00);
         assertEquals("account has transferred 95.10 to account #22", t_account.getAmount(), 95.10);
         assertNotNull("account has logs", t_account.getLog());
     }

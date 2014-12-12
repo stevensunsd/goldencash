@@ -3,21 +3,38 @@ package cse110.com.goldencash;
 import android.app.Instrumentation;
 import android.test.ActivityInstrumentationTestCase2;
 import android.test.UiThreadTest;
+import android.util.Log;
+import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.parse.Parse;
+import com.parse.ParseUser;
+
+import cse110.com.goldencash.modelAccount.Account;
+
 public class TransactionActivityTest extends ActivityInstrumentationTestCase2<TransactionActivity> {
 
     private TransactionActivity t_transact;
     Button t_confirm;
     Button t_transfer;
-    // Account t_account; // add later
-    boolean t_mode;
+
+    User t_user;
+    private Account t_debit;
+    private Account t_credit;
+    private Account t_saving;
+
+    private Account sourceAccount = t_debit;
+    private AccountRule t_rule = new AccountRule();
+    private String t_email;
 
     public static final int DPVALUE = -2;
+    public static final String MAIN_STRING = "1XwyXTQlIQDuwcjETTTmvEaysvJVZLsSasuxibY3";
+    public static final String CLIENT_STRING = "hQIEN0MfhYKiBPCHsPZ6djei7myOjcRpX56Cd4Xc";
+    public static final String EMAIL_ADDR = "velocity@cceleration.com";
 
     public TransactionActivityTest() {
         super(TransactionActivity.class);
@@ -25,18 +42,32 @@ public class TransactionActivityTest extends ActivityInstrumentationTestCase2<Tr
 
     @Override
     protected void setUp() throws Exception {
-        super.setUp();
         setActivityInitialTouchMode(true);
         t_transact = getActivity();
+        Parse.initialize(t_transact, MAIN_STRING, CLIENT_STRING);
+        ParseUser.enableAutomaticUser();
+
+        t_user = new User();
 
         t_confirm = (Button) t_transact.findViewById(R.id.button_confirm_transaction);
         t_transfer = (Button) t_transact.findViewById(R.id.button_transfer_to_account);
+        t_email = "";
+        t_debit = t_user.getAccount2("Debit");
+        t_credit = t_user.getAccount2("Credit");
+        t_saving = t_user.getAccount2("Saving");
     }
 
     public void testPreconditions() {
         assertNotNull("transact is not null", t_transact);
         assertNotNull("confirm button is not null", t_confirm);
-        assertNotNull("tranfser button is not null", t_transfer);
+        assertNotNull("transfer button is not null", t_transfer);
+        assertNotNull("email string is not null", t_email);
+        assertNotNull("transact is not null", t_transact);
+        assertNotNull("user is not null", t_user);
+        assertNotNull("debit account is not null", t_debit);
+        assertNotNull("credit account is not null", t_credit);
+        assertNotNull("saving account is not null", t_saving);
+
     }
 
     @UiThreadTest
@@ -71,4 +102,13 @@ public class TransactionActivityTest extends ActivityInstrumentationTestCase2<Tr
                 }
         );
     }
+
+    public void testMisc() {
+        // most of the actual transfer functions are already tested in the AccountTests
+        t_email = EMAIL_ADDR;
+        assertEquals(t_email, "velocity@cceleration.com");
+        assertTrue(t_rule.canTransferToAnother(sourceAccount,t_credit,20));
+        assertTrue(t_rule.canDeposit(t_saving,15.50).first);
+    }
+
 }

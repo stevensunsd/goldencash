@@ -75,7 +75,7 @@ public class CreditAccountTest extends AndroidTestCase {
         //t_account.transfer("Debit", 15.50);
         //assertEquals("account has transferred 15.50 to anonymous account",
          //       t_account.getAmount(), 84.50);
-        t_account.transfer(t_acc2, 14.50);
+        t_account.transferOut(t_acc2, 14.50);
         assertEquals("account has transferred 14.50 to account #2", t_account.getAmount(), 85.5);
         assertNotNull("account has logs", t_account.getLog());
     }
