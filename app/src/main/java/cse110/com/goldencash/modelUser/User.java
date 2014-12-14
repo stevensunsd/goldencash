@@ -60,8 +60,8 @@ public class User extends ParseUser {
         user.logOut();
     }
     public String getEmail(){return user.getString("email");}
-    /*
-    // need to remove this one
+    /**
+     * @deprecated
     public Account getAccount() {
              Account account = (Account) user.getParseObject("account");
              try {

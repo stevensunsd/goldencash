@@ -69,17 +69,6 @@ public class CustomerMainActivity extends Activity {
         });
         setAdapter();
     }
-    /*
-    @Override
-    public void onRestart() {
-        super.onRestart();
-        //When BACK BUTTON is pressed, the activity on the stack is restarted
-        //Do what you want on the refresh procedure here
-        debit = user.getAccount2("Debit");
-        credit = user.getAccount2("Credit");
-        saving = user.getAccount2("Saving");
-    }
-    */
 
     /**
      * this method set correct adapter to listview
@@ -266,7 +255,7 @@ public class CustomerMainActivity extends Activity {
     }
 
     /**
-     * showing an alert message on the screen
+     * showing an alert message on current screen
      * @param title
      * @param msg
      */

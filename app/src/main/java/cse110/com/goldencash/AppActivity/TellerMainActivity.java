@@ -293,7 +293,7 @@ public class TellerMainActivity extends Activity{
     }
 
     /**
-     * show an alert message on screen
+     * show an alert message on current screen
      */
     private void alertMsg(String title, String msg){
         //build dialog
