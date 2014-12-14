@@ -231,7 +231,7 @@ public class AccountsActivity extends Activity{
                     double value = Double.parseDouble(input.getText().toString());
                     value = NumberFormater(value);
                     Account account = accountArray.get(index);
-                    Pair<Boolean, String> resultPair = rule.canWithdraw(account, value);
+                    Pair<Boolean, String> resultPair = rule.canDeposit(account, value);
                     if (resultPair.first) {
                         account.deposit(value);
                         alertMsg("Success", "You have deposited $" + value);
