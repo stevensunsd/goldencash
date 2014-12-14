@@ -30,6 +30,7 @@ public class SigninActivity extends Activity implements View.OnClickListener {
     private Button forgotButton;
     private int wrongInfo_counter = 0;
     private String username;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -54,6 +54,9 @@ public class TellerMainActivity extends Activity{
     private ArrayList<Account> accountArray = new ArrayList<Account>();
     private Rule rule = new Rule();
 
+    /**
+     * find all required text views
+     */
     private void setupTextViews(){
         usernameText = (TextView) findViewById(R.id.accounts_username);
         nameText = (TextView) findViewById(R.id.accounts_name);
@@ -62,6 +65,9 @@ public class TellerMainActivity extends Activity{
         accountEmailText = (TextView)findViewById(R.id.accounts_email);
     }
 
+    /**
+     * get all the user that need to show
+     */
     private void getUser(){
         setProgressBarIndeterminateVisibility(true);
         Log.d("getting user","id: "+getIntent().getStringExtra("username"));
@@ -104,13 +110,10 @@ public class TellerMainActivity extends Activity{
         // account = user.getAccount();
     }
 
-
-    private void refreshData() {
-        Intent intent = new Intent(TellerMainActivity.this, TellerMainActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(intent);
-    }
-
+    /**
+     * set up adapter array for listview
+     * @return
+     */
     private ArrayList<String> setAdapterarray(){
         ArrayList<String> account_list=new ArrayList<String>();
         credit.applyInterest();
@@ -137,6 +140,9 @@ public class TellerMainActivity extends Activity{
         return account_list;
     }
 
+    /**
+     * set adapter to listview
+     */
     private void setAdapter(){
         ArrayList<String> data = setAdapterarray();
         adapter = new ArrayAdapter<String>(this,
@@ -144,6 +150,7 @@ public class TellerMainActivity extends Activity{
         // Assign adapter to ListView
         listview.setAdapter(adapter);
     }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -185,6 +192,10 @@ public class TellerMainActivity extends Activity{
 
     }
 
+    /**
+     * showing a selection box with option of accounts
+     * @param id
+     */
     protected void selectionBox(long id){
         final int index = (int)id;
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -214,6 +225,10 @@ public class TellerMainActivity extends Activity{
         alert.show();
     }
 
+    /**
+     * showing a edit dialog for deposit input on screen
+     * @param id
+     */
     protected void editDeposit( long id) {
         final int index = (int) id;
         final EditText input = new EditText(this);
@@ -242,6 +257,11 @@ public class TellerMainActivity extends Activity{
         });
         builder.show();
     }
+
+    /**
+     * showing a edit dialog for withdraw input on screen
+     * @param id
+     */
     protected void editWithdraw(long id) {
         final EditText input = new EditText(this);
         input.setHint("$");
@@ -271,6 +291,10 @@ public class TellerMainActivity extends Activity{
         });
         builder.show();
     }
+
+    /**
+     * show an alert message on screen
+     */
     private void alertMsg(String title, String msg){
         //build dialog
         AlertDialog.Builder builder= new AlertDialog.Builder(this);
@@ -285,11 +309,21 @@ public class TellerMainActivity extends Activity{
         builder.show();
     }
 
+    /**
+     * Number formatter for money
+     * @param value
+     * @return
+     */
     private double NumberFormater(double value) {
         BigDecimal number = new BigDecimal(value);
         return number.setScale(2,BigDecimal.ROUND_HALF_UP).doubleValue();
     }
 
+    /**
+     * validates input number for money
+     * @param input
+     * @return
+     */
     private boolean isValidInput(EditText input){
         String s = input.getText().toString();
         //Double d = Double.parseDouble(s);

@@ -48,6 +48,7 @@ public class SignupActivity extends Activity implements View.OnClickListener {
     boolean finishTag = false;
 
     protected ProgressDialog proDialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

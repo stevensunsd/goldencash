@@ -44,12 +44,13 @@ public class CustomerMainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // 11. Add a spinning progress bar (and make sure it's off)
+        // Add a spinning progress bar (and make sure it's off)
         requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         setProgressBarIndeterminateVisibility(false);
 
         setTitle("Welcome, "+user.getFirstName());
         setContentView(R.layout.activity_customermain);
+
         accountNumberText = (TextView) findViewById(R.id.customer_main_account_number);
         accountNumberText.setText("Account Number: "+debit.getAccountNumber());
         //get listview from XML
@@ -80,6 +81,9 @@ public class CustomerMainActivity extends Activity {
     }
     */
 
+    /**
+     * this method set correct adapter to listview
+     */
     private void setAdapter(){
         ArrayList<String> templist=setAdapterarray();
         adapter = new ArrayAdapter<String>(this,
@@ -90,6 +94,10 @@ public class CustomerMainActivity extends Activity {
 
     }
 
+    /**
+     * setup the array for the adapter
+     * @return
+     */
     private ArrayList<String> setAdapterarray(){
         ArrayList<String> account_list=new ArrayList<String>();
         credit.applyInterest();
@@ -149,6 +157,9 @@ public class CustomerMainActivity extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * log out customer
+     */
     private void customerLogOut(){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Log Out?");
@@ -166,6 +177,9 @@ public class CustomerMainActivity extends Activity {
         alert.show();
     }
 
+    /**
+     * close the account that is selected
+     */
     private void closeAccount(){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         final ArrayList list = new ArrayList();
@@ -203,18 +217,38 @@ public class CustomerMainActivity extends Activity {
         //show dialog on screen
         alert.show();
     }
+
+    /**
+     * go to sign in activity
+     */
     private void gotoSigninActtivity(){
         Intent intent = new Intent(this,SigninActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
     }
 
+    /**
+     * go to transaction activity
+     */
     private void gotoTransactionPage(){
         Intent intent = new Intent(this,TransactionActivity.class);
         //intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
     }
 
+    /**
+     * go to sign in activity
+     */
+    private void gotoSigninPage(){
+        Intent intent = new Intent(this,SigninActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+    }
+
+    /**
+     * go to statement activity
+     * @param i
+     */
     private void gotoStatementsPage(int i){
         Intent intent = new Intent(this, StatementsActivity.class);
         Log.d("CustomerMain","go Statement with: "+accountArray.get(i).getAccounttype());
@@ -222,12 +256,20 @@ public class CustomerMainActivity extends Activity {
         startActivity(intent);
     }
 
+    /**
+     * refresh current display
+     */
     private void refreshData() {
         Intent intent = new Intent(CustomerMainActivity.this, CustomerMainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
     }
 
+    /**
+     * showing an alert message on the screen
+     * @param title
+     * @param msg
+     */
     private void alertMsg(String title, String msg){
         //build dialog
         AlertDialog.Builder builder= new AlertDialog.Builder(this);
@@ -242,9 +284,5 @@ public class CustomerMainActivity extends Activity {
         builder.show();
     }
 
-    private void gotoSigninPage(){
-        Intent intent = new Intent(this,SigninActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(intent);
-    }
+
 }

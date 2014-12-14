@@ -41,6 +41,9 @@ public class StatementsActivity extends Activity {
         });
     }
 
+    /**
+     * setup views for showing statement
+     */
     private void getStatementOnScreen(){
         statmentTV = (TextView) findViewById(R.id.statement_text);
         statmentTV.setText(user.getAccount2(account).getLog());
