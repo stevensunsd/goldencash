@@ -5,6 +5,8 @@ import com.parse.Parse;
 import com.parse.ParseObject;
 import android.app.Application;
 
+import cse110.com.goldencash.modelUser.User;
+
 public class App extends Application {
     @Override
     public void onCreate() {

@@ -1,18 +1,14 @@
 package cse110.com.goldencash;
 
 import android.test.ActivityInstrumentationTestCase2;
-import android.test.UiThreadTest;
-import android.view.ViewGroup;
-import android.view.WindowManager;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.parse.Parse;
 import com.parse.ParseUser;
 
+import cse110.com.goldencash.AppActivity.CustomerMainActivity;
 import cse110.com.goldencash.modelAccount.Account;
+import cse110.com.goldencash.modelUser.User;
 
 public class CustomerMainActivityTest extends ActivityInstrumentationTestCase2<CustomerMainActivity> {
 

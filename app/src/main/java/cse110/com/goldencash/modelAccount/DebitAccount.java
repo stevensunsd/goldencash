@@ -2,11 +2,6 @@ package cse110.com.goldencash.modelAccount;
 
 import com.parse.ParseClassName;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
-import cse110.com.goldencash.User;
-
 @ParseClassName("DebitAccount")
 public class DebitAccount extends Account {
     private int dailyAmount;

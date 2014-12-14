@@ -1,4 +1,4 @@
-package cse110.com.goldencash;
+package cse110.com.goldencash.AppActivity;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -12,6 +12,8 @@ import android.widget.EditText;
 import com.parse.ParseException;
 import com.parse.ParseUser;
 import com.parse.RequestPasswordResetCallback;
+
+import cse110.com.goldencash.R;
 
 /**
  * Created by Xin Wen on 12/4/2014.

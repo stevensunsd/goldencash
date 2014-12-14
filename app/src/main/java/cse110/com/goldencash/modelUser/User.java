@@ -1,4 +1,4 @@
-package cse110.com.goldencash;
+package cse110.com.goldencash.modelUser;
 
 import android.util.Log;
 

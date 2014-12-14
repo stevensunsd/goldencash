@@ -1,14 +1,14 @@
 package cse110.com.goldencash;
 
-import android.app.Instrumentation;
 import android.test.ActivityInstrumentationTestCase2;
 import android.test.UiThreadTest;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
+
+import cse110.com.goldencash.AppActivity.ResetPasswordActivity;
 
 /**
  * Created by ADMV on 12/4/2014.

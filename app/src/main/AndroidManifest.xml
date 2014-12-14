@@ -13,18 +13,18 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
 
-        <activity android:name=".SigninActivity"  android:label="@string/app_name">
+        <activity android:name=".AppActivity.SigninActivity"  android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".SignupActivity"/>
-        <activity android:name=".AccountsActivity"/>
-        <activity android:name=".UserListActivity"/>
-        <activity android:name=".CustomerMainActivity"/>
-        <activity android:name=".TransactionActivity"/>
-        <activity android:name=".StatementsActivity"/>
-        <activity android:name=".ResetPasswordActivity"/>
+        <activity android:name=".AppActivity.SignupActivity"/>
+        <activity android:name=".AppActivity.TellerMainActivity"/>
+        <activity android:name=".AppActivity.UserListActivity"/>
+        <activity android:name=".AppActivity.CustomerMainActivity"/>
+        <activity android:name=".AppActivity.TransactionActivity"/>
+        <activity android:name=".AppActivity.StatementsActivity"/>
+        <activity android:name=".AppActivity.ResetPasswordActivity"/>
     </application>
 </manifest>

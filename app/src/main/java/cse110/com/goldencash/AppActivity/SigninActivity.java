@@ -1,4 +1,4 @@
-package cse110.com.goldencash;
+package cse110.com.goldencash.AppActivity;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -17,6 +17,9 @@ import com.parse.ParseException;
 import com.parse.ParseUser;
 
 import android.app.ProgressDialog;import com.parse.LogInCallback;
+
+import cse110.com.goldencash.R;
+import cse110.com.goldencash.modelUser.User;
 
 public class SigninActivity extends Activity implements View.OnClickListener {
 
@@ -121,9 +124,9 @@ public class SigninActivity extends Activity implements View.OnClickListener {
                             alertMsg("Connection Failed", "Please check your Internet connection");
                         } else {
                             // Show the error message for general fail
-                            if(username.equals(username_field.getText().toString()))
+                            if (username.equals(username_field.getText().toString()))
                                 wrongInfo_counter++;
-                            if(wrongInfo_counter==3)
+                            if (wrongInfo_counter == 3)
                                 alertMsg("Logging in Fail", "Your account has been blocked, Please contact Customer Service.\"");
                             alertMsg("Sign in failed", "Invalid username or password.");
                         }

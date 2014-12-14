@@ -1,11 +1,10 @@
-package cse110.com.goldencash;
+package cse110.com.goldencash.AppActivity;
 
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Message;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
@@ -22,6 +21,9 @@ import com.parse.ParseUser;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import cse110.com.goldencash.R;
+import cse110.com.goldencash.modelUser.User;
 
 /**
  * Created by Xin Wen on 11/9/14.
@@ -93,7 +95,7 @@ public class UserListActivity extends Activity
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
         String username = parseObjects.get(i).getString("username");
         String userId = parseObjects.get(i).getObjectId();
-        Intent intent = new Intent(this, AccountsActivity.class);
+        Intent intent = new Intent(this, TellerMainActivity.class);
         intent.putExtra("username",username);
         intent.putExtra("userId",userId);
         startActivity(intent);

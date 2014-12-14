@@ -1,4 +1,4 @@
-package cse110.com.goldencash;
+package cse110.com.goldencash.AppActivity;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -22,6 +22,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
+import cse110.com.goldencash.R;
 import cse110.com.goldencash.modelAccount.*;
 import cse110.com.goldencash.modelAccount.Account;
 

@@ -1,27 +1,11 @@
 package cse110.com.goldencash;
 
-import android.app.Activity;
-import android.content.Context;
-import android.content.Intent;
 import android.test.AndroidTestCase;
-import android.test.RenamingDelegatingContext;
-import android.test.TouchUtils;
-import android.test.UiThreadTest;
-import android.test.mock.MockContext;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.WindowManager;
-import android.widget.Button;
-import android.widget.EditText;
-import com.parse.GetCallback;
+
 import com.parse.Parse;
-import com.parse.ParseClassName;
-import com.parse.ParseException;
-import com.parse.ParseObject;
-import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
-import junit.framework.TestCase;
+import cse110.com.goldencash.modelUser.User;
 
 /**
  * Created by ADMV on 11/21/2014.

@@ -1,4 +1,4 @@
-package cse110.com.goldencash;
+package cse110.com.goldencash.AppActivity;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -19,19 +19,19 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.parse.FindCallback;
-import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
-import com.parse.SaveCallback;
-import com.parse.SignUpCallback;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
+import cse110.com.goldencash.R;
 import cse110.com.goldencash.modelAccount.Account;
+import cse110.com.goldencash.modelAccount.Rule;
+import cse110.com.goldencash.modelUser.User;
 
 /**
  * Created by Xin Wen on 11/20/14.
@@ -52,7 +52,7 @@ public class TransactionActivity extends Activity{
     private cse110.com.goldencash.modelAccount.Account saving = user.getAccount2("Saving");
 
     private Account sourceAccount = debit;
-    private AccountRule rule = new AccountRule();
+    private Rule rule = new Rule();
     private String email;
 
     @Override

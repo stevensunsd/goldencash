@@ -1,4 +1,4 @@
-package cse110.com.goldencash;
+package cse110.com.goldencash.AppActivity;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -19,7 +19,9 @@ import com.parse.ParseUser;
 
 import java.util.ArrayList;
 
+import cse110.com.goldencash.R;
 import cse110.com.goldencash.modelAccount.Account;
+import cse110.com.goldencash.modelUser.User;
 
 /**
  * Created by Xin Wen on 11/17/14.

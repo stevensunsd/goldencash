@@ -1,20 +1,18 @@
 package cse110.com.goldencash;
 
-import android.app.Instrumentation;
 import android.test.ActivityInstrumentationTestCase2;
 import android.test.UiThreadTest;
-import android.util.Log;
-import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
 
 import com.parse.Parse;
 import com.parse.ParseUser;
 
+import cse110.com.goldencash.AppActivity.TransactionActivity;
 import cse110.com.goldencash.modelAccount.Account;
+import cse110.com.goldencash.modelAccount.Rule;
+import cse110.com.goldencash.modelUser.User;
 
 public class TransactionActivityTest extends ActivityInstrumentationTestCase2<TransactionActivity> {
 
@@ -28,7 +26,7 @@ public class TransactionActivityTest extends ActivityInstrumentationTestCase2<Tr
     private Account t_saving;
 
     private Account sourceAccount = t_debit;
-    private AccountRule t_rule = new AccountRule();
+    private Rule t_rule = new Rule();
     private String t_email;
 
     public static final int DPVALUE = -2;

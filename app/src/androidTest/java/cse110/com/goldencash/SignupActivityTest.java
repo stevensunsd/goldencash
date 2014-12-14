@@ -1,18 +1,15 @@
 package cse110.com.goldencash;
 
-import android.app.Activity;
-import android.app.ProgressDialog;
-import android.content.Intent;
 import android.test.ActivityInstrumentationTestCase2;
-import android.test.TouchUtils;
 import android.test.UiThreadTest;
-import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
+
+import cse110.com.goldencash.AppActivity.SignupActivity;
 
 /**
  * Created by ADMV on 11/14/2014.

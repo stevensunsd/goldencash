@@ -1,4 +1,4 @@
-package cse110.com.goldencash;
+package cse110.com.goldencash.AppActivity;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -8,7 +8,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import cse110.com.goldencash.modelAccount.Account;
+import cse110.com.goldencash.R;
+import cse110.com.goldencash.modelUser.User;
 
 /**
  * Created by Xin Wen on 11/30/2014.

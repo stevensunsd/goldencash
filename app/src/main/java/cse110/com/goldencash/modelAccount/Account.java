@@ -1,8 +1,5 @@
 package cse110.com.goldencash.modelAccount;
 
-import android.app.ProgressDialog;
-import android.util.Log;
-
 import com.parse.ParseObject;
 import com.parse.ParseClassName;
 
@@ -11,12 +8,12 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
 
-import cse110.com.goldencash.User;
-import cse110.com.goldencash.AccountRule;
+import cse110.com.goldencash.modelUser.User;
+
 @ParseClassName("Account")
 public abstract class Account extends ParseObject {
     protected String accountType;
-    private AccountRule rule = new AccountRule();
+    private Rule rule = new Rule();
     private User user = new User();
     public Account() {
 

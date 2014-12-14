@@ -1,4 +1,4 @@
-package cse110.com.goldencash;
+package cse110.com.goldencash.modelAccount;
 
 /**
  * Created by Yang on 12/3/2014.
@@ -11,7 +11,7 @@ import java.util.Date;
 
 import cse110.com.goldencash.modelAccount.Account;
 
-public class AccountRule {
+public class Rule {
     private boolean checkSufficientFund(double balance, double charge) {
         return balance - charge >= 0;
     }

@@ -1,7 +1,6 @@
-package cse110.com.goldencash;
+package cse110.com.goldencash.AppActivity;
 
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,11 +8,8 @@ import android.app.Activity;
 import android.text.InputType;
 import android.util.Log;
 import android.util.Pair;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
-import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -23,27 +19,27 @@ import android.widget.Toast;
 
 //Our class
 import com.parse.FindCallback;
-import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
 import java.math.BigDecimal;
-import org.w3c.dom.Text;
 
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Date;
 
+import cse110.com.goldencash.R;
 import cse110.com.goldencash.modelAccount.Account;
+import cse110.com.goldencash.modelAccount.Rule;
+import cse110.com.goldencash.modelUser.User;
 
 
 /**
  * Created by Xin Wen on 10/27/14.
  */
-public class AccountsActivity extends Activity{
+public class TellerMainActivity extends Activity{
 
     ListView listview;
     private TextView usernameText, nameText, lastloginText, accountNumberText,accountEmailText;
@@ -56,7 +52,7 @@ public class AccountsActivity extends Activity{
 
     protected ArrayAdapter<String> adapter;
     private ArrayList<Account> accountArray = new ArrayList<Account>();
-    private AccountRule rule = new AccountRule();
+    private Rule rule = new Rule();
 
     private void setupTextViews(){
         usernameText = (TextView) findViewById(R.id.accounts_username);
@@ -110,7 +106,7 @@ public class AccountsActivity extends Activity{
 
 
     private void refreshData() {
-        Intent intent = new Intent(AccountsActivity.this, AccountsActivity.class);
+        Intent intent = new Intent(TellerMainActivity.this, TellerMainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
     }
