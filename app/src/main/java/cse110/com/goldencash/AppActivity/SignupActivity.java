@@ -23,6 +23,8 @@ import java.util.List;
 import java.util.Random;
 
 import cse110.com.goldencash.R;
+import cse110.com.goldencash.SideFunctionFacade;
+import cse110.com.goldencash.SideFunctionFacadeImp;
 import cse110.com.goldencash.modelAccount.*;
 import cse110.com.goldencash.modelAccount.Account;
 
@@ -48,6 +50,7 @@ public class SignupActivity extends Activity implements View.OnClickListener {
     boolean finishTag = false;
 
     protected ProgressDialog proDialog;
+    protected SideFunctionFacade sff = new SideFunctionFacadeImp();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,22 +85,22 @@ public class SignupActivity extends Activity implements View.OnClickListener {
 
     //A chain of methods to validate all fields that user entered
     private void checkInputFields(){
-        if(isEmpty(username)) {
+        if(sff.isEmpty(username)) {
             alertMsg("Sign Up Failed", "Please Enter Username");
         }
-        else if(isEmpty(password1)||isEmpty(password2)){
+        else if(sff.isEmpty(password1)||sff.isEmpty(password2)){
             alertMsg("Sign Up Failed", "Please Enter Password");
         }
         else if(!password1.equals(password2)) {
             alertMsg("Sign Up Failed", "The passwords do not match");
         }
-        else if (isEmpty(firstname)||isEmpty(lastname)){
+        else if (sff.isEmpty(firstname)||sff.isEmpty(lastname)){
             alertMsg("Sign Up Failed", "Please Enter Firstname or Lastname");
         }
         else if (!(firstname.matches("[a-zA-Z]+")) || !(lastname.matches("[a-zA-Z]+"))) {
             alertMsg("Sign Up Failed", "Please only enter letters for names.");
         }
-        else if(isEmpty(email)){
+        else if(sff.isEmpty(email)){
             alertMsg("Sign Up Failed", "Please Enter an Email Address");
         }
         else if(!openCredit && !openDebit &&!openSaving) {
@@ -245,10 +248,6 @@ public class SignupActivity extends Activity implements View.OnClickListener {
         AlertDialog alert = builder.create();
         //show dialog on screen
         alert.show();
-    }
-
-    private boolean isEmpty(String s) {
-        return s.trim().length() > 0 ? false : true;
     }
 
     protected void startLoading() {

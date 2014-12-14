@@ -34,9 +34,9 @@ public class CustomerMainActivity extends Activity {
     protected TextView accountNumberText;
 
     protected User user = new User();
-    private cse110.com.goldencash.modelAccount.Account debit = user.getAccount2("Debit");
-    private cse110.com.goldencash.modelAccount.Account credit = user.getAccount2("Credit");
-    private cse110.com.goldencash.modelAccount.Account saving = user.getAccount2("Saving");
+    private cse110.com.goldencash.modelAccount.Account debit = user.getAccount("Debit");
+    private cse110.com.goldencash.modelAccount.Account credit = user.getAccount("Credit");
+    private cse110.com.goldencash.modelAccount.Account saving = user.getAccount("Saving");
 
     private ArrayList<Account> accountArray = new ArrayList<Account>();
 
@@ -69,17 +69,6 @@ public class CustomerMainActivity extends Activity {
         });
         setAdapter();
     }
-    /*
-    @Override
-    public void onRestart() {
-        super.onRestart();
-        //When BACK BUTTON is pressed, the activity on the stack is restarted
-        //Do what you want on the refresh procedure here
-        debit = user.getAccount2("Debit");
-        credit = user.getAccount2("Credit");
-        saving = user.getAccount2("Saving");
-    }
-    */
 
     /**
      * this method set correct adapter to listview

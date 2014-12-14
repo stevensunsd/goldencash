@@ -29,6 +29,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cse110.com.goldencash.R;
+import cse110.com.goldencash.SideFunctionFacade;
+import cse110.com.goldencash.SideFunctionFacadeImp;
 import cse110.com.goldencash.modelAccount.Account;
 import cse110.com.goldencash.modelAccount.Rule;
 import cse110.com.goldencash.modelUser.User;
@@ -47,13 +49,14 @@ public class TransactionActivity extends Activity{
     private boolean transactionMode = false;
     protected User user = new User();
     private cse110.com.goldencash.modelAccount.Account targetAccount;
-    private cse110.com.goldencash.modelAccount.Account debit = user.getAccount2("Debit");
-    private cse110.com.goldencash.modelAccount.Account credit = user.getAccount2("Credit");
-    private cse110.com.goldencash.modelAccount.Account saving = user.getAccount2("Saving");
+    private cse110.com.goldencash.modelAccount.Account debit = user.getAccount("Debit");
+    private cse110.com.goldencash.modelAccount.Account credit = user.getAccount("Credit");
+    private cse110.com.goldencash.modelAccount.Account saving = user.getAccount("Saving");
 
     private Account sourceAccount = debit;
     private Rule rule = new Rule();
     private String email;
+    protected SideFunctionFacade sff = new SideFunctionFacadeImp();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -161,10 +164,10 @@ public class TransactionActivity extends Activity{
         }
         builder.setPositiveButton("Confirm",new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog,int which) {
-                if (isValidInput(input)) {
+                if (sff.isValidInput(input)) {
                     startLoading();
                     Double amount = Double.parseDouble(input.getText().toString());
-                    amount = NumberFormater(amount);
+                    amount = sff.NumberFormater(amount);
                     if (transactionMode) {
                         makeTransactionToOther(targetAccount, amount);
                     } else {
@@ -190,9 +193,9 @@ public class TransactionActivity extends Activity{
         }
     }
     private void makeTransaction(double amount,String from, String to){
-        Pair<Boolean, String> resultPair = rule.canDeposit(user.getAccount2(to),amount);
+        Pair<Boolean, String> resultPair = rule.canDeposit(user.getAccount(to),amount);
         if(resultPair.first) {
-            Pair<Boolean,String > result = rule.canTransfer(user.getAccount2(from), amount);
+            Pair<Boolean,String > result = rule.canTransfer(user.getAccount(from), amount);
             if (result.first) {
                 if (from.equals("Debit")) {
                     if (to.equals("Saving"))
@@ -225,11 +228,6 @@ public class TransactionActivity extends Activity{
     protected void stopLoading() {
         proDialog.dismiss();
         proDialog = null;
-    }
-
-    private double NumberFormater(double value) {
-        BigDecimal number = new BigDecimal(value);
-        return number.setScale(2,BigDecimal.ROUND_HALF_UP).doubleValue();
     }
 
     private void alertMsg(String title, String msg){
@@ -323,15 +321,5 @@ public class TransactionActivity extends Activity{
                 }
             });
         }
-    }
-    private boolean isValidInput(EditText input){
-        String s = input.getText().toString();
-        //Double d = Double.parseDouble(s);
-        if(s.matches("")){
-            return false;
-        }else if(!s.matches("[0-9.]+")){
-            return false;
-        }
-        return true;
     }
 }

@@ -41,9 +41,9 @@ public class CustomerMainActivityTest extends ActivityInstrumentationTestCase2<C
         t_number = (TextView) t_custom.findViewById(R.id.customer_main_account_number);
 
         t_user = new User();
-        t_debit = t_user.getAccount2("Debit");
-        t_credit = t_user.getAccount2("Credit");
-        t_saving = t_user.getAccount2("Saving");
+        t_debit = t_user.getAccount("Debit");
+        t_credit = t_user.getAccount("Credit");
+        t_saving = t_user.getAccount("Saving");
 
     }
 

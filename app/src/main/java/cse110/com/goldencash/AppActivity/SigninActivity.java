@@ -19,10 +19,18 @@ import com.parse.ParseUser;
 import android.app.ProgressDialog;import com.parse.LogInCallback;
 
 import cse110.com.goldencash.R;
+import cse110.com.goldencash.SideFunctionFacade;
+import cse110.com.goldencash.SideFunctionFacadeImp;
 import cse110.com.goldencash.modelUser.User;
 
+
+/**
+ *  Title: class SigninActivity
+ *  Description: User need to Signin for their account for the beginning
+ */
 public class SigninActivity extends Activity implements View.OnClickListener {
 
+    // initialize variable using to store input data
     private Button signinButton;
     private Button signupButton;
     private EditText username_field;
@@ -30,13 +38,14 @@ public class SigninActivity extends Activity implements View.OnClickListener {
     private Button forgotButton;
     private int wrongInfo_counter = 0;
     private String username;
+    protected SideFunctionFacade sff = new SideFunctionFacadeImp();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_signin);
-
+        // connect UI to the code
         signinButton = (Button) findViewById(R.id.signin_button);
         signinButton.setOnClickListener(this);
         signupButton = (Button) findViewById(R.id.signup_button);
@@ -69,14 +78,13 @@ public class SigninActivity extends Activity implements View.OnClickListener {
 
     @Override
     public void onClick(View view) {
-        //SignIn Button Clicked, Should have gone to a pop-up cover the main screen,
-        //then check the username and password with the database, if correct, jump
-        //to main screen, or false should return to the sign in screen.
+        // if user click signin Button
         if(findViewById(R.id.signin_button).equals(view)) {
-        //Log.d(getString(R.string.debugInfo_text), "Username entered: " +  username_field.getText().toString());
             checkInput();
+        // if user click signup Button
         }else if(findViewById(R.id.signup_button).equals(view)){
             gotoSignup();
+        // if user click resetPassword Button
         }else{
             gotoResetPassword();
         }
@@ -169,10 +177,10 @@ public class SigninActivity extends Activity implements View.OnClickListener {
     }
 
     private void checkInput(){
-        if(isEmpty(username_field.getText().toString())){
+        if(sff.isEmpty(username_field.getText().toString())){
             alertMsg("Log in failed", "Please Enter Username");
         }
-        else if (isEmpty(password_field.getText().toString())){
+        else if (sff.isEmpty(password_field.getText().toString())){
             alertMsg("Log in failed", "Please Enter Password");
         }
         else {
@@ -180,7 +188,5 @@ public class SigninActivity extends Activity implements View.OnClickListener {
         }
     }
 
-    private boolean isEmpty(String s) {
-        return s.trim().length() > 0 ? false : true;
-    }
+
 }

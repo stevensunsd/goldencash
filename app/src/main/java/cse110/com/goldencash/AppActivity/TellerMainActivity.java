@@ -2,7 +2,6 @@ package cse110.com.goldencash.AppActivity;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.app.Activity;
 import android.text.InputType;
@@ -31,6 +30,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cse110.com.goldencash.R;
+import cse110.com.goldencash.SideFunctionFacade;
+import cse110.com.goldencash.SideFunctionFacadeImp;
 import cse110.com.goldencash.modelAccount.Account;
 import cse110.com.goldencash.modelAccount.Rule;
 import cse110.com.goldencash.modelUser.User;
@@ -53,6 +54,7 @@ public class TellerMainActivity extends Activity{
     protected ArrayAdapter<String> adapter;
     private ArrayList<Account> accountArray = new ArrayList<Account>();
     private Rule rule = new Rule();
+    protected SideFunctionFacade sff = new SideFunctionFacadeImp();
 
     /**
      * find all required text views
@@ -238,9 +240,9 @@ public class TellerMainActivity extends Activity{
         builder.setTitle("Please Enter Deposit Amount").setIcon(android.R.drawable.ic_dialog_info).setView(input).setNegativeButton("Cancel",null);
         builder.setPositiveButton("Confirm",new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog,int which) {
-                if(isValidInput(input)) {
+                if(sff.isValidInput(input)) {
                     double value = Double.parseDouble(input.getText().toString());
-                    value = NumberFormater(value);
+                    value = sff.NumberFormater(value);
                     Account account = accountArray.get(index);
                     Pair<Boolean, String> resultPair = rule.canDeposit(account, value);
                     if (resultPair.first) {
@@ -271,9 +273,9 @@ public class TellerMainActivity extends Activity{
         builder.setTitle("Please Enter Withdraw Amount").setIcon(android.R.drawable.ic_dialog_info).setView(input).setNegativeButton("Cancel",null);
         builder.setPositiveButton("Confirm",new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog,int which){
-                if(isValidInput(input)) {
+                if(sff.isValidInput(input)) {
                     double value = Double.parseDouble(input.getText().toString());
-                    value = NumberFormater(value);
+                    value = sff.NumberFormater(value);
                     Account account = accountArray.get(index);
 
                     Pair<Boolean, String> resultPair = rule.canWithdraw(account, value);
@@ -307,31 +309,5 @@ public class TellerMainActivity extends Activity{
                     }
                 });
         builder.show();
-    }
-
-    /**
-     * Number formatter for money
-     * @param value
-     * @return
-     */
-    private double NumberFormater(double value) {
-        BigDecimal number = new BigDecimal(value);
-        return number.setScale(2,BigDecimal.ROUND_HALF_UP).doubleValue();
-    }
-
-    /**
-     * validates input number for money
-     * @param input
-     * @return
-     */
-    private boolean isValidInput(EditText input){
-        String s = input.getText().toString();
-        //Double d = Double.parseDouble(s);
-        if(s.matches("")){
-            return false;
-        }else if(!s.matches("[0-9.]+")){
-            return false;
-        }
-        return true;
     }
 }

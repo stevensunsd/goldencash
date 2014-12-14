@@ -46,6 +46,6 @@ public class StatementsActivity extends Activity {
      */
     private void getStatementOnScreen(){
         statmentTV = (TextView) findViewById(R.id.statement_text);
-        statmentTV.setText(user.getAccount2(account).getLog());
+        statmentTV.setText(user.getAccount(account).getLog());
     }
 }

@@ -7,6 +7,8 @@ import com.parse.ParseClassName;
 import java.util.Date;
 
 
+import cse110.com.goldencash.SideFunctionFacade;
+import cse110.com.goldencash.SideFunctionFacadeImp;
 import cse110.com.goldencash.modelUser.User;
 
 @ParseClassName("Account")
@@ -129,7 +131,7 @@ public abstract class Account extends ParseObject {
     public void withdraw(double value) {
         put(accountType,getAmount() - value);
         //check rule then update Time
-        if(rule.isAmountCorsstheLine(user.getAccount2(accountType), -value))
+        if(rule.isAmountCorsstheLine(user.getAccount(accountType), -value))
             updateTime();
         addLog("Withdraw", value);
         updateDailyTime();

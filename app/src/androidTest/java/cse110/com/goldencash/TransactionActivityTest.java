@@ -50,9 +50,9 @@ public class TransactionActivityTest extends ActivityInstrumentationTestCase2<Tr
         t_confirm = (Button) t_transact.findViewById(R.id.button_confirm_transaction);
         t_transfer = (Button) t_transact.findViewById(R.id.button_transfer_to_account);
         t_email = "";
-        t_debit = t_user.getAccount2("Debit");
-        t_credit = t_user.getAccount2("Credit");
-        t_saving = t_user.getAccount2("Saving");
+        t_debit = t_user.getAccount("Debit");
+        t_credit = t_user.getAccount("Credit");
+        t_saving = t_user.getAccount("Saving");
     }
 
     public void testPreconditions() {

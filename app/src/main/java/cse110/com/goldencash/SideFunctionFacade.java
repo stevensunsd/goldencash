@@ -1,4 +1,6 @@
-package cse110.com.goldencash.modelAccount;
+package cse110.com.goldencash;
+
+import android.widget.EditText;
 
 import java.util.Date;
 
@@ -12,4 +14,6 @@ public interface SideFunctionFacade {
     public String stringFormater(String choose,double value);
     public double NumberFormater(double value);
     public boolean isOver30days(Date updateTime);
+    public boolean isEmpty(String s);
+    public boolean isValidInput(EditText input);
 }
