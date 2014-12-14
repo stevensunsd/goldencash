@@ -83,7 +83,9 @@ public class SignupActivity extends Activity implements View.OnClickListener {
         }
     }
 
-    //A chain of methods to validate all fields that user entered
+    /**
+     * A chain of methods to validate all criteria that user entered
+     */
     private void checkInputFields(){
         if(sff.isEmpty(username)) {
             alertMsg("Sign Up Failed", "Please Enter Username");
@@ -111,12 +113,17 @@ public class SignupActivity extends Activity implements View.OnClickListener {
         }
     }
 
-    //Networking with Parse for signup
+    /**
+     * Networking with Parse for signup
+     */
     private void processSignup() {
         startLoading();
         setupParse();
     }
 
+    /**
+     * initialize database object for this user.
+     */
     private void setupParse() {
         String accountnumber = new Random().nextInt(99999999) % (99999999 - 00000001 + 1) + 00000001 + "";
         String log = "\n";
@@ -218,6 +225,9 @@ public class SignupActivity extends Activity implements View.OnClickListener {
                 });
     }
 
+    /**
+     * Helper function to clear all text fields in current activity
+     */
     //this function will be using when need to clear the text user entered in the textfields
     protected void clearAlltext() {
         ViewGroup textFields = (ViewGroup) findViewById(R.id.signup_textFields);
@@ -229,6 +239,11 @@ public class SignupActivity extends Activity implements View.OnClickListener {
         }
     }
 
+    /**
+     * show an alert message on current activity.
+     * @param title
+     * @param msg
+     */
     protected void alertMsg(String title, String msg){
         //build dialog
         AlertDialog.Builder builder= new AlertDialog.Builder(this);

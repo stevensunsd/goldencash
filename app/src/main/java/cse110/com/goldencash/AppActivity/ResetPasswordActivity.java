@@ -85,7 +85,7 @@ public class ResetPasswordActivity extends Activity implements View.OnClickListe
     }
 
     /**
-     * showing an alert message on screen
+     * showing an alert message on current screen
      * @param title
      * @param msg
      */
@@ -110,6 +110,9 @@ public class ResetPasswordActivity extends Activity implements View.OnClickListe
         alert.show();
     }
 
+    /**
+     * Helper function for clear all text entered in text fields.
+     */
     //this function will be using when need to clear the text user entered in the textfields
     protected void clearAlltext() {
         ViewGroup textFields = (ViewGroup) findViewById(R.id.rp_viewgroup);

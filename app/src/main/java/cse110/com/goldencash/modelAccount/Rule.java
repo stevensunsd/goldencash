@@ -14,10 +14,21 @@ import java.util.Date;
  *  Description: Rule Object using for check condition during transaction
  */
 public class Rule {
+    /**
+     * validates if amount in an account is sufficient
+     * @param balance
+     * @param charge
+     * @return
+     */
     private boolean checkSufficientFund(double balance, double charge) {
         return balance - charge >= 0;
     }
 
+    /**
+     * validate daily time called by daily limit
+     * @param account
+     * @return
+     */
     private boolean isDailyTimeToday(Account account){
         Calendar cal1 = Calendar.getInstance();
         Calendar cal2 = Calendar.getInstance();
@@ -29,6 +40,12 @@ public class Rule {
         return sameDay;
     }
 
+    /**
+     * validate daily limit
+     * @param acc
+     * @param charge
+     * @return
+     */
     private boolean checkDailyLimit(Account acc, double charge) {
         double limit = 0;
         if (acc.getAccounttype().equals("Saving"))
@@ -49,6 +66,12 @@ public class Rule {
         return true;
     }
 
+    /**
+     * verify if Debit account can withdraw.
+     * @param acc
+     * @param charge
+     * @return a pair of result, first is validation status. second is error message.
+     */
     private Pair<Boolean,String> checkDebitWithdraw(Account acc, double charge) {
         double balance = acc.getAmount();
         if(!acc.isOpen()){
@@ -65,7 +88,12 @@ public class Rule {
         }
         return Pair.create(true,"");
     }
-
+    /**
+     * verify if Saving account can withdraw.
+     * @param acc
+     * @param charge
+     * @return a pair of result, first is validation status. second is error message.
+     */
     private Pair<Boolean,String> checkSavingWithdraw(Account acc, double charge) {
         double balance = acc.getAmount();
         if(!acc.isOpen()){
@@ -81,7 +109,12 @@ public class Rule {
         }
         return Pair.create(true, "");
     }
-
+    /**
+     * verify if an account can withdraw.
+     * @param acc
+     * @param charge
+     * @return a pair of result, first is validation status. second is error message.
+     */
     public Pair<Boolean, String> canWithdraw(Account acc, double charge) {
         if(charge <= 0.01){
             return Pair.create(false, "Amount has to be greater than $0.01");
@@ -99,7 +132,12 @@ public class Rule {
         else
             return Pair.create(false,"Account Type Error");
     }
-
+    /**
+     * verify if  account can deposit.
+     * @param acc
+     * @param value
+     * @return a pair of result, first is validation status. second is error message.
+     */
     public Pair<Boolean, String> canDeposit(Account acc, double value){
         if(value < 0.01){
             return Pair.create(false, "Amount has to be greater than $0.01");
@@ -108,17 +146,40 @@ public class Rule {
         }
         return Pair.create(true, "");
     }
-
+    /**
+     * verify if an account can transfer money.
+     * @param acc
+     * @param value
+     * @return a pair of result, first is validation status. second is error message.
+     */
     public Pair<Boolean, String> canTransfer(Account acc, double value) {
         return canWithdraw(acc, value);
     }
-
+    /**
+     * verify if an account can transfer fund to other user.
+     * @param source
+     * @param target
+     * @param value
+     * @return
+     */
     public boolean canTransferToAnother(Account source, Account target, double value) {
         return canWithdraw(source, value).first;
     }
+    /**
+     * verify if an account can be transferred in fund.
+     * @param account
+     * @return
+     */
     public boolean canTransferToThis(Account account){
         return account.isOpen();
     }
+
+    /**
+     * Helper rule to check if the amount is cross some pool.
+     * @param acc
+     * @param value
+     * @return
+     */
     public boolean isAmountCorsstheLine(Account acc, double value) {
         double original = acc.getAmount();
         double result = original - value;

@@ -255,7 +255,7 @@ public class CustomerMainActivity extends Activity {
     }
 
     /**
-     * showing an alert message on the screen
+     * showing an alert message on current screen
      * @param title
      * @param msg
      */
