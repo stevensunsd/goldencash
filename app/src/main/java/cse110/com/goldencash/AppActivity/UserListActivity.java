@@ -110,7 +110,6 @@ public class UserListActivity extends Activity
 
     @Override
     public void onBackPressed(){
-        //TODO:Show up log out dialog
         AdminLogOut();
     }
 
