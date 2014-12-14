@@ -24,7 +24,6 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -78,6 +77,9 @@ public class TransactionActivity extends Activity{
 
 
     }
+    /**
+     * add correct accounts to spinners.
+     */
     private void addItemsOnSpinners(){
         spinnerFrom = (Spinner) findViewById(R.id.spinner_transaction_from);
         spinnerTo = (Spinner) findViewById(R.id.spinner_transaction_to);
@@ -91,6 +93,10 @@ public class TransactionActivity extends Activity{
         spinnerFrom.setAdapter(createAdapter(list));
         //spinnerTo.setAdapter(adapter);
     }
+
+    /**
+     * add onclicklistener to buttons
+     */
     private void addListenerOnButton(){
         button = (Button)findViewById(R.id.button_confirm_transaction);
         transferButton = (Button)findViewById(R.id.button_transfer_to_account);
@@ -110,6 +116,10 @@ public class TransactionActivity extends Activity{
         });
 
     }
+
+    /**
+     * add click listener to spinner
+     */
     private void addListenerOnSpinnerItemSelection(){
 
         spinnerFrom.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -137,18 +147,29 @@ public class TransactionActivity extends Activity{
         //spinnerTo.setOnItemSelectedListener(this);
     }
 
+    /**
+     * setup adapter for listview.
+     * @param list
+     * @return
+     */
     private ArrayAdapter createAdapter(ArrayList list){
         ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item,list);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         return adapter;
     }
 
+    /**
+     * show an edit amount dialog on current screen.
+     * content will be differ from what kind of account selected.
+     */
     private void editbox() {
         final EditText input = new EditText(this);
         input.setHint("$");
         input.setInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL);
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Enter Amount").setIcon(android.R.drawable.ic_dialog_info).setView(input).setNegativeButton("Cancel",null);
+
+        //checking transaction boolean value to choose what content to show.
         if(transactionMode) {
             String[] options = {"From Checking Account", "From Saving Account"};
             int selected = 0; // or whatever you want
@@ -182,6 +203,12 @@ public class TransactionActivity extends Activity{
         });
         builder.show();
     }
+
+    /**
+     * make transaction to other user
+     * @param account
+     * @param value
+     */
     private void makeTransactionToOther(Account account,double value){
         if(rule.canTransferToAnother(sourceAccount,targetAccount,value)) {
             sourceAccount.transferOut(account, value);
@@ -192,6 +219,13 @@ public class TransactionActivity extends Activity{
             alertMsg("Failed","Insufficient fund in the "+sourceAccount.getAccounttype()+ " account.");
         }
     }
+
+    /**
+     * make transaction to other account that current user have
+     * @param amount
+     * @param from
+     * @param to
+     */
     private void makeTransaction(double amount,String from, String to){
         Pair<Boolean, String> resultPair = rule.canDeposit(user.getAccount(to),amount);
         if(resultPair.first) {
@@ -217,6 +251,9 @@ public class TransactionActivity extends Activity{
         }
     }
 
+    /**
+     * Helper methods to show loading HUD
+     */
     protected void startLoading() {
         proDialog = new ProgressDialog(this);
         proDialog.setMessage("Transferring...Please Wait");
@@ -230,6 +267,12 @@ public class TransactionActivity extends Activity{
         proDialog = null;
     }
 
+
+    /**
+     * show an error alert dialog on current activity
+     * @param title
+     * @param msg
+     */
     private void alertMsg(String title, String msg){
         //build dialog
         AlertDialog.Builder builder= new AlertDialog.Builder(this);
@@ -244,6 +287,11 @@ public class TransactionActivity extends Activity{
         builder.show();
     }
 
+    /**
+     * Helper method to show transfer account dialog, see below
+     * @param title
+     * @param msg
+     */
     private void alertMsg2(String title, String msg){
         //build dialog
         AlertDialog.Builder builder= new AlertDialog.Builder(this);
@@ -258,12 +306,18 @@ public class TransactionActivity extends Activity{
         builder.show();
     }
 
+    /**
+     * go to customer main activity, ends current one.
+     */
     private void gotoCustomerMainPage(){
         Intent intent = new Intent(this,CustomerMainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
     }
 
+    /**
+     * showing a dialog that user be able to enter an email address.
+     */
     private void showTransferAccountDialog(){
         final EditText input = new EditText(this);
         input.setInputType(InputType.TYPE_CLASS_TEXT);
@@ -281,6 +335,10 @@ public class TransactionActivity extends Activity{
         builder.show();
     }
 
+    /**
+     * Helper method that validates user email entered from database.
+     * @param email
+     */
     private void checkEmailEntered(final String email){
         Log.d("transaction","Target email: "+email+" Owner Email: "+user.getEmail());
         if(email.isEmpty() || email.equals( user.getEmail())){

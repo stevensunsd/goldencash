@@ -90,11 +90,17 @@ public class SigninActivity extends Activity implements View.OnClickListener {
         }
     }
 
+    /**
+     * gotoXXX for transfer current activity to other activity
+     */
     private void gotoResetPassword(){
         Intent intent = new Intent(this,ResetPasswordActivity.class);
         startActivity(intent);
     }
 
+    /**
+     * sign in user with checking with server.
+     */
     private void gotoSignup() {
         Intent intent = new Intent(this, SignupActivity.class);
         startActivity(intent);
@@ -157,6 +163,11 @@ public class SigninActivity extends Activity implements View.OnClickListener {
         }
     }
 
+    /**
+     * show an alert message on the current screen
+     * @param title
+     * @param msg
+     */
     private void alertMsg(String title, String msg){
         //build dialog
         AlertDialog.Builder builder= new AlertDialog.Builder(this);
@@ -176,6 +187,9 @@ public class SigninActivity extends Activity implements View.OnClickListener {
         alert.show();
     }
 
+    /**
+     * validate sign in input in the text fields
+     */
     private void checkInput(){
         if(sff.isEmpty(username_field.getText().toString())){
             alertMsg("Log in failed", "Please Enter Username");
