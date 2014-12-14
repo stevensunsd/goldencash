@@ -9,8 +9,10 @@ import android.util.Pair;
 import java.util.Calendar;
 import java.util.Date;
 
-import cse110.com.goldencash.modelAccount.Account;
-
+/**
+ *  Title: class Rule
+ *  Description: Rule Object using for check condition during transaction
+ */
 public class Rule {
     private boolean checkSufficientFund(double balance, double charge) {
         return balance - charge >= 0;
@@ -79,9 +81,7 @@ public class Rule {
         }
         return Pair.create(true, "");
     }
-    /*
-    Public functions for banking rule
-     */
+
     public Pair<Boolean, String> canWithdraw(Account acc, double charge) {
         if(charge <= 0.01){
             return Pair.create(false, "Amount has to be greater than $0.01");
@@ -129,12 +129,5 @@ public class Rule {
         if(original < 2000 && result >= 3000 && result < 3000)
             return true;
         return original < 3000 && result >= 3000;
-    }
-
-    public boolean applyPenalty(Account acc) {
-        // if over 30 days && balance below 100
-        // currentTime - acc.getRecordTime
-        // return true
-        return false;
     }
 }
