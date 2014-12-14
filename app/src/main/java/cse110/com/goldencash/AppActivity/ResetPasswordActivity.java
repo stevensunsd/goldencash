@@ -45,6 +45,9 @@ public class ResetPasswordActivity extends Activity implements View.OnClickListe
         }
     }
 
+    /**
+     * check input and process it
+     */
     void checkInput(){
         if(isEmpty(email)) {
             alertMsg("Failed", "Please Enter an Email Address");
@@ -54,6 +57,9 @@ public class ResetPasswordActivity extends Activity implements View.OnClickListe
         }
     }
 
+    /**
+     * reset password
+     */
     private void processResetPassword(){
         ParseUser.requestPasswordResetInBackground(email,
                 new RequestPasswordResetCallback() {
@@ -69,10 +75,20 @@ public class ResetPasswordActivity extends Activity implements View.OnClickListe
                 });
     }
 
+    /**
+     * check empty string
+     * @param s
+     * @return
+     */
     private boolean isEmpty(String s) {
         return s.trim().length() > 0 ? false : true;
     }
 
+    /**
+     * showing an alert message on screen
+     * @param title
+     * @param msg
+     */
     protected void alertMsg(String title, String msg){
         //build dialog
         AlertDialog.Builder builder= new AlertDialog.Builder(this);
@@ -93,6 +109,7 @@ public class ResetPasswordActivity extends Activity implements View.OnClickListe
         //show dialog on screen
         alert.show();
     }
+
     //this function will be using when need to clear the text user entered in the textfields
     protected void clearAlltext() {
         ViewGroup textFields = (ViewGroup) findViewById(R.id.rp_viewgroup);

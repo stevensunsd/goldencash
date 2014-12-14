@@ -55,6 +55,9 @@ public class UserListActivity extends Activity
         queryUsers();
     }
 
+    /**
+     * get user objects from the server.
+     */
     //query limit to 100 at most one time.
     private void queryUsers(){
         setProgressBarIndeterminateVisibility(true);
@@ -75,6 +78,10 @@ public class UserListActivity extends Activity
         });
     }
 
+    /**
+     * set up adapter for objects
+     * @param parseObjects
+     */
     private void setupAdapter(List<ParseObject> parseObjects){
         int i = 0;
         ArrayList<String> usernames = new ArrayList<String>();
@@ -103,10 +110,12 @@ public class UserListActivity extends Activity
 
     @Override
     public void onBackPressed(){
-        //TODO:Show up log out dialog
         AdminLogOut();
     }
 
+    /**
+     * showing log out dialog and setup listener for it.
+     */
     private void AdminLogOut(){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Exit");
@@ -123,6 +132,10 @@ public class UserListActivity extends Activity
         //show dialog on screen
         alert.show();
     }
+
+    /**
+     * go to sign in activity
+     */
     private void gotoSigninActtivity(){
         Intent intent = new Intent(this,SigninActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
